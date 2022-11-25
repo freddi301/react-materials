@@ -1,0 +1,24 @@
+- scrivere il jsx statico con balori hardcoded
+- aggiugnere event listener che fanno alert di quello che dovrebbe accadere
+- se ci sono liste o tabelle
+  - scrtivere i .map()
+    - copiando la riga statica e mettendola dentro il rutrn del map
+    - aggiungere la prop speciale key
+    - verificare che il .map ripete cortrettament e gli elemnti
+    - infine cancellare la riga statica
+- individuare quali valori hardcoded diventano props
+  - e sostituirli con props.qualcosa o object destructuring
+  - indizio: sono quelli che servono se il componente e ripetuto in pagina
+- individuare quali valori hardcoded cambiano nel tempo ma solo all'ionterno del componente
+  - sostiturli con const qualcosa
+  - indizio: valori che cambiano quando l'utente interagisce
+  - selezionare il valore, click destro, refactor, extract const module scope
+  - scegliamo se usare useReducer o useState e adattarlo
+    - useState se è una semplice slot di memoria che viene modificata, senza alcuna logica dietro
+    - useReducer se nelle modifica è implicata una qualche logica
+- controllare se ci sono dei todo negli event listenere (esmepio dei alert)
+  - e sostituirli con le chiamate ai setter o dispatch
+- individuare dei todo (es: commenti) che sono degli effetti collaterali
+  - codificarli con React.useEffect
+    - ricordiamoci di inserire nell'array delle dipendenze tutte le variabile usate nell'effetto (possiamo sfruttare l'ide per farlo in automatico)
+    - ricordiamoci di scrivere il codice di cleanup se serve

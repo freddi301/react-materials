@@ -1,0 +1,404 @@
+import styled from "styled-components/macro";
+import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus, faHeart, faStar } from "@fortawesome/free-solid-svg-icons";
+
+// Smart component
+export function VideotecaAlberto() {
+
+  const films = useFilms();
+  const [preferredFilmsById, togglePreferred, setPreferredFilter] = usePreferredFilms();
+  const [filmReviewsById, setFilmReview, setReviewFilter] = useFilmReviews();
+  const [filmRatingsById, setFilmRating, setRatingFilter] = useFilmRatings();
+  const [filmLastEpisodesById, setFilmLastEpisode] = useFilmLastEpisodes();
+
+  const filmsByPopolarityDesc = films.all;
+  const filmsByPopolarityAsc = films.all.slice(0).reverse();
+  const filmsByAlphaDesc = films.all
+    .slice(0)
+    .sort((a, b) => a.title.localeCompare(b.title));
+  const filmsByAlphaAsc = filmsByAlphaDesc.slice(0).reverse();
+
+  const [orderCriteria, setOrderCriteria] = React.useState("popolarityDesc");
+
+  const filmsToShow = (() => {
+    let filmsToShow = filmsByPopolarityDesc.slice(0);
+    switch (orderCriteria) {
+      case "popolarityDesc": {
+        filmsToShow = filmsByPopolarityDesc.slice(0);
+        break;
+      } case "popolarityAsc": {
+        filmsToShow = filmsByPopolarityAsc.slice(0);
+        break;
+      } case "alphaDesc": {
+        filmsToShow = filmsByAlphaDesc.slice(0);
+        break;
+      } case "alphaAsc": {
+        filmsToShow = filmsByAlphaAsc.slice(0);
+        break;
+      } default: break;
+    }
+    filmsToShow = filmsToShow.filter((el) => {
+      return checkFilter(filmReviewsById.filter, filmReviewsById[el.id]);
+    }).filter((el) => {
+      return checkFilter(filmRatingsById.filter, filmRatingsById[el.id]);
+    }).filter((el) => {
+      return checkFilter(preferredFilmsById.filter, preferredFilmsById[el.id]);
+    });
+    return filmsToShow;
+  })();
+
+  return (
+    <React.Fragment>
+    <div id="header">
+      <Wave />
+      <h1 className="absolute inset-14 text-6xl mb-5 font-bold text-white max-w-min max-h-16">Videoteca</h1>
+    </div>
+    <div className="px-5 flex flex-col">
+      <div className="flex space-x-5">
+        <div className="flex-grow"></div>
+        <FilterWithWithout filter={preferredFilmsById.filter} setFilter={setPreferredFilter} labelWith="Preferiti" labelWithout="Non preferiti"/>
+        <FilterWithWithout filter={filmRatingsById.filter} setFilter={setRatingFilter} labelWith="Con valutazione" labelWithout="Senza Valutazione"/>
+        <FilterWithWithout filter={filmReviewsById.filter} setFilter={setReviewFilter} labelWith="Recensiti" labelWithout="Non recensiti"/>
+        <select
+          value={orderCriteria}
+          onChange={(e) => setOrderCriteria(e.currentTarget.value)}
+          className="mb-5 px-5 bg-blue-500 text-white shadow-md rounded-sm h-10" >
+          <option value="popolarityDesc">Ordina per popolarità (decrescente)</option>
+          <option value="popolarityAsc">Ordina per popolarità (crescente)</option>
+          <option value="alphaDesc">Ordina alfabeticamente (decrescente)</option>
+          <option value="alphaAsc">Ordina alfabeticamente (crescente)</option>
+        </select>
+      </div>
+      {films.isLoading ? (
+        <div>Loading..</div>
+      ) : (
+        <TailwindListaFilmDiv>
+          {filmsToShow.map((film) => {
+            const filmId = film.id;
+            return <TailwindFilmListItem
+              key={filmId}
+              film={film}
+              isPreferred={preferredFilmsById[filmId]}
+              review={filmReviewsById[filmId]}
+              rating={filmRatingsById[filmId]}
+              lastEpisode={filmLastEpisodesById[filmId]}
+              onTogglePreferred={() => togglePreferred(filmId)}
+              onSetFilmreview={(review) => setFilmReview(filmId, review)}
+              onSetFilmRating={(rating) => setFilmRating(filmId, rating)}
+              onSetFilmLastEpisode={(lastEpisode) => {
+                if (lastEpisode <= film.episodes && lastEpisode >= 0)
+                  setFilmLastEpisode(filmId, lastEpisode)
+              }}
+            />;
+          })}
+        </TailwindListaFilmDiv>
+      )}
+    </div>
+    </React.Fragment>
+  );
+}
+
+// Dumb component
+function FilmListItem({ film, isPreferred, onTogglePreferred }) {
+  return (
+    <StyledFilmDiv>
+      <StyledFilmIconImg src={film.cover} />
+      <StyledDatiFilmDiv>
+        <StyledDatoFilmDiv>{film.title}</StyledDatoFilmDiv>
+        <StyledDatoFilmDiv>{film.genre}</StyledDatoFilmDiv>
+        <StyledDatoFilmDiv>{film.description}</StyledDatoFilmDiv>
+        <FontAwesomeIcon
+          icon={isPreferred ? faHeart : faPlus}
+          onClick={onTogglePreferred}
+        />
+      </StyledDatiFilmDiv>
+    </StyledFilmDiv>
+  );
+}
+
+function checkFilter(filter, objectFiltered) {
+  if (filter === "all") return true;
+  if (filter === "with" && objectFiltered?.length > 0)
+    return true;
+  if (filter === "without" && objectFiltered === undefined)
+    return true;
+  return false;
+}
+
+function Wave(){
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      style={{ WebkitTransition: "0.3s", transition: "0.3s" }}
+      transform="rotate(180)"
+      viewBox="0 0 1440 320"
+    >
+      <defs>
+        <linearGradient id="sw-gradient-0" x1="0" x2="0" y1="1" y2="0">
+          <stop offset="0%" stopColor="rgba(62, 133.235, 243, 1)"></stop>
+          <stop offset="100%" stopColor="rgba(11, 255, 254.173, 1)"></stop>
+        </linearGradient>
+      </defs>
+      <path
+        fill="url(#sw-gradient-0)"
+        d="M0 160l40-21.3C80 117 160 75 240 80s160 59 240 53.3c80-5.3 160-69.3 240-64 80 5.7 160 79.7 240 96 80 15.7 160-26.3 240-58.6C1280 75 1360 53 1440 64s160 53 240 85.3c80 31.7 160 53.7 240 32C2000 160 2080 96 2160 64s160-32 240-37.3c80-5.7 160-15.7 240-16 80 .3 160 10.3 240 16 80 5.3 160 5.3 240 5.3s160 0 240 5.3c80 5.7 160 15.7 240 37.4 80 21.3 160 53.3 240 90.6 80 37.7 160 79.7 240 90.7s160-11 240-10.7c80-.3 160 21.7 240 16 80-5.3 160-37.3 240-58.6 80-21.7 160-31.7 240-42.7 80-11 160-21 240-48s160-69 240-69.3c80 .3 160 42.3 200 64l40 21.3v192H0z"
+      ></path>
+    </svg>
+  );
+}
+
+function TailwindListaFilmDiv({children}) {
+    return (<div className="flex flex-col space-y-5">{children}</div>);
+}
+
+function TailwindFilmListItem({ film, isPreferred, review, rating, lastEpisode,
+            onTogglePreferred, onSetFilmreview, onSetFilmRating, onSetFilmLastEpisode }) {
+    return (
+      <div className="shadow-xl flex rounded-xl h-64">
+        <img className="rounded-l-xl h-64" src={film.cover} alt={film.title} />
+        <div className="pl-10 pt-10">
+          <div className="pb-5 text-2xl font-medium text-black">
+            {film.title}
+          </div>
+          <div className="pb-5 text-md text-gray-500">
+            {film.genre}
+          </div>
+          <div className="pb-5 text-md text-gray-500">
+            {film.description}
+          </div>
+          <div className="pb-5 text-md text-gray-500">
+            <span>Episodi visti: </span>
+            <span>
+              <input type="number" className="w-10"
+                value={lastEpisode ?? 0}
+                onChange={(e) => onSetFilmLastEpisode(e.currentTarget.value)}
+                />
+            </span>
+            <span> / {film.episodes}</span>
+          </div>
+        </div>
+        <div className="flex-grow"></div>
+        <div className="px-10 pt-10 w-96 flex flex-col pb-10 space-y-5">
+          <FilmRating rating={rating} onSetFilmRating={onSetFilmRating} />
+          <textarea className="shadow-small rounded-sm min-w-full flex-grow text-gray-500"
+            value={review}
+            onChange={(e) => onSetFilmreview(e.currentTarget.value)}
+            placeholder="Inserisci recensione"
+          />
+        </div>
+        <div className="w-64 flex flex-col items-center justify-center space-y-5">
+            <TailwindFilmButton text="Like" onClick={onTogglePreferred}>
+                <FontAwesomeIcon
+                  icon={isPreferred ? faHeart : faPlus}
+                  />
+            </TailwindFilmButton>
+        </div>
+
+  </div>);
+}
+
+function FilmRating({rating, onSetFilmRating}) {
+  const colorBlue = "rgba(59, 130, 246, 1)";
+  const colorGray = "rgba(107, 114, 128,1)";
+  return (<div className="flex space-x-3">
+    {Array.from(Array(5).keys()).map((idx) => {
+      const color = idx < Number(rating) ? colorBlue : colorGray;
+      return <FontAwesomeIcon
+          key={idx}
+          icon={faStar}
+          color={color}
+          onClick={() => onSetFilmRating(idx + 1)}
+          />;
+    })}
+    </div>);
+}
+
+
+function TailwindFilmButton(props) {
+  return (<button className="bg-blue-500 w-44 h-10 rounded-sm text-white text-base shadow-md"
+      onClick={props.onClick}>
+    {props.children}
+    <span className="ml-2">{props.text}</span>
+  </button>);
+}
+
+function useFilms() {
+  const [filmsDTO, isLoading] = useFetchFilms();
+  return {
+    all: filmsDTO.map(filmDtoToFilm),
+    isLoading
+  };
+}
+
+// Fetch hooks
+function useFetchFilms() {
+  const [filmsObj, setFilmsObj] = React.useState({
+    isLoading: true,
+    data: []
+  });
+
+  React.useEffect(() => {
+    getFilms().then((films) =>
+      setFilmsObj({
+        isLoading: false,
+        data: films.top
+      })
+    );
+  }, []);
+
+  return [filmsObj.data, filmsObj.isLoading];
+}
+
+// Fetch function
+async function getFilms() {
+  const response = await fetch("https://api.jikan.moe/v3/top/anime/1", {
+    method: "GET"
+  });
+  const data = await response.json();
+  return data;
+}
+
+// Data mapper (dto => domain)
+function filmDtoToFilm(filmDto) {
+  return {
+    id: filmDto.mal_id,
+    title: filmDto.title,
+    genre: "Anime",
+    description: "Descrizione",
+    cover: filmDto.image_url,
+    score: filmDto.score,
+    episodes: filmDto.episodes
+  };
+}
+
+function usePreferredFilms() {
+  const [preferredFilmsById, setPreferredFilms] = useLocalStorage(
+    "preferredFilmsById",
+    {
+      filter : "all"
+    }
+  );
+  const togglePreferred = (filmId) => {
+    setPreferredFilms({
+      ...preferredFilmsById,
+      [filmId]: (!preferredFilmsById[filmId]).toString()
+    });
+  };
+  const setPreferredFilter = (filter) => {
+    setPreferredFilms({
+      ...preferredFilmsById,
+      filter : filter
+    });
+  }
+  return [preferredFilmsById, togglePreferred, setPreferredFilter];
+}
+
+function useFilmReviews() {
+  const [filmReviewsById, setFilmReviews] = useLocalStorage(
+    "filmReviewsById",
+    {
+      filter : "all"
+    }
+  );
+  const setFilmReview = (filmId, review) => {
+    setFilmReviews({
+      ...filmReviewsById,
+      [filmId] : review
+    });
+  }
+  const setReviewFilter = (filter) => {
+    setFilmReviews({
+      ...filmReviewsById,
+      filter : filter
+    });
+  }
+  return [filmReviewsById, setFilmReview, setReviewFilter];
+}
+
+function useFilmRatings() {
+  const [filmRatingsById, setFilmRatings] = useLocalStorage(
+    "filmRatingsById",
+    {
+      filter : "all"
+    }
+  );
+  const setFilmRating = (filmId, rating) => {
+    setFilmRatings({
+      ...filmRatingsById,
+      [filmId] : rating
+    });
+  }
+  const setRatingFilter = (filter) => {
+    setFilmRatings({
+      ...filmRatingsById,
+      filter : filter
+    });
+  }
+  return [filmRatingsById, setFilmRating, setRatingFilter];
+}
+
+function useFilmLastEpisodes() {
+  const [filmLastEpisodesById, setFilmLastEpisodes] = useLocalStorage(
+    "filmLastEpisodesById",
+    {}
+  );
+  const setFilmLastEpisode = (filmId, lastFilmEpisode) => {
+    setFilmLastEpisodes({
+      ...filmLastEpisodesById,
+      [filmId] : lastFilmEpisode
+    });
+  }
+  return [filmLastEpisodesById, setFilmLastEpisode];
+
+}
+
+function useLocalStorage(chiave, valoreDiDefault) {
+  const [state, setState] = React.useState(() => {
+    const storageValue = localStorage.getItem(chiave);
+    return storageValue ? JSON.parse(storageValue) : valoreDiDefault;
+  });
+  React.useEffect(() => {
+    localStorage.setItem(chiave, JSON.stringify(state));
+  }, [chiave, state]);
+
+  return [state, setState];
+}
+
+function FilterWithWithout({filter, setFilter, labelWith, labelWithout}) {
+  return (<select
+    className="mb-5 px-5 bg-blue-500 text-white shadow-md rounded-sm h-10"
+    value={filter}
+    onChange={(event) => setFilter(event.currentTarget.value)}
+    >
+    <option value="all">Tutti</option>
+    <option value="with">{labelWith}</option>
+    <option value="without">{labelWithout}</option>
+  </select>);
+}
+
+// Dumb components
+const StyledListaFilmDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+const StyledFilmDiv = styled.div`
+  display: flex;
+  border-color: black;
+  border-style: solid;
+  border-width: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+`;
+const StyledFilmIconImg = styled.img`
+  width: 120px;
+  margin-right: 20px;
+`;
+const StyledDatiFilmDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+const StyledDatoFilmDiv = styled.div`
+  margin-top: 10px;
+  margin-bottom: 10px;
+`;

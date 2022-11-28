@@ -1,0 +1,59 @@
+- struttura di un app react
+- typescript e vscode plugins
+- come scegliere le librerie
+- linting con prettier e eslint
+- stilizzazione con styled-components and theming with css varaibles
+- recupero dati con react-query with openapi codegen
+- recupero dati con apollo-graphql
+- grafici con d3js e svg
+- paginazione con react-virtuso and react-window
+- routing con react-router
+- styling con ui kit material-ui
+- animazioni con react-spring / framer-motion
+- React intro (declarative framework)
+- JSX e strumenti di compilazione
+- Thinking in react
+- React hooks
+- TODO app (state managment)
+- Videoteca app (routing, persitenza, paginazione)
+- Performance and memoization
+
+
+- HTML
+- CSS
+- JavaScript
+  - basi
+  - promise + async/await
+  - array methods
+
+- React intro (declarative framework)
+- JSX e strumenti di compilazione (create-react-app)
+- Rudimenti programmazione funzionale (immutabilità, closure)
+- Rendering Condizionale
+- Event Listeners
+- "key" prop
+- Thinking in react
+- React hooks
+- Custom hooks
+- Lo stato in React (props, hooks, context)
+- TODO app (state managment)
+- Videoteca app (routing, persitenza, paginazione)
+- Performance and memoization (React.memo, React.useMemo, React.useCallback, React.useRef)
+  - esempio modifica all'interno di lista
+- children e render props
+- state lisfting
+- prop drilling
+- error boundaries
+- portal
+- ciclo di un commit react
+
+- struttura di un app react
+- come scegliere le librerie
+- stilizzazione con styled-components and theming with css variables
+- recupero dati con react-query with openapi codegen
+- recupero dati con apollo-graphql
+- grafici con d3js e svg
+- paginazione con react-virtuso and react-window
+- routing con react-router
+- styling con ui kit material-ui
+- animazioni con react-spring

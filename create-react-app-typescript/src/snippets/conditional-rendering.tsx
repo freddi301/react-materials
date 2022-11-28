@@ -3,7 +3,7 @@ import React from "react";
 // l'if else sul primo livello del componente
 // è utile sopratutto per il early-return in caso di paramteri nulli
 type ComponenteAProps = { persona: { nome: string; cognome: string } | null };
-function ComponenteA({ persona }: ComponenteAProps) {
+function ComponentA({ persona }: ComponenteAProps) {
   if (!persona) return null;
   const { nome, cognome } = persona;
   return (
@@ -19,7 +19,7 @@ function ComponenteA({ persona }: ComponenteAProps) {
 type ComponenteBProps = {
   persona: { nome?: string; cognome?: string; eta?: number };
 };
-function ComponenteB({ persona: { nome, cognome, eta } }: ComponenteBProps) {
+function ComponentB({ persona: { nome, cognome, eta } }: ComponenteBProps) {
   return (
     <div>
       {nome && <div>nome: {nome}</div>}

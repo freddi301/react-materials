@@ -1,17 +1,7 @@
 import React from "react";
 
-export function RefExamples() {
-  return (
-    <React.Fragment>
-      <RefExample />
-      <RefFunctionExample />
-      <RefVariableExample />
-    </React.Fragment>
-  );
-}
-
 function RefExample() {
-  const divRef = React.useRef();
+  const divRef = React.useRef<HTMLDivElement | null>(null);
   return (
     <div
       ref={divRef}
@@ -25,7 +15,7 @@ function RefExample() {
 }
 
 function RefFunctionExample() {
-  const divRef = React.useRef();
+  const divRef = React.useRef<HTMLDivElement | null>(null);
   return (
     <div
       ref={(element) => {
@@ -34,7 +24,7 @@ function RefFunctionExample() {
           // e in questo momento che il div del dom reale corrispondente
           // a questo di viene aggiunto al dom reale
         } else {
-          divRef.current = undefined;
+          divRef.current = null;
         }
       }}
       onClick={() => {

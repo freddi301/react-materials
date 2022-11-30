@@ -1,54 +1,45 @@
-// https://codesandbox.io/s/useeffect-flash-on-render-zvo59
+import React from "react";
 
-import React, { useState, useEffect, useLayoutEffect } from "react";
-import ReactDOM from "react-dom";
-import "./styles.css";
-
-const BlinkyRender = () => {
-  const [value, setValue] = useState(0);
-
-  useEffect(() => {
+function BlinkyRender() {
+  const [value, setValue] = React.useState(0);
+  React.useEffect(() => {
     if (value === 0) {
       setValue(10 + Math.random() * 200);
     }
   }, [value]);
-
   console.log("render", value);
-
   return (
     <div>
       <button onClick={() => setValue(0)}>value</button>: {value}
     </div>
   );
-};
+}
 
-const GoodRender = () => {
-  const [value, setValue] = useState(0);
+function GoodRender() {
+  const [value, setValue] = React.useState(0);
 
-  useLayoutEffect(() => {
+  React.useLayoutEffect(() => {
     if (value === 0) {
       setValue(10 + Math.random() * 200);
     }
   }, [value]);
-
   console.log("render", value);
-
   return (
     <div>
       <button onClick={() => setValue(0)}>value</button>: {value}
     </div>
   );
-};
+}
 
-const FlickerFibonacci = () => {
-  const [targetIndex, setTargetIndex] = useState(0);
-  const [[currentIndex, prev, current], setStep] = useState([0, 1, 1]);
-  useEffect(() => {
+function FlickerFibonacci() {
+  const [targetIndex, setTargetIndex] = React.useState(0);
+  const [[currentIndex, prev, current], setStep] = React.useState([0, 1, 1]);
+  React.useEffect(() => {
     if (currentIndex < targetIndex) {
       setStep([currentIndex + 1, current, prev + current]);
     }
   }, [currentIndex, targetIndex, prev, current]);
-  useEffect(() => {
+  React.useEffect(() => {
     if (targetIndex < currentIndex) {
       setStep([0, 1, 1]);
     }
@@ -58,22 +49,22 @@ const FlickerFibonacci = () => {
       <input
         type="number"
         value={targetIndex}
-        onChange={event => setTargetIndex(Number(event.target.value))}
+        onChange={(event) => setTargetIndex(Number(event.target.value))}
       />
       {current}
     </div>
   );
-};
+}
 
-const GoodFibonacci = () => {
-  const [targetIndex, setTargetIndex] = useState(0);
-  const [[currentIndex, prev, current], setStep] = useState([0, 1, 1]);
-  useLayoutEffect(() => {
+function GoodFibonacci() {
+  const [targetIndex, setTargetIndex] = React.useState(0);
+  const [[currentIndex, prev, current], setStep] = React.useState([0, 1, 1]);
+  React.useLayoutEffect(() => {
     if (currentIndex < targetIndex) {
       setStep([currentIndex + 1, current, prev + current]);
     }
   }, [currentIndex, targetIndex, prev, current]);
-  useLayoutEffect(() => {
+  React.useLayoutEffect(() => {
     if (targetIndex < currentIndex) {
       setStep([0, 1, 1]);
     }
@@ -83,24 +74,9 @@ const GoodFibonacci = () => {
       <input
         type="number"
         value={targetIndex}
-        onChange={event => setTargetIndex(Number(event.target.value))}
+        onChange={(event) => setTargetIndex(Number(event.target.value))}
       />
       {current}
     </div>
   );
-};
-
-ReactDOM.render(
-  <>
-    useEffect: <BlinkyRender />
-    <br />
-    useLayoutEffect: <GoodRender />
-    <br />
-    <hr />
-    <br />
-    useEffect: <FlickerFibonacci />
-    <br />
-    useLayoutEffect: <GoodFibonacci />
-  </>,
-  document.querySelector("#root")
-);
+}

@@ -177,6 +177,7 @@ function inferenceExample<Value>(x: Value) {
 const prova1 = inferenceExample(Math.random());
 
 // esempio generics espicite
+// @ts-ignore
 const prova2 = inferenceExample<string>(45);
 
 // SICUREZZA

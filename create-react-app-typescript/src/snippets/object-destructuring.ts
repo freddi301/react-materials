@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 // molto spesso ci capita di dover leggere degli attributi di un oggetto
 
 // esiste un syntax sugar che ci permete di estraare gli attributi di un oggetto

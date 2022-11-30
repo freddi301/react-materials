@@ -4,6 +4,7 @@ This repository contains various resources for react courses.
 
 ## Snippets
 
+- [object destructuring](create-react-app-typescript/src/snippets/object-destructuring.ts)
 - [vscode cheat sheet](create-react-app-typescript/src/snippets/vscode-cheat-sheet.md)
 - [conditional rendering](create-react-app-typescript/src/snippets/conditional-rendering.tsx)
 - [react ref example](create-react-app-typescript/src/snippets/react-ref-example.tsx)

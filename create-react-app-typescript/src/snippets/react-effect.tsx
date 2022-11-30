@@ -1,8 +1,6 @@
-/* eslint @typescript-eslint/no-use-before-define: 0 */
-
 import React from "react";
 
-export function EsempioUseEffect() {
+function EsempioUseEffect() {
   const [count, setCount] = React.useState(0);
   // useEffect esegue la funzione che racchiude il codice impuro
   // almeno una volta, quando entra in pagina
@@ -33,7 +31,7 @@ export function EsempioUseEffect() {
 // la seconda è DISFARE quanto fatto
 // la seconda si codifica ritornando una funzione, ed è opzionale
 
-export function TitleModifier() {
+function TitleModifier() {
   // const titolo = "titolo";
   const [titolo, setTitolo] = React.useState("titolo");
 

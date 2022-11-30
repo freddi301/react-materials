@@ -2,7 +2,8 @@ import ReactDOM from "react-dom";
 import React from "react";
 
 export function PortalExample() {
-  const [teleportTarget, setTeleportTarget] = React.useState(null);
+  const [teleportTarget, setTeleportTarget] =
+    React.useState<HTMLDivElement | null>(null);
   React.useEffect(() => {
     const teleporTarget = document.createElement("div");
     document.body.appendChild(teleporTarget);
@@ -19,3 +20,6 @@ export function PortalExample() {
     </div>
   );
 }
+
+// Exercise
+// create a modal using react protal

@@ -12,5 +12,6 @@ This repository contains various resources for react courses.
 - [react context example](create-react-app-typescript/src/snippets/react-context-example.tsx)
 - [react context i18n exercise](create-react-app-typescript/src/snippets/react-context-i18-exercise.tsx)
 - [useLayoutEffect flicker](create-react-app-typescript/src/snippets/use-layout-effect-flicker.tsx)
-- [react protal](create-react-app-typescript/src/snippets/react-portal.tsx)
+- [react portal](create-react-app-typescript/src/snippets/react-portal.tsx)
 - [library choice](create-react-app-typescript/src/snippets/library-choice.md)
+- [files structure](create-react-app-typescript/src/snippets/files-structure.md)

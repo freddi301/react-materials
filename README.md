@@ -6,9 +6,11 @@ This repository contains various resources for react courses.
 
 - [object destructuring](create-react-app-typescript/src/snippets/object-destructuring.ts)
 - [vscode cheat sheet](create-react-app-typescript/src/snippets/vscode-cheat-sheet.md)
+- [jsx translation example](create-react-app-typescript/src/snippets/jsx-translation-example.tsx)
 - [conditional rendering](create-react-app-typescript/src/snippets/conditional-rendering.tsx)
 - [react ref example](create-react-app-typescript/src/snippets/react-ref-example.tsx)
 - [react effect](create-react-app-typescript/src/snippets/react-effect.tsx)
+- [calculator with workaround](create-react-app-typescript/src/snippets/calculator-with-workflow.tsx)
 - [todo list with workflow](create-react-app-typescript/src/snippets/todo-list-with-workflow.tsx)
 - [react context example](create-react-app-typescript/src/snippets/react-context-example.tsx)
 - [react context i18n exercise](create-react-app-typescript/src/snippets/react-context-i18-exercise.tsx)

@@ -2,7 +2,7 @@
 
 // stesura del markup (statico) con valori finti
 
-function Calcolatrice() {
+function Calcolatrice1() {
   return (
     <div>
       <input value="12" type="text"></input>
@@ -21,7 +21,7 @@ function Calcolatrice() {
 // sostituzione dei valori finti con variabili
 // dichiarate nello scope del componente
 
-function Calcolatrice() {
+function Calcolatrice2() {
   const operando1 = "12";
   const operando2 = "40";
   const operazione = "add";
@@ -43,7 +43,7 @@ function Calcolatrice() {
 
 // individuazione stato fondamentale e derivato
 
-function Calcolatrice() {
+function Calcolatrice3() {
   const operando1 = "12"; // fondamentale
   const operando2 = "40"; // fondamentale
   const operazione = "add"; // fondamentale
@@ -67,7 +67,7 @@ function Calcolatrice() {
 // fondamentale -> React.useState
 // derivate -> const qualcosa = calcolo()
 
-function Calcolatrice() {
+function Calcolatrice4() {
   const [operando1, setOperando1] = React.useState(12);
   const [operando2, setOperando2] = React.useState(40);
   const [operazione, setOperazione] = React.useState("add");
@@ -110,7 +110,7 @@ function Calcolatrice() {
 //  const [text, setText] = React.useState("")
 //  <input value={text} onChange={event => setText(event.currentTarget.value)}/>
 
-function Calcolatrice() {
+function Calcolatrice5() {
   const [operando1, setOperando1] = React.useState(12);
   const [operando2, setOperando2] = React.useState(40);
   const [operazione, setOperazione] = React.useState("add");
@@ -171,7 +171,7 @@ function Calcolatrice() {
 // - nel destructuring estrarre tutti gli attributi necessari (segnalati in rosso dall'ide)
 // - ritornare nella hook sotto forma di oggetto tutti gli attributi cosi usati (si puo anche fare iun copia incolla del destructuring precedente)
 
-export function Calcolatrice() {
+export function Calcolatrice6() {
   const {
     operando1,
     operando2,
@@ -179,8 +179,8 @@ export function Calcolatrice() {
     risultato,
     setOperazione,
     setOperando1,
-    setOperando2
-  } = useCalcolatrice();
+    setOperando2,
+  } = useCalcolatrice6();
   return (
     <div>
       <input
@@ -190,7 +190,7 @@ export function Calcolatrice() {
       ></input>
       <select
         value={operazione}
-        onChange={(event) => setOperazione(event.currentTarget.value)}
+        onChange={(event) => setOperazione(event.currentTarget.value as Operazione)}
       >
         <option value="add">Add</option>
         <option value="subtract">Subtract</option>
@@ -207,10 +207,12 @@ export function Calcolatrice() {
   );
 }
 
-function useCalcolatrice() {
+type Operazione = "add" | "subtract" | "multiply" | "divide";
+
+function useCalcolatrice6() {
   const [operando1, setOperando1] = React.useState(12);
   const [operando2, setOperando2] = React.useState(40);
-  const [operazione, setOperazione] = React.useState("add");
+  const [operazione, setOperazione] = React.useState<Operazione>("add");
   const risultato = (() => {
     switch (operazione) {
       case "add": {
@@ -237,7 +239,7 @@ function useCalcolatrice() {
     risultato,
     setOperazione,
     setOperando1,
-    setOperando2
+    setOperando2,
   };
 }
 
@@ -250,7 +252,7 @@ function useCalcolatrice() {
 // - ricreare i setter mancanti
 // - eliminare codice precedentemento commentato
 
-function Calcolatrice() {
+function Calcolatrice7() {
   const {
     operando1,
     operando2,
@@ -258,8 +260,8 @@ function Calcolatrice() {
     risultato,
     setOperazione,
     setOperando1,
-    setOperando2
-  } = useCalcolatrice();
+    setOperando2,
+  } = useCalcolatrice7();
   return (
     <div>
       <input
@@ -269,7 +271,7 @@ function Calcolatrice() {
       ></input>
       <select
         value={operazione}
-        onChange={(event) => setOperazione(event.currentTarget.value)}
+        onChange={(event) => setOperazione(event.currentTarget.value as Operazione)}
       >
         <option value="add">Add</option>
         <option value="subtract">Subtract</option>
@@ -286,20 +288,24 @@ function Calcolatrice() {
   );
 }
 
-function useCalcolatrice() {
-  const [state, setState] = React.useState({
+function useCalcolatrice7() {
+  const [state, setState] = React.useState<{
+    operando1: number;
+    operando2: number;
+    operazione: Operazione;
+  }>({
     operando1: 12,
     operando2: 40,
-    operazione: "add"
+    operazione: "add",
   });
   const { operando1, operando2, operazione } = state;
-  const setOperando1 = (operando1) => {
+  const setOperando1 = (operando1: number) => {
     setState({ ...state, operando1 });
   };
-  const setOperando2 = (operando2) => {
+  const setOperando2 = (operando2: number) => {
     setState({ ...state, operando2 });
   };
-  const setOperazione = (operazione) => {
+  const setOperazione = (operazione: Operazione) => {
     setState({ ...state, operazione });
   };
   const risultato = (() => {
@@ -328,7 +334,7 @@ function useCalcolatrice() {
     risultato,
     setOperazione,
     setOperando1,
-    setOperando2
+    setOperando2,
   };
 }
 

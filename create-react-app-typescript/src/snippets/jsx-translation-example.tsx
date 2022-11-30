@@ -1,4 +1,3 @@
-// https://codesandbox.io/s/objective-rubin-to6fj
 import React from "react";
 import ReactDOM from "react-dom";
 
@@ -22,7 +21,7 @@ const app_jsx = (
 const app_element = React.createElement(
   "ol",
   {
-    onClick: hello
+    onClick: hello,
   },
   React.createElement("li", {}, "giacomo"),
   React.createElement("li", {}, "mario", React.createElement(Icon))
@@ -34,9 +33,9 @@ const app_data = {
     onClick: hello,
     children: [
       { type: "li", props: { children: ["giacomo"] } },
-      { type: "li", props: { children: ["mario", { type: Icon }] } }
-    ]
-  }
+      { type: "li", props: { children: ["mario", { type: Icon }] } },
+    ],
+  },
 };
 
 const rootElement = document.getElementById("root");

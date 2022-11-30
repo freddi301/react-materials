@@ -65,3 +65,19 @@ function RefVariableExample() {
 /*
   $(<qui elemento del dom reale dove mettere il date picker>).datepicker();
 */
+
+declare global {
+  interface Window {
+    "$": any
+  }
+}
+
+function Soluzione() {
+  const ref = React.useRef<HTMLDivElement | null>(null);
+
+  React.useEffect(() => {
+    window.$(ref.current).datepicker();
+  }, []);
+
+  return <div ref={ref} />;
+}

@@ -6,7 +6,6 @@ import { ToDoListLuca } from "./luca-todolist";
 import { LucaComponentContext } from "./luca-context";
 import { LucaErrorExample } from "./luca-error-boundary";
 import { CreaLucaModale } from "./luca-portal-example";
-import { LucaJquery } from "./luca-jquery-datepicker";
 
 // Smart Component
 export function VideotecaLuca() {

@@ -8,7 +8,7 @@ i18n:
   react-intl (+ 18n-ally)
 
 diagrams:
-  visx
+  visx [scales](https://observablehq.com/@d3/learn-d3-scales)
   d3
 
 ui kits:
@@ -25,7 +25,7 @@ state managment:
   redux
 
 data loading rest:
-  react-query
+  @tanstack/react-query (more performant and customizable than react-swr)
   react-swr
 
 data laoding graphql:
@@ -40,11 +40,16 @@ array utilities:
   lodash
 
 infinite lists:
-  react virtusos
-  react window
+  react-virtuso (most feature complete, auto sizing)
+  react-window (most used but manual)
+  @tanstack/react-virtual (similar to react-window but newer)
 
 animations:
-  react-spring
   framer-motion
+  react-spring
 
+table: [see here for types](https://tanstack.com/table/v8/docs/guide/introduction)
+  ag-grid (standard full feature table, most used)
 
+codegen:
+  - openapi-typescript-codegen (openapi yaml -> typescript client)

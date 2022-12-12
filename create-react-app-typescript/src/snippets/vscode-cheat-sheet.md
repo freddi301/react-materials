@@ -28,5 +28,4 @@ estensioni:
 - live share
 - markdown all in one
 - todo tree
-- tabnine
-- - one dark pro
+- one dark pro

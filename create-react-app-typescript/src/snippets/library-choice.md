@@ -53,3 +53,6 @@ table: [see here for types](https://tanstack.com/table/v8/docs/guide/introductio
 
 codegen:
   - openapi-typescript-codegen (openapi yaml -> typescript client)
+
+mock:
+  - [msw](https://mswjs.io/)

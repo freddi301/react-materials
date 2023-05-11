@@ -1,58 +1,57 @@
+Styling:
+- styled-components + VSCode extension
+- className
 
-styling:
-  styled-components + vsocode extension
-  className
+Internationalization (i18n):
+- lingui (+ i18n-ally)
+- react-intl (+ i18n-ally)
 
-i18n:
-  lingui (+ i18n-ally)
-  react-intl (+ 18n-ally)
+Diagrams:
+- visx [scales](https://observablehq.com/@d3/learn-d3-scales)
+- d3
 
-diagrams:
-  visx [scales](https://observablehq.com/@d3/learn-d3-scales)
-  d3
+UI Kits:
+- Material UI
+- Bootstrap
+- Bootstrap Italia
+- ClayUI
 
-ui kits:
-  material ui
-  bootstrap
-  boostrap italia
-  clayui
+Routing:
+- React Router
 
-routing:
-  react-router
+State Management:
+- Custom Hooks
+- Redux
 
-state managment:
-  custom hooks
-  redux
+Data Loading (REST):
+- @tanstack/react-query (più performante e personalizzabile rispetto a react-swr)
+- react-swr
 
-data loading rest:
-  @tanstack/react-query (more performant and customizable than react-swr)
-  react-swr
+Data Loading (GraphQL):
+- Apollo-GraphQL + VSCode extension
 
-data laoding graphql:
-  apollo-graphql + vscode extrension
+Date Library:
+- Luxon.js
+- Day.js
+- date-fns
 
-date library:
-  luxon js
-  day.js
-  date-fns
+Array Utilities:
+- Lodash
 
-array utilities:
-  lodash
+Infinite Lists:
+- react-virtuso (più completo in termini di funzionalità, auto-dimensionamento)
+- react-window (più utilizzato, ma manuale)
+- @tanstack/react-virtual (simile a react-window, ma più recente)
 
-infinite lists:
-  react-virtuso (most feature complete, auto sizing)
-  react-window (most used but manual)
-  @tanstack/react-virtual (similar to react-window but newer)
+Animations:
+- Framer Motion
+- React Spring
 
-animations:
-  framer-motion
-  react-spring
+Table: [vedi qui per i tipi](https://tanstack.com/table/v8/docs/guide/introduction)
+- ag-Grid (tabella completa e standard, la più utilizzata)
 
-table: [see here for types](https://tanstack.com/table/v8/docs/guide/introduction)
-  ag-grid (standard full feature table, most used)
+Code Generation:
+- openapi-typescript-codegen (OpenAPI YAML -> TypeScript client)
 
-codegen:
-  - openapi-typescript-codegen (openapi yaml -> typescript client)
-
-mock:
-  - [msw](https://mswjs.io/)
+Mock:
+- [msw](https://mswjs.io/)

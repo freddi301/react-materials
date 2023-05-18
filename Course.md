@@ -848,3 +848,7 @@ Every layer has access only to its children. Dependency inversion applies only f
   - **Forms**: use thin layer approach
   - **i18n**: use `react-i18next` with label extraction.
   - **State managment**: use plain props passing. If needed use renderProps.
+
+# Notes
+
+Exercise progression: like counter -> todo list -> CRUD UI

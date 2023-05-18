@@ -6,7 +6,6 @@ This repository contains various resources for react courses.
 
 - [object destructuring](snippets/object-destructuring.ts)
 - [vscode cheat sheet](snippets/vscode-cheat-sheet.md)
-- [reimplement .map and .filter](snippets/replica-filter-map.ts)
 - [jsx translation example](snippets/jsx-translation-example.tsx)
 - [conditional rendering](snippets/conditional-rendering.tsx)
 - [react ref example](snippets/react-ref-example.tsx)
@@ -18,6 +17,3 @@ This repository contains various resources for react courses.
 - [useLayoutEffect flicker](snippets/use-layout-effect-flicker.tsx)
 - [react portal](snippets/react-portal.tsx)
 - [error boundary](snippets/erroy-boundary.tsx)
-- [thin form](snippets/thin-form.md)
-- [library choice](snippets/library-choice.md)
-- [files structure](snippets/files-structure.md) <-- TODO: Update with new workflow (make an example app)

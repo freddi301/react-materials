@@ -20,4 +20,4 @@ This repository contains various resources for react courses.
 - [error boundary](create-react-app-typescript/src/snippets/erroy-boundary.tsx)
 - [thin form](create-react-app-typescript/src/snippets/thin-form.md)
 - [library choice](create-react-app-typescript/src/snippets/library-choice.md)
-- [files structure](create-react-app-typescript/src/snippets/files-structure.md)
+- [files structure](create-react-app-typescript/src/snippets/files-structure.md) <-- TODO: Update with new workflow (make an example app)

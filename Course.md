@@ -788,3 +788,18 @@ const esempio = <MioComponente nome={"Fred"} cognome={"Bat"}/>
 # React Advanced
 
 # React Best Practices
+
+## React apllication layers
+
+Every layer has access only to its children. Dependency inversion applies only for types.
+
+- **App Layer**:
+  - **Data Layer**: It answers `Get data` and `Modify data`. Implemented as named exports of custom hooks for queries and mutations that takes Domain/DTO objects and return Domain/DTO objects.
+    - **Rest**
+      - **Hooks useQuery useMutation**: Implements caching and aggregation. Custom hooks that just return `react-use-query` calls.
+        - **Api object**: Implements authentication and data fetching. implemented as instantiable object *(to handle ouatuh schemes) with configuration, exposed ad REact context with custom hook `useApi`. Handles internally authentication, refresh tokens, custom headers, adapts data. Use at least `customFetch` insted of `fetch` to eventually add global features as needed. Use `msw` for mocking. 
+    - **GraphQl**: Implements authentication, caching and aggregation. `ApolloGraphQL` Client
+  - **Visual components Layer**: It answers `Show something`. Implement reased visual components to isolate from specific implementation. Implemented as flat directory `components` with named export for react components or custom hooks that are a thin wrapper around ui-kit used (ex: Bootstrap, MaterialUI, ClayUI). If needed custom styling with `styled-components` with *css={`color: red`}* and theme as REact context with custom hook `useTheme`.
+  - **Forms**: see related tutorial
+  - **i18n**: use `react-i18next`
+  - **State managment**: use plain props passing. If needed use renderProps.

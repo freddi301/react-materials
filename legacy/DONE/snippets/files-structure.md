@@ -1,3 +1,5 @@
+OBSOLETE: trasnscribe
+
 The frontend application will be realized with web tecnologies.
 Technical choices and their motiviation follows:
 

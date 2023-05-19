@@ -5,6 +5,8 @@
 ## Suggested Readings
 
 // JavaScript Allongee [libro programmazione funzionale]
+https://react.dev/learn
+https://github.com/getify/You-Dont-Know-JS
 
 ## Functions
 
@@ -935,6 +937,7 @@ null, undefined, true, false vengono interpretati come spazio vuoto
 string e number invece come testo puro
 <div/> che è il jsx per istanziare componenti nativi
 <MyComponent/> che è il jsx per istanziare componenti creati da noi
+[null, undefined, true, false, "", 0, <div>, <MyComponent/>] una array che contiene qualsiasi cosa di cui sopra
 
 ```tsx
 // creare un compoentente react che visualizza il seguente dato
@@ -942,12 +945,34 @@ string e number invece come testo puro
 // usare typescript, Array.map e le props
 // per il momento ignoriamo i warning sulle "key"
 
-const app = <PersonList persons={[{name: "Fred", age: 28}, {name: "John", age: 30}]}>
+const app = <PersonList persons={[{id: "y0", name: "Fred", age: 28}, {id: "x1", name: "John", age: 30}]}/>;
 
+// SPOILER soluzione
+
+type Person = { id: string, name: string, age: number }
+
+function PersonListItem({ person: { name, age } }: { person: Person }){
+  return <div>
+    <div>name: {name}</div>
+    <div>age: {age}</div> 
+  </div>
+}
+
+function PersonList({ persons }: { persons: Array<Person> }){
+  return <div>
+    {persons.map((person) => {
+      return <PersonListItem key={person.id} person={person}/>
+    })}
+  </div>
+}
+
+// key è una props speciale che serve quando renderizziamo array di elementi dinamici
+// è vitale per 2 motivi
+// performance: affinchè react possa riordinare in modo efficiente gli elementi in pagina
+// significato: più avanti quando utilizzzeremo lo stato, noteremo che lo stato di un componente
+//   è legato alla sua posizione nell'albero, e alla key se si trova in un array
+//   quindi è fondamentale, che le key siano univoche e non ripetute per tutti gli elementi nell array (non serve che siano univoche globalmente)
 ```
-
-MEtti un asterisco qui
-Ho gia fatto e funziona: **
 
 
 # React Advanced

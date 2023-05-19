@@ -731,7 +731,7 @@ Punto di partenza react
 ```tsx
 const rootElement = document.getElementById("root")!;
 const root = ReactDOM.createRoot(rootElement);
-// copnst root = { currentRealDom: rootElement, currentVirtualDom: null }
+// const root = { currentRealDom: rootElement, currentVirtualDom: null }
 
 // root.render(<App />);
 
@@ -747,7 +747,6 @@ root.render(<h1>Luca</h1>);
 root.render(<h1>Mario</h1>);
 ```
 
-
 Unita di uddivisione e riutilizzo del codice
 
 ```tsx
@@ -758,7 +757,7 @@ Unita di uddivisione e riutilizzo del codice
 // per suddividere il codice, e poterlo eventualmente riutilizzare
 // noi componiamo software tramite il richiamo di funzione
 
-function coppiaDiNUmeri(numero) {
+function coppiaDiNumeri(numero) {
   return [numero, numerio]
 }
 const esempio = coppiaDiNumero(4)
@@ -779,10 +778,176 @@ function MioComponente({nome, cognome}: {nome: string, cognome: string}) {
   // return <h1>{nome + " " + cognome}</h1>
 }
 const esempio = <MioComponente nome={"Fred"} cognome={"Bat"}/>
-// const esempio = React.createElement(MioComponente, { nome: "Fred", cognome: "Bat })
-// const esempio = MioComponente({ nome: "Fred", cognome: "Bat" }) // come se fosse cosi
+// const esempio = React.createElement(MioComponente, { nome: "Fred", cognome: "Bat" })
+// const esempio = MioComponente({ nome: "Fred", cognome: "Bat" }) // come se voelssi fare cosi
+// const esempio = { component: MioComponente, props: { nome: "Fred", cognome: "Bat" } } // ma in realtà è cosi !!!
+```
+
+
+## React naive DIY
+
+```typescript
+
+type VirtualDom =
+  { component: "p", props: { children: string } } |
+  { component: "div", props: { children: Array<VirtualDom> } } |
+  { component: (props: any) => VirtualDom, props: any } |
+  null
+
+function render(current: VirtualDom, next: VirtualDom, realDom: HtmlElement) {
+  if (current === null && next !== null) {
+    realDom.appendChild(create(next))
+  }
+  if (current !== && next === null) {
+    realDom.removeChild(realDom.child)
+  }
+  update(current, next, realDom)
+}
+
+function create(virtualNode: VirtualDom): HtmlElement | null {
+  if (virtualNode === null) return null
+  if (typeof virtualNode.component === "Function") {
+    return create(virtualNode.component(virtualNode.props))
+  }
+  if (typeof virtualNode.component === "string") {
+    const element = document.createElement(virtualNode.component)
+    for (const [attribute, value] of virtualNode.props) {
+      element.setAttribute(attribute, value)
+    }
+    return element;
+  }
+}
+
+function update(current: VirtualDom, next: VirtualDom, realDom: HtmlElement) {
+  if (typeof virtualNode.component === "string") {
+    // se il tag non cambia, es: da "div" rimane "div"
+    if (current.component === next.component) {
+      for (const attribute of Object.keys(current).concat(Object.keys(next))) {
+        // aggiorno solo gli attributi che differiscono
+        if (curent[attribute] !== next[attribute]) {
+          element.setAttribute(attribute, next[attribute])
+        }
+      }
+    } else {
+      realDom.replaceChild(create(next), realDom.child)
+    }
+  }
+}
 
 ```
+
+## React props passing example
+
+```tsx
+
+React.createElement(component, props) // è una funzione
+// che come primo parametro, accettaa la funzione che rappresenta il componente react
+// oppure una string (es: "div") per indicare un elemento nativo html
+// come seocndo parametro accetta i parametri per il componente
+// nel caso di un componenten nativo tipo "div" soono proprio gli attributi html
+// nel caso di un componentne a forma di funzione, i parametri da passargli
+// es: <div id="container" aria-label="contenitore">
+// è: React.createElement("div", { id: "container", "aria-label": "contenitore" })
+// es: <div/>
+// è: React.createElement("div", {})
+
+
+// I have a react component in typescript
+function Person({ name, age }: { name: String; age: number }) {
+  return (
+    <div>
+      <div>name: {name}</div>
+      <div>age: {age}</div>
+    </div>
+  );
+}
+
+// and and instance of it as react element
+const personElement = <Person name="John" age={30} />;
+
+// same code as above but in javascript and wihtout jsx
+function Person(props) {
+  return React.createElement(
+    "div",
+    {},
+    React.createElement("div", {}, "name: ", props.name),
+    React.createElement("div", {}, "age: ", props.age)
+  );
+}
+
+const personElement = React.createElement(Person, { name: "John", age: 30 }); // è solo un modo per indicare a react che in realtà
+// qui voglio eseguire la chiamata di functione
+// const personElement = Person({ name: "John", age: 30 })
+// E qui qui che avviene il passgio di paraemtri, in react noti come props
+
+// In definitiva il JSX è solo un modo per codificare le chiamate a funzione.
+// quindi volendo semplificare
+
+function Person(props) {
+  return div({}, [
+    div({},["name: ", props.name])
+    div({},["name: ", props.name])
+  ])
+}
+const personElement = Person({ name: "John", age: 30 });
+
+// l'unica grande differenza è che in questa versione semplificate le funzioni vengono eseguite subito
+// mentre nella versione jsx le funzioni non vengono eseguite subito, bensi codificate come istruzioni per eseguirle
+// cosi react puo decidere quando aggiornare quale parte della pagina, senza rieseguire il codice
+// di tutto l'albero dell'applicazione
+```
+
+## children prop
+
+```tsx
+// se ci serve un componente che possa fare qualcosa con i propri figli
+// possiamo utilizzare la prop speciale children
+// che è un array di elementi tra l'apertura e chiususra del tag del nostro componente
+function WrapperContainer({ children }) {
+  return <div>{children}</div>
+}
+const app = <WrapperContainer>
+  <input/>
+  <input/>
+</WrapperContainer>
+
+// equivale a scrivere
+const app = WrapperContainer({
+  children: [
+    <input/>,
+    <input/>
+    ]
+})
+
+// eseguendo diventa
+const app = <div> 
+  <input/>
+  <input/>
+</div>
+```
+
+Ci sono due prop speciali e riservate in react: "children" e "key" che quindi non possono essere utilizzate come paramteri arbitrari per i nostri componenti
+
+## First react component that renders a list
+
+ricorda: react è in grado di renderizzare solo alcuni tipi di dato
+null, undefined, true, false vengono interpretati come spazio vuoto
+string e number invece come testo puro
+<div/> che è il jsx per istanziare componenti nativi
+<MyComponent/> che è il jsx per istanziare componenti creati da noi
+
+```tsx
+// creare un compoentente react che visualizza il seguente dato
+// e che va utilizzato cosi
+// usare typescript, Array.map e le props
+// per il momento ignoriamo i warning sulle "key"
+
+const app = <PersonList persons={[{name: "Fred", age: 28}, {name: "John", age: 30}]}>
+
+```
+
+MEtti un asterisco qui
+Ho gia fatto e funziona: **
 
 
 # React Advanced

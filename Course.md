@@ -1669,6 +1669,63 @@ Every layer has access only to its children. Dependency inversion applies only f
   - **i18n**: use `react-i18next` with label extraction, without context key, with `<Trans/>` component.
   - **State managment**: use plain props passing. If needed use renderProps.
 
+## Library choice
+
+- Styling
+  - styled-components + vscode extension
+  - className + css
+
+- Internationalization (i18n) and localization (l10n)
+  - react-i18next
+
+- Chart and diagrams:
+  - visx [scales](https://observablehq.com/@d3/learn-d3-scales)
+  - svg tags
+  - d3
+
+- UI Kits
+  - Material UI
+  - Bootstrap
+  - Bootstrap Italia
+  - ClayUI
+
+- Routing
+  - React Router
+
+- State Management
+  - DO NOT USE LIBRARIES
+  - USE props passing and render props
+
+- Data Loading (REST)
+  - @tanstack/react-query (più performante e personalizzabile rispetto a react-swr)
+
+- Data Loading (GraphQL)
+  - Apollo-GraphQL + VSCode extension
+
+- Date Library
+  - [Luxon.js](https://moment.github.io/luxon) <-- miglior api e performance
+  - Day.js molto utilizzato ma api meno chiara
+  - date-fns molto utilizzato ma api non tipizzata in typescript
+
+- Array Utilities
+  - Lodash (più veloce e con piu funzionalita rispetto a underscore)
+
+- Infinite Lists
+  - react-virtuso (più completo in termini di funzionalità, auto-dimensionamento)
+  - react-window (più utilizzato, ma manuale)
+  - @tanstack/react-virtual (simile a react-window, ma più recente)
+
+- Animations
+  - Framer Motion
+  - React Spring
+
+- Table
+  - #tanstack/table [vedi qui per i tipi](https://tanstack.com/table/v8/docs/guide/introduction)
+  - ag-Grid (tabella completa e standard, la più utilizzata per amministrazione pubblica)
+
+- Mock:
+  - [msw](https://mswjs.io/)
+
 # Notes
 
 Exercise progression: like counter -> todo list -> CRUD UI

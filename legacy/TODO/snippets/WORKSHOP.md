@@ -1,32 +1,5 @@
 # Workshop (react + hooks + typescript)
 
-![meme](./src/distracted-boyfriend.jpg)
-
-## Software da istallare
-
-- [vscode](https://code.visualstudio.com/)
-  - estensioni
-    - bookmarks
-    - debugger for chrome
-    - debugger for firefox
-    - error lens
-    - git lens
-    - live share + live share audio (fare login)
-    - markdown all in one
-    - one dark pro
-    - paste json as code
-    - rainbow brackets
-    - todo tree
-    - tslint
-    - eslint
-    - vscode icons
-    - vscode-styled-components
-    - prettier
-- [nodejs](https://nodejs.org/en/) 10 (su linux si consiglia [nvm](https://github.com/nvm-sh/nvm))
-  - [yarn](https://yarnpkg.com/lang/en/)
-- [gitkraken](https://www.gitkraken.com/)
-- react dev tools [chrome](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi) [firefox](https://addons.mozilla.org/it/firefox/addon/react-devtools/)
-
 ## Nozioni
 
 - cheat-sheet javascript features [jsfeatures.in](https://jsfeatures.in/)
@@ -40,17 +13,6 @@
 - [new javascript features](https://medium.com/@madasamy/javascript-brief-history-and-ecmascript-es6-es7-es8-features-673973394df4)
 
 # Progetto
-
-## Istallare yarn
-
-E un package manager come npm ma più veloce
-
-Lanciare `npm install -g yarn`
-
-Controllare l'istallazione se è andatao a buon fine con `yarn --version`
-
-Chiudere e riaprire la linea di comando eventualmente
-Eventualmente aggiungere il comando al PATH
 
 ## Setup con create-react-app
 

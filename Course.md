@@ -1384,6 +1384,58 @@ function useState(initial) {
 
 # React Best Practices
 
+## Tools
+
+- [nodejs](https://nodejs.org/en/)
+  - [nvm linux](https://github.com/nvm-sh/nvm) oppure [nvm windows](https://github.com/coreybutler/nvm-windows) serve per gestire più versioni di nodejs contemporanemante
+    - istallare LTS (long term support)
+  - [yarn](https://yarnpkg.com/lang/en/)
+- [gitkraken](https://www.gitkraken.com/) A PAGAMENTO
+- react dev tools
+  - [react dev tools - chrome](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi)
+  - [react dev tools - firefox](https://addons.mozilla.org/it/firefox/addon/react-devtools/)
+
+### [vscode](https://code.visualstudio.com/)
+
+#### Extensions
+
+- prettier
+- eslint
+- git lens
+- bookmarks
+- vscode icons
+- live share
+- markdown all in one
+- todo tree
+- one dark pro theme
+- debugger for chrome
+- debugger for firefox
+- debugger for edge
+- paste json as code
+- vscode-styled-components
+- rainbow brackets
+- copilot A PAGAMENTO
+
+#### Configurazione
+
+ctrl + , apre la finestra di configurazione, configurare sempre per progetto, questo crea un file .vscode/settings.json che è da committare
+
+- format on save [x]
+- formattore di default per javascript, typescript, html, css -> prettier
+
+#### Cheatsheet
+
+- ctrl + p > ci fa eseguire comandi
+- ctrl + p nome file ci fa cercare file
+- ctrl + p :25 ci fa andare a riga del file corernte
+- ctrl + p @ ci fa cercare tra le variabili nel file corrente
+- ctrl + d seleziona tutta la parole sotto al cursore
+- ctrl + d ripetuto più volte seleziona la prossima porzione di testo identica (piccolo modale in alto a destra offre toggle case sensitive)
+- shift + alt + -> seleziona il codice dentro le parentesi
+- alt + selezione col mouse seleziona in colonna
+
+
+
 ## React code writing workflow
 
 Per gli esempi fare riferimento agli esempi precedenti (ricerca testuale "workflow" in questo file)

@@ -4,7 +4,6 @@ This repository contains various resources for react courses.
 
 ## Snippets
 
-- [object destructuring](snippets/object-destructuring.ts)
 - [jsx translation example](snippets/jsx-translation-example.tsx)
 - [react ref example](snippets/react-ref-example.tsx)
 - [react effect](snippets/react-effect.tsx)

@@ -1340,6 +1340,8 @@ function MioComponente(){
 ## React.useReducer
 
 E la react hook fondamentale per lo stato interno.
+E talmente fondamentale che React.useState è implementata attraverso React.useReducer.
+React.useReducer ci permette di incapsulare la logica di modifica dello stato.
 Primo parametero è una funzione che dato lo stato attuale ed un azione, produce nuovo stato.
 Secondo parametro è lo stato iniziale, oppure una funzione che produce lo stato iniziale.
 Ritorna un array di due elementi: il primo è lo stato attuale, il secondo una funzione per notificare un'azione da svolgere sullo stato.
@@ -1350,9 +1352,37 @@ function MyComponent() {
     switch (action.type) {
       case "increment": return state + 1;
       case "decrement": return state - action.amount;
+      // è buona pratica lanciare un errore su un azione non gestita
+      // (occhio però questo errore è utile in sviluppo
+      // perchè vediamo lo stack trace,
+      // non dovrebbe mai accadere in production)
+      default:
+        throw new Error();
     } 
   }, 0);
   return <button onClick={event => { dispatchCount({ type: "increment" }) }}>{count}</button>
+}
+```
+
+```tsx
+// solitamente suddividiamo le operazioni in funzioni diverse
+
+function inc(){}
+function dec(){}
+function set(amount: number){}
+
+
+// per motivi di performance con useReducer dobbiamo accorparle
+// quindi diventa una serializzazione della chiamata a funzione fatta a mano
+
+disptach({type: "inc"}) // invece di inc()
+dispatch({type: "dec"}) // invece di dec()
+dispatch({type: "set", amount: 45}) // invece di set(45)
+
+switch(action.type){
+  case "inc": 
+  case "dec": 
+  case "set": 
 }
 ```
 
@@ -1366,7 +1396,7 @@ function useState(initial) {
 }
 ```
 
-### Todo list
+## Todo list
 
 ```tsx
 // realizzare un componente TodoList
@@ -1425,6 +1455,7 @@ ctrl + , apre la finestra di configurazione, configurare sempre per progetto, qu
 
 #### Cheatsheet
 
+- ctrl + spazio usa autocompletamento
 - ctrl + p > ci fa eseguire comandi
 - ctrl + p nome file ci fa cercare file
 - ctrl + p :25 ci fa andare a riga del file corernte

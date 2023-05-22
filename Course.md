@@ -1624,16 +1624,23 @@ const [value, setValue] = React.useState("");
 2. To create a custom hook that encapsulates the state management for a form field, you can use a thin wrapper approach. Begin by creating a custom hook called `useField` and initially include only the `useState` hook.
 
 ```tsx
-function useField<Value>(props: { initial: Value }) {
-  const [value, privateSetValue] = React.useState(props.initial);
-  const [hasChanged, setHasChanged] = React.useState(false);
-
-  const setValue = React.useCallback((value: Value) => {
-    privateSetValue(value);
-    setHasChanged(true);
-  }, []);
-
-  return { value, setValue, hasChanged };
+export function useField<Value>({ initialValue }: { initialValue?: Value }) {
+  type State = { value: { type: "set"; value: Value } | { type: "unset" }, hasChanged: boolean };
+  const [state, setState] = React.useState<State>(() => {
+    const value = initialValue
+      ? { type: "set" as const, value: initialValue }
+      : { type: "unset" as const };
+    return { value, hasChanged: false };
+  });
+  const value = state.value.type === "set" ? state.value.value : undefined;
+  const setValue = React.useCallback(
+    (value: Value) =>
+      setState((state) => {
+        return { ...state, value: { type: "set", value }, hasChanged: true };
+      }),
+    []
+  );
+  return { value, setValue };
 }
 ```
 

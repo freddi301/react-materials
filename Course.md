@@ -1563,7 +1563,6 @@ function useState(initial) {
 - debugger for edge
 - paste json as code
 - vscode-styled-components
-- rainbow brackets
 - copilot A PAGAMENTO
 
 #### Configurazione
@@ -1572,6 +1571,8 @@ ctrl + , apre la finestra di configurazione, configurare sempre per progetto, qu
 
 - format on save [x]
 - formattore di default per javascript, typescript, html, css -> prettier
+- bracket pairs -> active
+- linked editing -> enabled
 
 #### Cheatsheet
 
@@ -1584,6 +1585,8 @@ ctrl + , apre la finestra di configurazione, configurare sempre per progetto, qu
 - ctrl + d ripetuto più volte seleziona la prossima porzione di testo identica (piccolo modale in alto a destra offre toggle case sensitive)
 - shift + alt + -> seleziona il codice dentro le parentesi
 - alt + selezione col mouse seleziona in colonna
+- f2 rinomina una variabile in tutto il progetto
+- click destro -> refactor varie operazioni
 
 
 
@@ -1732,6 +1735,9 @@ Every layer has access only to its children. Dependency inversion applies only f
 
 - Mock:
   - [msw](https://mswjs.io/)
+
+- Fonts
+  - https://github.com/fontsource/fontsource
 
 # Notes
 

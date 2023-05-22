@@ -1028,15 +1028,14 @@ By following these steps, you can create custom form components in React using t
 
 Every layer has access only to its children. Dependency inversion applies only for types.
 
-- **App Layer**:
-  - **Data Layer**: It answers `Get data` and `Modify data`. Implemented as named exports of custom hooks for queries and mutations that takes Domain/DTO objects and return Domain/DTO objects.
-    - **Rest**
-      - **Hooks useQuery useMutation**: Implements caching and aggregation. Custom hooks that just return `react-use-query` calls.
-        - **Api object**: Implements authentication and data fetching. implemented as instantiable object *(to handle ouatuh schemes) with configuration, exposed ad REact context with custom hook `useApi`. Handles internally authentication, refresh tokens, custom headers, adapts data. Use at least `customFetch` insted of `fetch` to eventually add global features as needed. Use `msw` for mocking. 
-    - **GraphQl**: Implements authentication, caching and aggregation. `ApolloGraphQL` Client
-  - **Visual components Layer**: It answers `Show something`. Implement reased visual components to isolate from specific implementation. Implemented as flat directory `components` with named export for react components or custom hooks that are a thin wrapper around ui-kit used (ex: Bootstrap, MaterialUI, ClayUI). If needed custom styling with `styled-components` with *css={`color: red`}* and theme as REact context with custom hook `useTheme`.
-  - **Forms**: use thin layer approach
-  - **i18n**: use `react-i18next` with label extraction.
+- **App Layer**: `component/*.tsx`
+  - **Data Layer**: It answers `Get data` and `Modify data`. Implemented as named exports of custom hooks for queries and mutations that takes Domain/DTO objects and return Domain/DTO objects. `component/data.ts`
+    - **Rest**: Implements caching and aggregation. Custom hooks that just return `react-query` calls. `component/data.ts`
+      - **Api object**: Implements authentication and data fetching. implemented as instantiable object *(to handle ouatuh schemes) with configuration, exposed ad REact context with custom hook `useApi`. Handles internally authentication, refresh tokens, custom headers, adapts data. Use at least `customFetch` insted of `fetch` to eventually add global features as needed. Use `msw` for mocking. 
+    - **GraphQl**: Implements authentication, caching and aggregation. `ApolloGraphQL` Client `component/data.ts`
+  - **Visual components Layer**: It answers `Show something`. Implement reased visual components to isolate from specific implementation. Implemented as flat directory `components` with named export for react components or custom hooks that are a thin wrapper around ui-kit used (ex: Bootstrap, MaterialUI, ClayUI). If needed custom styling with `styled-components/macro` with *css={`color: red`}* and theme as React context with custom hook `useTheme` or project css global variables.  `component/*data*.tsx`
+  - **Forms**: use thin layer approach  `component/*.tsx`
+  - **i18n**: use `react-i18next` with label extraction, without context key, with `<Trans/>` component.
   - **State managment**: use plain props passing. If needed use renderProps.
 
 # Notes

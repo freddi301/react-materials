@@ -1389,11 +1389,23 @@ function useState(initial) {
 Per gli esempi fare riferimento agli esempi precedenti (ricerca testuale "workflow" in questo file)
 
 - scrivere il jsx statico con valori hard coded
+  - se ci sono liste o tabelle scrivere il jsx statico in modo da mostrare 3 elementi (così e piu facile identificare dove avviene la ripetizione)
 - aggiungere gli event handler che fanno il alert() della descrizione di quello che dovrebbe accadere, oppure annotare con // TODO
 - sostituire tutti i valori hard coded con delle variabili const nello scope del componente
-- individuare quali const devono diventare props, e trascrivere
-- individuare qauli const dovrebbero cambiare nel tempo, e quindi trasformarle in React.useState
+- individuare quali const devono diventare props, ovvero parametri del componente, e trascrivere
+- individuare quali const dovrebbero cambiare nel tempo ma sono privati al componente, e quindi trasformarle in React.useState
+  - selezionare il valore, click destro, refactor, extract const module scope
 - individuare le const ed implementare eventuali valori derivati
+- se ci sono liste o tabelle, implementarle
+  - scrivere [].map()
+    - copiando la riga statica e mettendola dentro il return del map
+    - aggiungere la prop speciale key
+    - verificare che il .map ripete correttamente gli elementi
+    - infine cancellare la riga statica
+- implementare gli event handler
+- inviduare eventuali effetti collaterali e codificarli con React.useEffect
+  - ricordiamoci di inserire nell'array delle dipendenze tutte le variabile usate nell'effetto (possiamo sfruttare l'ide per farlo in automatico)
+  - ricordiamoci di scrivere il codice di cleanup se serve
 
 ## Forms: thin wrapper approach
 

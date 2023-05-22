@@ -7,7 +7,6 @@ This repository contains various resources for react courses.
 - [object destructuring](snippets/object-destructuring.ts)
 - [vscode cheat sheet](snippets/vscode-cheat-sheet.md)
 - [jsx translation example](snippets/jsx-translation-example.tsx)
-- [conditional rendering](snippets/conditional-rendering.tsx)
 - [react ref example](snippets/react-ref-example.tsx)
 - [react effect](snippets/react-effect.tsx)
 - [calculator with workaround](snippets/calculator-with-workflow.tsx)

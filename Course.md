@@ -930,7 +930,7 @@ const app = <div>
 
 Ci sono due prop speciali e riservate in react: "children" e "key" che quindi non possono essere utilizzate come paramteri arbitrari per i nostri componenti
 
-## First react component that renders a list
+## List rendering
 
 ricorda: react è in grado di renderizzare solo alcuni tipi di dato
 null, undefined, true, false vengono interpretati come spazio vuoto
@@ -974,10 +974,426 @@ function PersonList({ persons }: { persons: Array<Person> }){
 //   quindi è fondamentale, che le key siano univoche e non ripetute per tutti gli elementi nell array (non serve che siano univoche globalmente)
 ```
 
+## Event handlers
+
+```tsx
+const app = <div
+  onClick={event => {
+    console.log("click");
+  }}
+>
+  click me
+</div>
+```
+
+Gli event handlers in react, sono gli stessi del DOM, con alcune piccole differenze:
+
+- Il nome dell'evento è in CamelCase
+- E una prop degli elementi nativi es `div`
+- Gli va passato una callback (callback indica una funzione che verrà chiamata in un secondo momento)
+- La cllback riceve un parametro, che per convenzione chiamaiamo event, che corrisponde all'evento.
+  - questo evento non è l'evento nativo del dom, bensi una versione "virtuale" (perchè react per perfromanze riutilizza gli oggetti degli eventi)
+  - pertanto, l'oggetto dopo che la funzione callback finisce, verà riutillazto, quinid per salvarlo, o utilizzarlo in un secondo momento
+  - bisogno chiamare il metodo event.persist() 
+
+Come prassi, scrivere gli event handler inline, eventualmente per portarli fuori, selezionare codice in vscode usare click destro -> refactor -> extract con const in enclosing scope:
+
+Scrive le callback come arrow function con graffe inline e nome dell'evento `event`, motivazioni:
+- più breve
+- inferisce tipo evento in typescript
+- leggibilità (un livello di indirezione in meno)
+- condizionalità (se fosse fuori, dobbiamo verificarlo due volte ed e facile dimentarselo)
+
+Quando la si mette fuori, attenzione a non richiamare la funzione erroneamente:
+
+```tsx
+// CORRETTO
+const onClick = (event) => { console.log() }
+const app = <div onClick={onClick}></div>
+
+// SBAGLIATO
+const onClick = (event) => { console.log() }
+const app = <div onClick={onClick()}></div>
+
+// POTREBBE ANDARE BENE
+const onClick = (event) => { console.log() }
+const app = <div onClick={event => { onClick(event) }}></div>
+
+// POTREBBE ANDARE BENE
+const makeOnClick = testo => (event) => { console.log(testo) }
+const app = <div onClick={makeOnClick("hello")}></div>
+```
+
+## Rendering condizionale
+
+### Early return
+
+Si usa nel caso in cui, vogliamo tornare una versione "vuota" di un pezzo di UI
+l'if else sul primo livello del componente
+è utile sopratutto per il early-return in caso di paramteri nulli
+
+```tsx
+function MioComponente({ name }) {
+  // se is visible e true visualizzare "Hello world"
+  // altrimenti non visualizzare nulla
+  if (name) {
+    return <div>hello {name}</div>
+  }
+  return null
+}
+```
+
+### Ternary operator
+
+Serve per visualizzare in base ad una condizione booleana
+l'operatore ternario e utile per graficare i valori booleani
+
+```tsx
+function MioComponente({ isVisible }) {
+  return <div>
+    {isVisible ? <div>It is visible</div> : null}
+  </div>
+}
+```
+
+### Logic operators
+
+Serve per visualizzare qualcosa se c'è. (Sfrutta la proprietà short-circuit degli operatori booleani di javascript)
+gli operatori logici (di solito &&)
+sono utili per visualizzare i campi opzionali
+
+```tsx
+function MioComponente({ nome, cognome }: { nome?: string, congome: string }) {
+  return <div>
+    {nome && <div>{nome}</div>}
+    {cognome && <div>{cognome}</div>}
+  </div>
+}
+```
+
+### IIFE
+
+Serve nel caso in cui necessetiamo di uno statement nella posizione di expression
+IFEE (immediately invoked function expression)
+ci permette di sfruttare gli statement nel jsx
+utile sopratutto per rendering condizionale di piu di due alternative
+
+```tsx
+function MioComponente({ status }: { status: "acceso" | "spento" | "rotto" }) {
+  return <div>
+    {(() => {
+      switch (status) {
+        case "acceso": return <div>acceso</div>
+        case "spento": return <div>spento</div>
+        case "rotto": return <div>rotto</div>
+      }
+    })()}
+  </div>
+}
+```
+
+## React component state
+
+Mentre le props, sono delle infuromazioni che arrivano al compoennte dal chi lo richiama.
+
+Lo stato di un compoennte è privato al componente (non è accessibile dal chiamante o dai figli, a meno chè non viene passato esplicitamente)
+
+Come al cambio delle props di un componente, il compoenten viene rirendirizzato e aggiornato in pagina, cosi al cambiare dello stato interno avviene la medesima cosa.
+
+## React hooks
+
+React hooks, sono delle funzioni speciali, che troviamo nel package "react" nell'oggetto React, che cominciano con il suffisso use (es: useSTate, useEffect).
+
+Ci permettono di agganciarci al lifecycle dei componenti, hanno funzioni diverse.
+
+E hanno delle regole da rispettare. (piu avanti)
+
+## React.useState
+
+React.useState è una react hook, che serve per creare uno slot di stato interno privato al componente. Se questo slot di memoria viene aggiornato, il componete viene rirenderizzato.
+
+```tsx
+function MyComponent(){
+  const [count, setCount] = React.useState(0);
+  return <button onClick={event => { setCount(count + 1); }}>{count}</button>
+} 
+```
+
+React.useState torna un array di due elementi: Il primo è il valore attuale dello slot di memoria, il secondo è una funzione che serve per aggiornarlo (setter);
+
+Di norma si assegna a const con array destructuring, il primo elemento viene chiamato col nome scelto, e il setter con prefisso set;
+
+React.useState riceve come parametro il valore iniziale assunto dallo slot di memoria.
+
+React.useState ha anche un altra firma sia per il setter che per lo stato iniziale, che servono principalmente per motivi di performance.
+
+```tsx
+function MyComponent(){
+  const [count, setCount] = React.useState(() => 0);
+  return <button onClick={event => { setCount(count => count + 1); }}>{count}</button>
+}
+```
+
+Come primo parametro accetta una funzione che produce il valore iniziale da usare se produrre il valore iniziale è costoso.
+Il setter, invece del valore da settare, accetta una funzione che dato il valore attuale produce il nuovo. Questo serve per la memoizzazione o per fare dei set state consecutivi.
+
+### Simple counter + conditional rendering with workflow
+
+```tsx
+// usando typescript + verificare funzionamento in codesandbox
+// scrivere un componente che si chiama Counter
+// che dato un numero massimo di persone
+// visualizza un bottone con il numero di persone attuali
+// cliccando sul buttone il numero di persone attuali aumenta di 1
+// se il numero di persone è magioreuguale all' 80% del massimo visualizzare anche scritta "capienza quasi raggiunta"
+// se raggiunge la capienza, nascondere il bottone, e visualizzare messaggio "capienza raggiunta"
+// cosa utilizzeremo?: component definition, props, useState, event handlers, conditional rendering
+
+// SPOILER soluzione con workflow
+
+// scrivere il jsx statico con valori hard coded
+
+function Counter(){
+  return <div>
+    <button>aumenta numero di persone di 1</button>
+    <div>numero di persone: 0</div>
+    <div>capienza massima: 10</div>
+    <div>capienza quasi raggiunta</div>
+    <div>capienza raggiunta</div>
+  </div>
+}
+
+// aggiungere gli event handler che fanno il alert() della descrizione di quello che dovrebbe accadere, oppure annotare con // TODO
+
+function Counter(){
+  return <div>
+    <button onClick={event => {
+      // TODO
+      alert("aumentare il conteggio di 1");
+    }}>
+      aumenta numero di persone di 1
+    </button>
+    <div>numero di persone: 0</div>
+    <div>capienza massima: 10</div>
+    <div>capienza quasi raggiunta</div>
+    <div>capienza raggiunta</div>
+  </div>
+}
+
+// sostituire tutti i valori hard coded con delle variabili const nello scope del componente
+
+function Counter(){
+  const numeroDiPersone = 0
+  const capienzaMassima = 10
+  const isCapienzaQuasiRaggiunta = false
+  const isCapienzaRaggiunta = false
+  return <div>
+    {!isCapienzaRaggiunta &&
+      <button onClick={event => {
+        // TODO
+        alert("aumentare il conteggio di 1");
+      }}>
+        aumenta numero di persone di 1
+      </button>
+    }
+    <div>numero di persone: {numeroDiPersone}</div>
+    <div>capienza massima: {capienzaMassima}</div>
+    {isCapienzaQuasiRaggiunta && <div>capienza quasi raggiunta</div>}
+    {isCapienzaRaggiunta && <div>capienza raggiunta</div>}
+  </div>
+}
+
+// individuare quali const devono diventare props, e trascrivere
+
+function Counter({ capienzaMassima }: { capienzaMassima: number }){
+  const numeroDiPersone = 0
+  const isCapienzaQuasiRaggiunta = false
+  const isCapienzaRaggiunta = false
+  return <div>
+    {!isCapienzaRaggiunta &&
+      <button onClick={event => {
+        // TODO
+        alert("aumentare il conteggio di 1");
+      }}>
+        aumenta numero di persone di 1
+      </button>
+    }
+    <div>numero di persone: {numeroDiPersone}</div>
+    <div>capienza massima: {capienzaMassima}</div>
+    {isCapienzaQuasiRaggiunta && <div>capienza quasi raggiunta</div>}
+    {isCapienzaRaggiunta && <div>capienza raggiunta</div>}
+  </div>
+}
+
+// individuare quali const dovrebbero cambiare nel tempo, e quindi trasformarle in React.useState
+
+function Counter({ capienzaMassima }: { capienzaMassima: number }){
+  const [numeroDiPersone, setNumeroDiPersone] = React.useState(0)
+  const isCapienzaQuasiRaggiunta = false
+  const isCapienzaRaggiunta = false
+  return <div>
+    {!isCapienzaRaggiunta &&
+      <button onClick={event => {
+        // TODO
+        alert("aumentare il conteggio di 1");
+      }}>
+        aumenta numero di persone di 1
+      </button>
+    }
+    <div>numero di persone: {numeroDiPersone}</div>
+    <div>capienza massima: {capienzaMassima}</div>
+    {isCapienzaQuasiRaggiunta && <div>capienza quasi raggiunta</div>}
+    {isCapienzaRaggiunta && <div>capienza raggiunta</div>}
+  </div>
+}
+
+// individuare le const ed implementare eventuali valori derivati
+
+function Counter({ capienzaMassima }: { capienzaMassima: number }){
+  const [numeroDiPersone, setNumeroDiPersone] = React.useState(0)
+  const isCapienzaQuasiRaggiunta = numeroDiPersone >= capienzaMassima * 0.80;
+  const isCapienzaRaggiunta = numeroDiPersone >= capienzaMassima;
+  return <div>
+    {!isCapienzaRaggiunta &&
+      <button onClick={event => {
+        // TODO
+        alert("aumentare il conteggio di 1");
+      }}>
+        aumenta numero di persone di 1
+      </button>
+    }
+    <div>numero di persone: {numeroDiPersone}</div>
+    <div>capienza massima: {capienzaMassima}</div>
+    {isCapienzaQuasiRaggiunta && <div>capienza quasi raggiunta</div>}
+    {isCapienzaRaggiunta && <div>capienza raggiunta</div>}
+  </div>
+}
+
+// implementare gli event handler
+
+function Counter({ capienzaMassima }: { capienzaMassima: number }){
+  const [numeroDiPersone, setNumeroDiPersone] = React.useState(0)
+  const isCapienzaQuasiRaggiunta = numeroDiPersone >= capienzaMassima * 0.80;
+  const isCapienzaRaggiunta = numeroDiPersone >= capienzaMassima;
+  return <div>
+    {!isCapienzaRaggiunta &&
+      <button onClick={event => {
+        setNumeroDiPersone(numeroDiPersone + 1)
+      }}>
+        aumenta numero di persone di 1
+      </button>
+    }
+    <div>numero di persone: {numeroDiPersone}</div>
+    <div>capienza massima: {capienzaMassima}</div>
+    {isCapienzaQuasiRaggiunta && <div>capienza quasi raggiunta</div>}
+    {isCapienzaRaggiunta && <div>capienza raggiunta</div>}
+  </div>
+}
+
+```
+
+### React state immutability
+
+Lo stato (props, stato interno, context) in react fanno parte della parte immutabile e dichiarativa. (ad esempio reactRoot.render, Rract.useEffect e event handlers della parte imperativa)
+
+Quindi! NON POSSIAMO MUTARE in alcun modo lo stato, bensi dobbiamo sempre produrre nuove versione (es: clonaendo e contesuatlmente modificando lo stato esistente) e pasarle ai vari setter.
+
+```tsx
+function MioComponente(){
+  const [persona, setPersona] = React.useState({ nome: "", cognome: "" })
+  return <div>
+    <input
+      value={persona.nome}
+      onChange={event => {
+        // SBAGLIATO! perche react aggiorname il componente in pagina, solo se richiamamiamo un setter di stato
+        persona.nome = event.currentTarget.value;
+
+        // SBAGLIATO! perche react aggiorname il componente in pagina, solo se richiamamiamo un setter di stato con una nuova istanza
+        persona.nome = event.currentTarget.value;
+        setPersona(persona)
+
+        // CORRETTO
+        setPersona({ ...persona, nome: event.currentTarget.value })
+
+        // CORRETTO MA ANCORA MEGLIO
+        const nome = event.currentTarget.value; // catturo subito il valore, perchè per motivi vari potrebbe cambiare
+        setPersona(persona => ({ ...persona, nome }));
+
+        // ALTERNATIVA PIU ESPLICITA
+        const nuovoNome = event.currentTarget.value;
+        const nuovaPersona = { ...persona, nome: nuovoNome };
+        setPersona(nuovaPersona)
+      }}
+    />
+    <input
+      value={persona.cognome}
+      onChange={event => {
+        // FORMA MIGLIORE per compromesso numero di indirezioni ed esplicità
+        const congome = event.currentTarget.value;
+        setPersona({...persona, cognome })
+      }}
+    />
+  </div>
+}
+```
+
+## React.useReducer
+
+E la react hook fondamentale per lo stato interno.
+Primo parametero è una funzione che dato lo stato attuale ed un azione, produce nuovo stato.
+Secondo parametro è lo stato iniziale, oppure una funzione che produce lo stato iniziale.
+Ritorna un array di due elementi: il primo è lo stato attuale, il secondo una funzione per notificare un'azione da svolgere sullo stato.
+
+```tsx
+function MyComponent() {
+  const [count, dispatchCount] = React.useReducer((state, action: {type: "increment"} | {type: "decrement", amount: number }) => {
+    switch (action.type) {
+      case "increment": return state + 1;
+      case "decrement": return state - action.amount;
+    } 
+  }, 0);
+  return <button onClick={event => { dispatchCount({ type: "increment" }) }}>{count}</button>
+}
+```
+
+In realtà React.useState è una hook costruita con React.useReducer
+
+```tsx
+// versione esemplificativa
+function useState(initial) {
+  const [state, dispatch] = React.useReducer((state, action) => action, initial)
+  return [state, disptach]
+}
+```
+
+### Todo list
+
+```tsx
+// realizzare un componente TodoList
+// mi deve permettere di gestire una lista di todo
+// implementare le seguenti features in ordine perhcè sono in ordine crescente di complessità
+// quindi aggiungere un todo
+// rimuovere un todo
+// segnare come letto un todo
+// modificare il testo di un todo
+// riordinare i todo
+```
+
 
 # React Advanced
 
 # React Best Practices
+
+## React code writing workflow
+
+Per gli esempi fare riferimento agli esempi precedenti (ricerca testuale "workflow" in questo file)
+
+- scrivere il jsx statico con valori hard coded
+- aggiungere gli event handler che fanno il alert() della descrizione di quello che dovrebbe accadere, oppure annotare con // TODO
+- sostituire tutti i valori hard coded con delle variabili const nello scope del componente
+- individuare quali const devono diventare props, e trascrivere
+- individuare qauli const dovrebbero cambiare nel tempo, e quindi trasformarle in React.useState
+- individuare le const ed implementare eventuali valori derivati
 
 ## Forms: thin wrapper approach
 

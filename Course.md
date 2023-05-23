@@ -1569,24 +1569,32 @@ function useState(initial) {
 
 ctrl + , apre la finestra di configurazione, configurare sempre per progetto, questo crea un file .vscode/settings.json che è da committare
 
-- format on save [x]
+- format on save -> enabled
 - formattore di default per javascript, typescript, html, css -> prettier
 - bracket pairs -> active
 - linked editing -> enabled
+- render whitespace -> boundary
 
 #### Cheatsheet
 
-- ctrl + spazio usa autocompletamento
-- ctrl + p > ci fa eseguire comandi
-- ctrl + p nome file ci fa cercare file
-- ctrl + p :25 ci fa andare a riga del file corernte
-- ctrl + p @ ci fa cercare tra le variabili nel file corrente
-- ctrl + d seleziona tutta la parole sotto al cursore
-- ctrl + d ripetuto più volte seleziona la prossima porzione di testo identica (piccolo modale in alto a destra offre toggle case sensitive)
-- shift + alt + -> seleziona il codice dentro le parentesi
-- alt + selezione col mouse seleziona in colonna
-- f2 rinomina una variabile in tutto il progetto
-- click destro -> refactor varie operazioni
+- `ctrl + spazio` usa autocompletamento
+- `ctrl + p`
+  - `>` ci fa eseguire comandi
+  - nome file ci fa cercare file
+  - `:`25 ci fa andare a riga del file corrente
+  - `@` ci fa cercare tra le variabii nel file corrente
+  - `#` ci fa cercare tra i nomi
+- `ctrl + d` seleziona tutta la parole sotto al cursore
+- `ctrl + d` ripetuto più volte seleziona la prossima porzione di testo identica (piccolo modale in alto a destra offre toggle case sensitive)
+- `shift + alt + ->` seleziona il codice dentro le parentesi
+- `alt + selezione col mouse` seleziona in colonna
+- `f2` rinomina una variabile in tutto il progetto
+- `click destro -> refactor` varie operazioni
+- `ctrl + shift + p -> search editor` ricerca super avanzata
+
+https://code.visualstudio.com/docs/getstarted/tips-and-tricks#_keyboard-reference-sheets
+https://code.visualstudio.com/docs/editor/codebasics
+https://code.visualstudio.com/docs/editor/editingevolved
 
 
 

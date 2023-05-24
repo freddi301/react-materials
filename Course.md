@@ -2466,6 +2466,92 @@ function useState(initial) {
 intrinseco: salvare le info nell'oggeto, quinid aggiungere al lui un attributo [usare solitamente questo]
 estrinseco: salvare le info su un oggetto in una collection esterna e ricollegare tramite key o index [usare se non si può modificare la foram dell'oggetto originale]
 
+## React.useEffect
+
+```tsx
+function MyComponent() {
+  const [count, setCount] = React.useState(0);
+  // vvvvvvvvvvvvvvvvvvvv
+  React.useEffect(() => {
+    console.log(count);
+    return () => {
+      console.log("cleanup");
+    };
+  }, [count]);
+  // ^^^^^^^^^^^^^^^^^^^^
+  return <button onClick={() => setCount(count + 1)}>{count}</button>;
+}
+```
+
+React.useEffect serve per incapsulare operazioni non pure, in gergo "effetti".
+Riceve 2 parametri.
+Il primo è una funzione che incapsule le istruzioni imperative con effetti collaterali. Queste istruzioni trovandosi dentro una funzione vengono eseguite appunto solo se la funzinione viene richiamata. Opzionalmente può ritornare una funzione di cleanup che verrà eseguita prima della successiva chiamata dell’effetto.
+Il secondo parametro è un array, in gergo array delle dipendenze, dentro questo array dobbiamo scrivere tutte le variabili che utiliziamo nelle funzione che incapsula le istruzioni ma che non appertengono al suo scope. Questo array va scritto in modo espicito nella maggiorpate dei casi non può essere computato. Fondamentalmente ci possiamo affidare all'ide per riempire questo array in automatico.
+La funzione che incapsula le istruzioni viene eseguita la prima volta che il componente viene renderizzato e poi ogni volta che una delle variabili dell'array delle dipendenze cambia valore.
+
+### Title changer
+
+```tsx
+// reallizzare un componente che permette di cambiare il titolo della tab del browser
+// usare React.useEffect e document.title = ""
+
+// SPOILER soluzione
+function TitleChanger() {
+  const [title, setTitle] = React.useState("React Workshop");
+  React.useEffect(() => {
+    document.title = title;
+  }, [title]);
+  return (
+    <div>
+      page title:{" "}
+      <input
+        value={title} // bisogna specificare quale sia il valore contenuto nell'input
+        onChange={(event) => {
+          // aggiorniamo lo stato prendendo il valore del campo di input dall'evento
+          setTitle(event.target.value);
+        }}
+      />
+    </div>
+  );
+}
+```
+
+### With setInterval
+
+```tsx
+function MyComponent() {
+  React.useEffect(() => {
+    const intervalId = setInterval(() => {
+      console.log("tick");
+    }, 1000);
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
+}
+```
+
+## Custom hook
+
+```tsx
+function useLogChanges<Value>(value: Value) {
+  React.useEffect(() => {
+    console.log(value);
+  }, [value]);
+}
+```
+
+Si chiama custom hook, qualsiasi funzione che utilizza una react hook (React.useQualcosa).
+Per convenzione i nome comincia con use.
+Non ha limitazione in quanto a parametri e ritorno.
+E l'unita di riutilizzo del codice per logiche di stato e effects.
+
+RECAP: qual'è l'unita di riutilizzo del codice?
+
+- in javascript : funzione
+- in react per il matkup : componente (ovvero una funzione che produce virtual dom)
+- in react per gestione stato e effects : custom hook (ovvero una funzione che a sua volta richiama custom hook)
+
 # React Advanced
 
 # React Best Practices

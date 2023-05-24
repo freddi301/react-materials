@@ -1624,6 +1624,9 @@ function useState(initial) {
 
 // SPOILER soluzione
 
+// da consultare i vscode -> ctrl + shift + p -> File: compare new untitled text files
+// incollando il passggio precedente a sinistra, e quello successivo a destra per vedere le differenze
+
 // ---
 
 (() => {

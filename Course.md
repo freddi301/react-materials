@@ -1610,7 +1610,7 @@ function useState(initial) {
 }
 ```
 
-## Todo list
+## Todo list + workflow
 
 ```tsx
 // realizzare un componente TodoList
@@ -2556,13 +2556,15 @@ Per gli esempi fare riferimento agli esempi precedenti (ricerca testuale "workfl
 - individuare quali const dovrebbero cambiare nel tempo ma sono privati al componente, e quindi trasformarle in React.useState
   - selezionare il valore, click destro, refactor, extract const module scope
 - individuare le const ed implementare eventuali valori derivati
+- se ci sono campi imput, fare il binding `<input value={value} onChange={event => {}}/>`
 - se ci sono liste o tabelle, implementarle
-  - scrivere [].map()
+  - scrivere `{[].map(item => { return null })}`
     - copiando la riga statica e mettendola dentro il return del map
-    - aggiungere la prop speciale key
+    - aggiungere la prop speciale key (se non si ha un id entità, si può usare l'index anche se non è ottimale)
     - verificare che il .map ripete correttamente gli elementi
     - infine cancellare la riga statica
 - implementare gli event handler
+- aggiungere stato intrinseco/estrinseco
 - inviduare eventuali effetti collaterali e codificarli con React.useEffect
   - ricordiamoci di inserire nell'array delle dipendenze tutte le variabile usate nell'effetto (possiamo sfruttare l'ide per farlo in automatico)
   - ricordiamoci di scrivere il codice di cleanup se serve

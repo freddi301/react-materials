@@ -2549,8 +2549,129 @@ E l'unita di riutilizzo del codice per logiche di stato e effects.
 RECAP: qual'è l'unita di riutilizzo del codice?
 
 - in javascript : funzione
-- in react per il matkup : componente (ovvero una funzione che produce virtual dom)
+- in react per il markup : componente (ovvero una funzione che produce virtual dom)
 - in react per gestione stato e effects : custom hook (ovvero una funzione che a sua volta richiama custom hook)
+
+## Controlled components
+
+Un componente si dice controllato quando il suo stato è interamente controllato da un componente superiore (chiamante).
+
+## Pattern di composizione
+
+### Props passing
+
+```tsx
+function Twice({ n }: { n: number }) {
+  return <div>{n * 2}</div>;
+}
+function App() {
+  return (
+    <div>
+      <Twice n={2} />
+      <Twice n={4} />
+    </div>
+  );
+}
+```
+
+### Event propagation
+
+Per convenzione prefisso "on"
+
+```tsx
+function Switcher({
+  value,
+  onChange,
+}: {
+  value: boolean;
+  onChange(value: boolean): void;
+}) {
+  // const [value, onChange] = React.useState(false)
+  <div
+    onClick={(event) => {
+      onChange(!value);
+    }}
+  >
+    {value ? "on" : "off"}
+  </div>;
+}
+
+function App() {
+  const [isEnabled, setIsEnabled] = React.useState(false);
+  return (
+    <div>
+      <Switcher value={isEnabled} onChange={setIsEnabled} />
+    </div>
+  );
+}
+```
+
+### Render props
+
+Veder in codesandbox
+
+```tsx
+function Twice({ children }: { children: React.ReactNode }) {
+  return (
+    <div>
+      {children}
+      {children}
+    </div>
+  );
+}
+function Chapter({
+  heading,
+  content,
+}: {
+  heading: React.ReactNode;
+  content: React.ReactNode;
+}) {
+  return (
+    <div>
+      <div>{heading}</div>
+      <div>{content}</div>
+    </div>
+  );
+}
+function App() {
+  return (
+    <div>
+      <Chapter
+        heading={<h1>Say hello twice</h1>}
+        content={<Twice>Hello</Twice>}
+      />
+      <Chapter heading={<h1>Say bye twice</h1>} content={<Twice>bye</Twice>} />
+    </div>
+  );
+}
+```
+
+### HOC - Higher Order Componente
+
+Come una uunzione si dice di ordine superiore se riceve e/o ritorna una funzione a sua volta,
+cosi HOC è una funzione che riceve un componente e ritorna un componente.
+
+E una tecnica desueta. Ne possiamo però trovare l'unico esempio utile sopravvissuto in React.memo.
+
+```tsx
+function WithPropLog<Props>(
+  component: React.FunctionComponent<Props>
+): React.FunctionComponent<Props> {
+  return function WithPropLog(props: Props) {
+    console.log(props);
+    return <Component {...props} />;
+  };
+}
+const TwiceWithLog = WithPropLog(Twice);
+```
+
+## Client only CRUD app exercise
+
+Realizzare in react, pure client side, una app CRUD che permette di gestire una lista di persone.
+
+- lista delle persone (READ tutte le entita)
+- bottone elimina persona (DELETE singola entita)
+- form di creazione e modifica persona (READ singola entita, CREATE singola entita, UPDATE singola entita)
 
 # React Advanced
 

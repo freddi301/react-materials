@@ -12,57 +12,56 @@ https://github.com/getify/You-Dont-Know-JS
 
 // in matematica
 
-// f(x) = x * 2
+// f(x) = x \* 2
 
 // y = f x ---- ad esempio per fare un grafico
 
-
 ```typescript
-f = (x: number): number => x * 2
+f = (x: number): number => x * 2;
 ```
 
 ```javascript
-f = (x) => x * 2
-f(8) // 16
+f = (x) => x * 2;
+f(8); // 16
 ```
-
-
 
 // un a funzione che prende 2 parametri
 
-
 ```typescript
-f = (x: number, y: number): number => x + y
+f = (x: number, y: number): number => x + y;
 ```
 
 ```javascript
-
-f = (x, y) => x + y
-f(2, 4) // 6
-
+f = (x, y) => x + y;
+f(2, 4); // 6
 ```
 
 // Currying
 
 ```typescript
-f = ((x: number) => ((y: number) => x + y)) // closure su x
+f = (x: number) => (y: number) => x + y; // closure su x
 ```
 
 ```javascript
-f = x => y => x + y;
+f = (x) => (y) => x + y;
 
 f(3); // per pterlo fare
-(x => y => x + y)(3);
-(y => 3 + y);
+(
+  (x) => (y) =>
+    x + y
+)(3);
+(y) => 3 + y;
 
 // f(2)(4)
-(f(2))(4);
-((x => y => x + y)(2))(4);
-((y => 4 + y)(2));
-(4 + 2);
-6
+f(2)(4);
+(
+  (x) => (y) =>
+    x + y
+)(2)(4);
+((y) => 4 + y)(2);
+4 + 2;
+6;
 ```
-
 
 // Left associative +
 
@@ -74,160 +73,163 @@ f(3); // per pterlo fare
 // a => b => c => d
 // a => (b => (c => d))
 
-
 ```typescript
-f = (g: (u: number) => number) => (x: number): number => g(g(x))
+f =
+  (g: (u: number) => number) =>
+  (x: number): number =>
+    g(g(x));
 
 function doubleExecution(opreation: (data: number) => number) {
   return function (data) {
-    const middle = operation(data)
-    return operation(middle)
-  }
+    const middle = operation(data);
+    return operation(middle);
+  };
 }
 ```
 
 ```javascript
-f = g => x => g(g(x))
+f = (g) => (x) => g(g(x));
 
-doubleExecution = operation => data => operation(operation(data))
+doubleExecution = (operation) => (data) => operation(operation(data));
 ```
-
 
 // i due estremi
 // pro (nessuna indirezione) contro (nessun nome; non si capisce cosa fa cosa)
 // vs
 // prop (esplicito) contro (troppi nomi; troppa indirezione nella lettura; inventare nome è difficile)
 
-
 ```typescript
-f = g => x => g(g(x))
+f = (g) => (x) => g(g(x));
 
-const f
-  : (g: (u: number) => number) => (x: number) => number
-  = (g: (u: number) => number): number => (x: number): number => g(g(x))
+const f: (g: (u: number) => number) => (x: number) => number =
+  (g: (u: number) => number): number =>
+  (x: number): number =>
+    g(g(x));
 
 // ---
 
-type Data = number
-type Operation = (data: Data) => Data
-const f
-  : (g: Operation) => (x: Data) => Data
-  = (g: Operation): (x: Data) => Data => (x: Data): Data => g(g(x))
+type Data = number;
+type Operation = (data: Data) => Data;
+const f: (g: Operation) => (x: Data) => Data =
+  (g: Operation): ((x: Data) => Data) =>
+  (x: Data): Data =>
+    g(g(x));
 
 // --
 
 type Data = number;
 type Operation = (data: Data) => Data;
 type DoubleExecution = (operation: Operation) => (data: Data) => Data;
-const doubleExecution: DoubleExecution = (operation: Operation) => (data: Data): Data => operation(operation(data))
+const doubleExecution: DoubleExecution =
+  (operation: Operation) =>
+  (data: Data): Data =>
+    operation(operation(data));
 
 // --
 
 type Data = number;
 type Operation = (data: Data) => Data;
 type DoubleExecution = (operation: Operation) => (data: Data) => Data;
-const doubleExecution: DoubleExecution = (operation: Operation) => (data: Data): Data => {
-  const intermediate = operation(data)
-  return operation(intermediate)
-}
+const doubleExecution: DoubleExecution =
+  (operation: Operation) =>
+  (data: Data): Data => {
+    const intermediate = operation(data);
+    return operation(intermediate);
+  };
 
 // -- secondo Frederik questa è la versione con il miglior rapporto di quantità ed esplicita del codice
 
 type Data = number;
 type Operation = (data: Data) => Data;
 const doubleExecution = (operation: Operation) => (data: Data) => {
-  return operation(operation(data))
-}
+  return operation(operation(data));
+};
 
 // --
 
 type Data = number;
 type Operation = (data: Data) => Data;
 const doubleExecution = (operation: Operation) => (data: Data) => {
-  const intermediateData = operation(data)
-  const finalData = operation(intermediateData)
-  return finalData
-}
+  const intermediateData = operation(data);
+  const finalData = operation(intermediateData);
+  return finalData;
+};
 
 // --
 
 type Data = number;
 type Operation = (data: Data) => Data;
 type DoubleExecution = (operation: Operation) => (data: Data) => Data;
-type Execution = (data: Data) => Data
-const doubleExecution: DoubleExecution = (operation : Operation) => {
+type Execution = (data: Data) => Data;
+const doubleExecution: DoubleExecution = (operation: Operation) => {
   const execution: Execution = (data: Data) => {
-    const intermediateData = operation(data)
-    const finalData = operation(intermediateData)
-    return finalData
-  }
-} 
+    const intermediateData = operation(data);
+    const finalData = operation(intermediateData);
+    return finalData;
+  };
+};
 ```
-
 
 // come utilizzarlo?
 
 ```typescript
 type Operation = (data: number) => number;
 const doubleExecution = (operation: Operation) => (data: number) => {
-  return operation(operation(data))
-}
+  return operation(operation(data));
+};
 
 const multiplicazionePer2 = (qualcosa) => qualcosa * 2;
-const addizioneDi4 = (numero : number) => numero + 4;
-
+const addizioneDi4 = (numero: number) => numero + 4;
 
 const risultato6 = doubleExecution(addizioneDi4)(2);
 
 // usare doubleExecution(???)(3) di modo che ritorni 1, tenersi in una riga
-const risultato3 = doubleExecution(numero => numero - 1)(3)
+const risultato3 = doubleExecution((numero) => numero - 1)(3);
 
-const addizioneDi = x => y => x + y // in java si chiamerebbe Factory di Operation
-const risultato12 = doubleExecution(addizioneDi(10))(2) // 12
+const addizioneDi = (x) => (y) => x + y; // in java si chiamerebbe Factory di Operation
+const risultato12 = doubleExecution(addizioneDi(10))(2); // 12
 
 const adddtionOfOperationFactory = (settings: number): Oepration => {
   const additionBy: Operation = (data: number) => {
-    return data + settings
-  }
-  return operation
-}
-
+    return data + settings;
+  };
+  return operation;
+};
 ```
 
 ```javascript
-f = (g) => (x) => g(g(x))
-f( x => 2*x )(4) // 16
+f = (g) => (x) => g(g(x));
+f((x) => 2 * x)(4); // 16
 ```
-
 
 ### Block scope vs function scope
 
 ```javascript
-function hello () {
+function hello() {
   // hoisting
   // var u;
-  var u = 10 // u = 10
+  var u = 10; // u = 10
   const a = 8;
-  consoel.log(u) // 10
+  consoel.log(u); // 10
   if (true) {
-    var u = 6 // u = 6
-    console.log(a) // 8
+    var u = 6; // u = 6
+    console.log(a); // 8
     const a = 5;
-    console.log(a) // 5
+    console.log(a); // 5
   }
-  console.log(a) // 8
-  consoel.log(u) // 6
+  console.log(a); // 8
+  consoel.log(u); // 6
 }
-
 ```
 
 ### IFEE Immediately Invoked Function Expression
+
 Serve per trasformare uno statement in un'espression
 
 ```javascript
 // e tutto finto
 libreria.funzionalita((() => {
-  const hello = String.random(); 
+  const hello = String.random();
   switch (hello) {
     case "a": return "b",
     case "c": return "g"
@@ -249,12 +251,12 @@ var Hello = function Hello(){
 ```javascript
 const a = {
   x: 1,
-  y: 2
-} // oggetto
+  y: 2,
+}; // oggetto
 const f = () => {
   console.log(1);
   console.log(1);
-} // statement
+}; // statement
 while (true) console.log();
 while (true) {
   console.log(1);
@@ -263,6 +265,7 @@ while (true) {
 ```
 
 Un oggetto un contenitore, fatto di una lista di chiave valore, con chiavi che sono univoche nell-oggetto
+
 ```javascript
 { x: 1, x: 2 }
 (() => {
@@ -275,67 +278,65 @@ Un oggetto un contenitore, fatto di una lista di chiave valore, con chiavi che s
 
 ```javascript
 const a = 4; // dichiarazione
-let b; b = 6; // mutazione
-
+let b;
+b = 6; // mutazione
 
 const original = {
   a: 1,
   b: 2,
-  c: 3
+  c: 3,
 };
 // verione esetesa
 const modified = {
   a: original.a,
   b: original.b,
-  c: 345
+  c: 345,
 };
 // versione syntax sugar che si chiama object spread
-const modified = { ...original, c: 345, d : 78  }
-
-
-// esempio sort
-[1,2,3].sort((a, b) => {
+const modified = { ...original, c: 345, d: 78 }[
+  // esempio sort
+  (1, 2, 3)
+].sort((a, b) => {
   // deve tornare 0 se sono uguali
   // deve tornare < 0 se a deve stare prima di b
   // deve tornare > 0 se a deve stare prima di b
 
   // per numeri
-  return a - b // quindi questo sarebbe l'0ridnamneto asscnedente
-  return b - a // quindi questo sarebbe l'0ridnamneto dissencdente
+  return a - b; // quindi questo sarebbe l'0ridnamneto asscnedente
+  return b - a; // quindi questo sarebbe l'0ridnamneto dissencdente
 
   // per stringhe .localCompare ordina in base all'allfabeto della lingua dell'utente
-  return a.localCompare(b)  
-  return b.localCompare(a)
+  return a.localCompare(b);
+  return b.localCompare(a);
   // < o > invece confronto come se ofsse ASCII
   // ["a", "b", "à"].sort() // ["a", "b", "à"]
   // ["a", "b", "à"].sort(...localCompare...) // ["a", "à", "b"]
 
   // per oggetti tornate per semplicità 0 -1 o 1
-})
+});
 ```
 
 spesso vi può capitare che vi serve una funzionalità che ha solo la variante mutabile
 in questo caso usare trucchetto: "mutabilità locale"
+
 ```javascript
 function immutableReverse(originalArray)
   const modifiedArray = [...orignalArray] // clono con array spread
   modifiedArray.reverse() // modifico il clone
-  return modfiedArray // l'orignale rimane intatto; 
+  return modfiedArray // l'orignale rimane intatto;
 // e all'esterno non si nota nessuna modifica allo stato dle mondo
 ```
 
-
 // using spread ...
 let p1 = {
-    ...person
+...person
 };
 
-// using  Object.assign() method <- quetaè la versione desugared quindi stessa funzionalità del {...x}
-let p2 = Object.assign({}, person); 
+// using Object.assign() method <- quetaè la versione desugared quindi stessa funzionalità del {...x}
+let p2 = Object.assign({}, person);
 
 // using JSON <- ok per prortotipare ma ha delle limitazioni (omette le funzioni)
 let p3 = JSON.parse(JSON.stringify(person));
-
 
 ```javascript
 function funzinalita(array)
@@ -365,97 +366,95 @@ function funzinalita(array)
 
 ```
 
-
 ## Array.map
 
 ```typescript
-
 // Il .map è la trasformazione di un oggetto, ma applicata ad un array di oggetti
 
-const arrayOriginale = ["a", "b", "c"]
-const suffisso = "--"
-const arrayNuovo = arrayOriginale.map(function newItemProducer(itemOriginale) {
-  const itemNuovo = itemOriginale.toUppercase() + suffisso
-  return itemNuovo
-}) // ["A--", "B--", "C--"]
+const arrayOriginale = ["a", "b", "c"];
+const suffisso = "--";
+const arrayNuovo = arrayOriginale
+  .map(function newItemProducer(itemOriginale) {
+    const itemNuovo = itemOriginale.toUppercase() + suffisso;
+    return itemNuovo;
+  }) // ["A--", "B--", "C--"]
 
-[1,2,3].map(x => x * 2) /* => produce => */ [2,4,6]
-
-[1,2,3].map(x => x * 2) /* => produce => */
-[2,4,6]
+  [(1, 2, 3)].map((x) => x * 2) /* => produce => */
+  [(2, 4, 6)][(1, 2, 3)].map((x) => x * 2) /* => produce => */[(2, 4, 6)];
 
 // VOTI: **
 
-type Person = { name: string }
-type Worker = { name: string, job: string }
-function fromPersonToWorker(person: Person): Worker { return {...person, job: "React developer"} }
+type Person = { name: string };
+type Worker = { name: string; job: string };
+function fromPersonToWorker(person: Person): Worker {
+  return { ...person, job: "React developer" };
+}
 
-const fredAtHome: Person = {name: "Frederik"}
-const fredAtSmc: Worker =  fromPersonToWorker(fredAtHome)
+const fredAtHome: Person = { name: "Frederik" };
+const fredAtSmc: Worker = fromPersonToWorker(fredAtHome);
 
-const fannulloni: Array<Person> = []
-const fannulloniConstipendio: Array<Worker> = fannulloni.map(fromPersonToWorker)
+const fannulloni: Array<Person> = [];
+const fannulloniConstipendio: Array<Worker> =
+  fannulloni.map(fromPersonToWorker);
 
 // VOTI:********
-
 ```
 
 ## Array.filter
 
 ```typescript
-
 // il .filter è il criterio su un ogetto ma applicato ad un array di oggetti
 
-["apple", "orange", "ananas", "banana"].filter(fruit => fruit.charAt(0) === "a") /* => produces => */ ["apple", "ananas"]
+["apple", "orange", "ananas", "banana"].filter(
+  (fruit) => fruit.charAt(0) === "a"
+) /* => produces => */[("apple", "ananas")];
 
-type Fruit = string
+type Fruit = string;
 
 function startsWihtA(fruit: Fruit): boolean {
-  const firstLEtter = fruit.charAt(0)
-  return firstLetter === "a"
+  const firstLEtter = fruit.charAt(0);
+  return firstLetter === "a";
 }
 
-const doesAppleStartsWithA = startsWihtA("appple")
+const doesAppleStartsWithA = startsWihtA("appple");
 
-const fruits: Array<Fruit> = ["apple", "orange", "ananas", "banana"]
-const fruitsILike = fruits.filter(startsWihtA) /* => produces => */ ["apple", "ananas"]
-
+const fruits: Array<Fruit> = ["apple", "orange", "ananas", "banana"];
+const fruitsILike =
+  fruits.filter(startsWihtA) /* => produces => */[("apple", "ananas")];
 ```
 
-## Import/Export 
+## Import/Export
 
 ```typescript
-
 // file src/libreria.ts
 
-export const x = 10
-export function haha(){}
+export const x = 10;
+export function haha() {}
 
 // file src/applicazione.ts
 
-import { x, haha } from "./libreria"
+import { x, haha } from "./libreria";
 
 console.log(x);
 haha();
-
 ```
+
 esempio di file risultatnto dopo il bundling
+
 ```javascript
-
 const librearia = (() => {
-  const x = 10
-  function haha(){}
+  const x = 10;
+  function haha() {}
 
-  return { x, haha } // gli export diventato un oggetto ritornato
-})()
+  return { x, haha }; // gli export diventato un oggetto ritornato
+})();
 
 const applicatione = (() => {
-  const { x, haha } = libreria // gli import diventato un oggetto destrutturato
+  const { x, haha } = libreria; // gli import diventato un oggetto destrutturato
 
   console.log(x);
   haha();
-})()
-
+})();
 ```
 
 esiste anche una forsa più datata di funzionalità import/export che si chiama require/define e sono delle espressioni;
@@ -513,34 +512,33 @@ export { a as x };
 ## Closure implementation in objects
 
 ```javascript
-
-function outer(){
+function outer() {
   const a = 1;
-  function inner(){
+  function inner() {
     const b = 2;
-    console.log(b)
+    console.log(b);
     console.log(a);
   }
   return inner;
 }
 
 class inner {
-  constructor(a){
+  constructor(a) {
     this.a = a;
     this.b = 2;
   }
-  run(){
-    console.log(this.b)
+  run() {
+    console.log(this.b);
     console.log(this.a);
   }
 }
 
 class outer {
-  constructor(){
+  constructor() {
     this.a = 1;
     this.inner = new inner(this.a);
-  }  
-  run(){
+  }
+  run() {
     return this.inner;
   }
 }
@@ -551,21 +549,21 @@ class outer {
 Array.reduce la codifica funzionale del ciclo for con accumulatore
 
 ```javascript
-const array = [10,20,30]
-let accumulatore = 100
-for (let i = 0; i < array.length; i++){
-  console.log({accumulatore, "array[i]": array[i], i})
-  const item = array[i]
+const array = [10, 20, 30];
+let accumulatore = 100;
+for (let i = 0; i < array.length; i++) {
+  console.log({ accumulatore, "array[i]": array[i], i });
+  const item = array[i];
   accumulatore = accumulatore + item;
 }
-console.log(accumulatore)
+console.log(accumulatore);
 
 console.log(
-  [10,20,30].reduce((accumulatore, item) => {
-    console.debug({accumulatore, item})
+  [10, 20, 30].reduce((accumulatore, item) => {
+    console.debug({ accumulatore, item });
     return accumulatore + item;
   }, 100)
-)
+);
 ```
 
 ## Replicate Array.filter, Array.map
@@ -721,7 +719,6 @@ function trasformaPersone(persone: Array<Persona>, trasformazione: (persone: Per
 // TODO: fare la versione generica di trasformaPersone
 
 // COMPLIMENTI, hai replicato con successo la funzionalità di filter e map
-
 ```
 
 ## Object destructuring
@@ -753,7 +750,7 @@ const a = p.a;
 
 // in cosa viene tradotto?
 const {
-  a: { b }
+  a: { b },
 } = t;
 // traduzione
 const b = t.a.b;
@@ -761,7 +758,7 @@ const b = t.a.b;
 // in cosa viene tradotto?
 const {
   a: { b },
-  c
+  c,
 } = t;
 // traduzione
 const b = t.a.b;
@@ -872,7 +869,6 @@ root.render(<h1>Mario</h1>);
 Unita di uddivisione e riutilizzo del codice
 
 ```tsx
-
 // in un software generico
 // abbiamo i dati e le sitruzioni
 // e utilizziamo le funzioni
@@ -880,10 +876,9 @@ Unita di uddivisione e riutilizzo del codice
 // noi componiamo software tramite il richiamo di funzione
 
 function coppiaDiNumeri(numero) {
-  return [numero, numerio]
+  return [numero, numerio];
 }
-const esempio = coppiaDiNumero(4)
-
+const esempio = coppiaDiNumero(4);
 
 // in react invece i nostri dati sono virtual dom
 // e le nostre funzioni si chiamano componenti
@@ -892,19 +887,22 @@ const esempio = coppiaDiNumero(4)
 // un componento è una funzione che li produce
 
 // function MioComponente(props) {
-function MioComponente({nome, cognome}: {nome: string, cognome: string}) {
+function MioComponente({ nome, cognome }: { nome: string; cognome: string }) {
   // const nome = props.nome
   // const cognome = props.cognome
-  return <h1>{nome} {cognome}</h1>
+  return (
+    <h1>
+      {nome} {cognome}
+    </h1>
+  );
   // React.createElement("h1", {}, nome, cognome);
   // return <h1>{nome + " " + cognome}</h1>
 }
-const esempio = <MioComponente nome={"Fred"} cognome={"Bat"}/>
+const esempio = <MioComponente nome={"Fred"} cognome={"Bat"} />;
 // const esempio = React.createElement(MioComponente, { nome: "Fred", cognome: "Bat" })
 // const esempio = MioComponente({ nome: "Fred", cognome: "Bat" }) // come se voelssi fare cosi
 // const esempio = { component: MioComponente, props: { nome: "Fred", cognome: "Bat" } } // ma in realtà è cosi !!!
 ```
-
 
 ## React naive DIY
 
@@ -1026,26 +1024,27 @@ const personElement = Person({ name: "John", age: 30 });
 // possiamo utilizzare la prop speciale children
 // che è un array di elementi tra l'apertura e chiususra del tag del nostro componente
 function WrapperContainer({ children }) {
-  return <div>{children}</div>
+  return <div>{children}</div>;
 }
-const app = <WrapperContainer>
-  <input/>
-  <input/>
-</WrapperContainer>
+const app = (
+  <WrapperContainer>
+    <input />
+    <input />
+  </WrapperContainer>
+);
 
 // equivale a scrivere
 const app = WrapperContainer({
-  children: [
-    <input/>,
-    <input/>
-    ]
-})
+  children: [<input />, <input />],
+});
 
 // eseguendo diventa
-const app = <div> 
-  <input/>
-  <input/>
-</div>
+const app = (
+  <div>
+    <input />
+    <input />
+  </div>
+);
 ```
 
 Ci sono due prop speciali e riservate in react: "children" e "key" che quindi non possono essere utilizzate come paramteri arbitrari per i nostri componenti
@@ -1055,6 +1054,7 @@ Ci sono due prop speciali e riservate in react: "children" e "key" che quindi no
 ricorda: react è in grado di renderizzare solo alcuni tipi di dato
 null, undefined, true, false vengono interpretati come spazio vuoto
 string e number invece come testo puro
+
 <div/> che è il jsx per istanziare componenti nativi
 <MyComponent/> che è il jsx per istanziare componenti creati da noi
 [null, undefined, true, false, "", 0, <div>, <MyComponent/>] una array che contiene qualsiasi cosa di cui sopra
@@ -1065,25 +1065,36 @@ string e number invece come testo puro
 // usare typescript, Array.map e le props
 // per il momento ignoriamo i warning sulle "key"
 
-const app = <PersonList persons={[{id: "y0", name: "Fred", age: 28}, {id: "x1", name: "John", age: 30}]}/>;
+const app = (
+  <PersonList
+    persons={[
+      { id: "y0", name: "Fred", age: 28 },
+      { id: "x1", name: "John", age: 30 },
+    ]}
+  />
+);
 
 // SPOILER soluzione
 
-type Person = { id: string, name: string, age: number }
+type Person = { id: string; name: string; age: number };
 
-function PersonListItem({ person: { name, age } }: { person: Person }){
-  return <div>
-    <div>name: {name}</div>
-    <div>age: {age}</div> 
-  </div>
+function PersonListItem({ person: { name, age } }: { person: Person }) {
+  return (
+    <div>
+      <div>name: {name}</div>
+      <div>age: {age}</div>
+    </div>
+  );
 }
 
-function PersonList({ persons }: { persons: Array<Person> }){
-  return <div>
-    {persons.map((person) => {
-      return <PersonListItem key={person.id} person={person}/>
-    })}
-  </div>
+function PersonList({ persons }: { persons: Array<Person> }) {
+  return (
+    <div>
+      {persons.map((person) => {
+        return <PersonListItem key={person.id} person={person} />;
+      })}
+    </div>
+  );
 }
 
 // key è una props speciale che serve quando renderizziamo array di elementi dinamici
@@ -1097,13 +1108,15 @@ function PersonList({ persons }: { persons: Array<Person> }){
 ## Event handlers
 
 ```tsx
-const app = <div
-  onClick={event => {
-    console.log("click");
-  }}
->
-  click me
-</div>
+const app = (
+  <div
+    onClick={(event) => {
+      console.log("click");
+    }}
+  >
+    click me
+  </div>
+);
 ```
 
 Gli event handlers in react, sono gli stessi del DOM, con alcune piccole differenze:
@@ -1114,11 +1127,12 @@ Gli event handlers in react, sono gli stessi del DOM, con alcune piccole differe
 - La cllback riceve un parametro, che per convenzione chiamaiamo event, che corrisponde all'evento.
   - questo evento non è l'evento nativo del dom, bensi una versione "virtuale" (perchè react per perfromanze riutilizza gli oggetti degli eventi)
   - pertanto, l'oggetto dopo che la funzione callback finisce, verà riutillazto, quinid per salvarlo, o utilizzarlo in un secondo momento
-  - bisogno chiamare il metodo event.persist() 
+  - bisogno chiamare il metodo event.persist()
 
 Come prassi, scrivere gli event handler inline, eventualmente per portarli fuori, selezionare codice in vscode usare click destro -> refactor -> extract con const in enclosing scope:
 
 Scrive le callback come arrow function con graffe inline e nome dell'evento `event`, motivazioni:
+
 - più breve
 - inferisce tipo evento in typescript
 - leggibilità (un livello di indirezione in meno)
@@ -1128,20 +1142,34 @@ Quando la si mette fuori, attenzione a non richiamare la funzione erroneamente:
 
 ```tsx
 // CORRETTO
-const onClick = (event) => { console.log() }
-const app = <div onClick={onClick}></div>
+const onClick = (event) => {
+  console.log();
+};
+const app = <div onClick={onClick}></div>;
 
 // SBAGLIATO
-const onClick = (event) => { console.log() }
-const app = <div onClick={onClick()}></div>
+const onClick = (event) => {
+  console.log();
+};
+const app = <div onClick={onClick()}></div>;
 
 // POTREBBE ANDARE BENE
-const onClick = (event) => { console.log() }
-const app = <div onClick={event => { onClick(event) }}></div>
+const onClick = (event) => {
+  console.log();
+};
+const app = (
+  <div
+    onClick={(event) => {
+      onClick(event);
+    }}
+  ></div>
+);
 
 // POTREBBE ANDARE BENE
-const makeOnClick = testo => (event) => { console.log(testo) }
-const app = <div onClick={makeOnClick("hello")}></div>
+const makeOnClick = (testo) => (event) => {
+  console.log(testo);
+};
+const app = <div onClick={makeOnClick("hello")}></div>;
 ```
 
 ## Rendering condizionale
@@ -1157,9 +1185,9 @@ function MioComponente({ name }) {
   // se is visible e true visualizzare "Hello world"
   // altrimenti non visualizzare nulla
   if (name) {
-    return <div>hello {name}</div>
+    return <div>hello {name}</div>;
   }
-  return null
+  return null;
 }
 ```
 
@@ -1170,9 +1198,7 @@ l'operatore ternario e utile per graficare i valori booleani
 
 ```tsx
 function MioComponente({ isVisible }) {
-  return <div>
-    {isVisible ? <div>It is visible</div> : null}
-  </div>
+  return <div>{isVisible ? <div>It is visible</div> : null}</div>;
 }
 ```
 
@@ -1183,11 +1209,13 @@ gli operatori logici (di solito &&)
 sono utili per visualizzare i campi opzionali
 
 ```tsx
-function MioComponente({ nome, cognome }: { nome?: string, congome: string }) {
-  return <div>
-    {nome && <div>{nome}</div>}
-    {cognome && <div>{cognome}</div>}
-  </div>
+function MioComponente({ nome, cognome }: { nome?: string; congome: string }) {
+  return (
+    <div>
+      {nome && <div>{nome}</div>}
+      {cognome && <div>{cognome}</div>}
+    </div>
+  );
 }
 ```
 
@@ -1200,15 +1228,20 @@ utile sopratutto per rendering condizionale di piu di due alternative
 
 ```tsx
 function MioComponente({ status }: { status: "acceso" | "spento" | "rotto" }) {
-  return <div>
-    {(() => {
-      switch (status) {
-        case "acceso": return <div>acceso</div>
-        case "spento": return <div>spento</div>
-        case "rotto": return <div>rotto</div>
-      }
-    })()}
-  </div>
+  return (
+    <div>
+      {(() => {
+        switch (status) {
+          case "acceso":
+            return <div>acceso</div>;
+          case "spento":
+            return <div>spento</div>;
+          case "rotto":
+            return <div>rotto</div>;
+        }
+      })()}
+    </div>
+  );
 }
 ```
 
@@ -1233,10 +1266,18 @@ E hanno delle regole da rispettare. (piu avanti)
 React.useState è una react hook, che serve per creare uno slot di stato interno privato al componente. Se questo slot di memoria viene aggiornato, il componete viene rirenderizzato.
 
 ```tsx
-function MyComponent(){
+function MyComponent() {
   const [count, setCount] = React.useState(0);
-  return <button onClick={event => { setCount(count + 1); }}>{count}</button>
-} 
+  return (
+    <button
+      onClick={(event) => {
+        setCount(count + 1);
+      }}
+    >
+      {count}
+    </button>
+  );
+}
 ```
 
 React.useState torna un array di due elementi: Il primo è il valore attuale dello slot di memoria, il secondo è una funzione che serve per aggiornarlo (setter);
@@ -1248,9 +1289,17 @@ React.useState riceve come parametro il valore iniziale assunto dallo slot di me
 React.useState ha anche un altra firma sia per il setter che per lo stato iniziale, che servono principalmente per motivi di performance.
 
 ```tsx
-function MyComponent(){
+function MyComponent() {
   const [count, setCount] = React.useState(() => 0);
-  return <button onClick={event => { setCount(count => count + 1); }}>{count}</button>
+  return (
+    <button
+      onClick={(event) => {
+        setCount((count) => count + 1);
+      }}
+    >
+      {count}
+    </button>
+  );
 }
 ```
 
@@ -1273,143 +1322,168 @@ Il setter, invece del valore da settare, accetta una funzione che dato il valore
 
 // scrivere il jsx statico con valori hard coded
 
-function Counter(){
-  return <div>
-    <button>aumenta numero di persone di 1</button>
-    <div>numero di persone: 0</div>
-    <div>capienza massima: 10</div>
-    <div>capienza quasi raggiunta</div>
-    <div>capienza raggiunta</div>
-  </div>
+function Counter() {
+  return (
+    <div>
+      <button>aumenta numero di persone di 1</button>
+      <div>numero di persone: 0</div>
+      <div>capienza massima: 10</div>
+      <div>capienza quasi raggiunta</div>
+      <div>capienza raggiunta</div>
+    </div>
+  );
 }
 
 // aggiungere gli event handler che fanno il alert() della descrizione di quello che dovrebbe accadere, oppure annotare con // TODO
 
-function Counter(){
-  return <div>
-    <button onClick={event => {
-      // TODO
-      alert("aumentare il conteggio di 1");
-    }}>
-      aumenta numero di persone di 1
-    </button>
-    <div>numero di persone: 0</div>
-    <div>capienza massima: 10</div>
-    <div>capienza quasi raggiunta</div>
-    <div>capienza raggiunta</div>
-  </div>
+function Counter() {
+  return (
+    <div>
+      <button
+        onClick={(event) => {
+          // TODO
+          alert("aumentare il conteggio di 1");
+        }}
+      >
+        aumenta numero di persone di 1
+      </button>
+      <div>numero di persone: 0</div>
+      <div>capienza massima: 10</div>
+      <div>capienza quasi raggiunta</div>
+      <div>capienza raggiunta</div>
+    </div>
+  );
 }
 
 // sostituire tutti i valori hard coded con delle variabili const nello scope del componente
 
-function Counter(){
-  const numeroDiPersone = 0
-  const capienzaMassima = 10
-  const isCapienzaQuasiRaggiunta = false
-  const isCapienzaRaggiunta = false
-  return <div>
-    {!isCapienzaRaggiunta &&
-      <button onClick={event => {
-        // TODO
-        alert("aumentare il conteggio di 1");
-      }}>
-        aumenta numero di persone di 1
-      </button>
-    }
-    <div>numero di persone: {numeroDiPersone}</div>
-    <div>capienza massima: {capienzaMassima}</div>
-    {isCapienzaQuasiRaggiunta && <div>capienza quasi raggiunta</div>}
-    {isCapienzaRaggiunta && <div>capienza raggiunta</div>}
-  </div>
+function Counter() {
+  const numeroDiPersone = 0;
+  const capienzaMassima = 10;
+  const isCapienzaQuasiRaggiunta = false;
+  const isCapienzaRaggiunta = false;
+  return (
+    <div>
+      {!isCapienzaRaggiunta && (
+        <button
+          onClick={(event) => {
+            // TODO
+            alert("aumentare il conteggio di 1");
+          }}
+        >
+          aumenta numero di persone di 1
+        </button>
+      )}
+      <div>numero di persone: {numeroDiPersone}</div>
+      <div>capienza massima: {capienzaMassima}</div>
+      {isCapienzaQuasiRaggiunta && <div>capienza quasi raggiunta</div>}
+      {isCapienzaRaggiunta && <div>capienza raggiunta</div>}
+    </div>
+  );
 }
 
 // individuare quali const devono diventare props, e trascrivere
 
-function Counter({ capienzaMassima }: { capienzaMassima: number }){
-  const numeroDiPersone = 0
-  const isCapienzaQuasiRaggiunta = false
-  const isCapienzaRaggiunta = false
-  return <div>
-    {!isCapienzaRaggiunta &&
-      <button onClick={event => {
-        // TODO
-        alert("aumentare il conteggio di 1");
-      }}>
-        aumenta numero di persone di 1
-      </button>
-    }
-    <div>numero di persone: {numeroDiPersone}</div>
-    <div>capienza massima: {capienzaMassima}</div>
-    {isCapienzaQuasiRaggiunta && <div>capienza quasi raggiunta</div>}
-    {isCapienzaRaggiunta && <div>capienza raggiunta</div>}
-  </div>
+function Counter({ capienzaMassima }: { capienzaMassima: number }) {
+  const numeroDiPersone = 0;
+  const isCapienzaQuasiRaggiunta = false;
+  const isCapienzaRaggiunta = false;
+  return (
+    <div>
+      {!isCapienzaRaggiunta && (
+        <button
+          onClick={(event) => {
+            // TODO
+            alert("aumentare il conteggio di 1");
+          }}
+        >
+          aumenta numero di persone di 1
+        </button>
+      )}
+      <div>numero di persone: {numeroDiPersone}</div>
+      <div>capienza massima: {capienzaMassima}</div>
+      {isCapienzaQuasiRaggiunta && <div>capienza quasi raggiunta</div>}
+      {isCapienzaRaggiunta && <div>capienza raggiunta</div>}
+    </div>
+  );
 }
 
 // individuare quali const dovrebbero cambiare nel tempo, e quindi trasformarle in React.useState
 
-function Counter({ capienzaMassima }: { capienzaMassima: number }){
-  const [numeroDiPersone, setNumeroDiPersone] = React.useState(0)
-  const isCapienzaQuasiRaggiunta = false
-  const isCapienzaRaggiunta = false
-  return <div>
-    {!isCapienzaRaggiunta &&
-      <button onClick={event => {
-        // TODO
-        alert("aumentare il conteggio di 1");
-      }}>
-        aumenta numero di persone di 1
-      </button>
-    }
-    <div>numero di persone: {numeroDiPersone}</div>
-    <div>capienza massima: {capienzaMassima}</div>
-    {isCapienzaQuasiRaggiunta && <div>capienza quasi raggiunta</div>}
-    {isCapienzaRaggiunta && <div>capienza raggiunta</div>}
-  </div>
+function Counter({ capienzaMassima }: { capienzaMassima: number }) {
+  const [numeroDiPersone, setNumeroDiPersone] = React.useState(0);
+  const isCapienzaQuasiRaggiunta = false;
+  const isCapienzaRaggiunta = false;
+  return (
+    <div>
+      {!isCapienzaRaggiunta && (
+        <button
+          onClick={(event) => {
+            // TODO
+            alert("aumentare il conteggio di 1");
+          }}
+        >
+          aumenta numero di persone di 1
+        </button>
+      )}
+      <div>numero di persone: {numeroDiPersone}</div>
+      <div>capienza massima: {capienzaMassima}</div>
+      {isCapienzaQuasiRaggiunta && <div>capienza quasi raggiunta</div>}
+      {isCapienzaRaggiunta && <div>capienza raggiunta</div>}
+    </div>
+  );
 }
 
 // individuare le const ed implementare eventuali valori derivati
 
-function Counter({ capienzaMassima }: { capienzaMassima: number }){
-  const [numeroDiPersone, setNumeroDiPersone] = React.useState(0)
-  const isCapienzaQuasiRaggiunta = numeroDiPersone >= capienzaMassima * 0.80;
+function Counter({ capienzaMassima }: { capienzaMassima: number }) {
+  const [numeroDiPersone, setNumeroDiPersone] = React.useState(0);
+  const isCapienzaQuasiRaggiunta = numeroDiPersone >= capienzaMassima * 0.8;
   const isCapienzaRaggiunta = numeroDiPersone >= capienzaMassima;
-  return <div>
-    {!isCapienzaRaggiunta &&
-      <button onClick={event => {
-        // TODO
-        alert("aumentare il conteggio di 1");
-      }}>
-        aumenta numero di persone di 1
-      </button>
-    }
-    <div>numero di persone: {numeroDiPersone}</div>
-    <div>capienza massima: {capienzaMassima}</div>
-    {isCapienzaQuasiRaggiunta && <div>capienza quasi raggiunta</div>}
-    {isCapienzaRaggiunta && <div>capienza raggiunta</div>}
-  </div>
+  return (
+    <div>
+      {!isCapienzaRaggiunta && (
+        <button
+          onClick={(event) => {
+            // TODO
+            alert("aumentare il conteggio di 1");
+          }}
+        >
+          aumenta numero di persone di 1
+        </button>
+      )}
+      <div>numero di persone: {numeroDiPersone}</div>
+      <div>capienza massima: {capienzaMassima}</div>
+      {isCapienzaQuasiRaggiunta && <div>capienza quasi raggiunta</div>}
+      {isCapienzaRaggiunta && <div>capienza raggiunta</div>}
+    </div>
+  );
 }
 
 // implementare gli event handler
 
-function Counter({ capienzaMassima }: { capienzaMassima: number }){
-  const [numeroDiPersone, setNumeroDiPersone] = React.useState(0)
-  const isCapienzaQuasiRaggiunta = numeroDiPersone >= capienzaMassima * 0.80;
+function Counter({ capienzaMassima }: { capienzaMassima: number }) {
+  const [numeroDiPersone, setNumeroDiPersone] = React.useState(0);
+  const isCapienzaQuasiRaggiunta = numeroDiPersone >= capienzaMassima * 0.8;
   const isCapienzaRaggiunta = numeroDiPersone >= capienzaMassima;
-  return <div>
-    {!isCapienzaRaggiunta &&
-      <button onClick={event => {
-        setNumeroDiPersone(numeroDiPersone + 1)
-      }}>
-        aumenta numero di persone di 1
-      </button>
-    }
-    <div>numero di persone: {numeroDiPersone}</div>
-    <div>capienza massima: {capienzaMassima}</div>
-    {isCapienzaQuasiRaggiunta && <div>capienza quasi raggiunta</div>}
-    {isCapienzaRaggiunta && <div>capienza raggiunta</div>}
-  </div>
+  return (
+    <div>
+      {!isCapienzaRaggiunta && (
+        <button
+          onClick={(event) => {
+            setNumeroDiPersone(numeroDiPersone + 1);
+          }}
+        >
+          aumenta numero di persone di 1
+        </button>
+      )}
+      <div>numero di persone: {numeroDiPersone}</div>
+      <div>capienza massima: {capienzaMassima}</div>
+      {isCapienzaQuasiRaggiunta && <div>capienza quasi raggiunta</div>}
+      {isCapienzaRaggiunta && <div>capienza raggiunta</div>}
+    </div>
+  );
 }
-
 ```
 
 ### React state immutability
@@ -1419,41 +1493,43 @@ Lo stato (props, stato interno, context) in react fanno parte della parte immuta
 Quindi! NON POSSIAMO MUTARE in alcun modo lo stato, bensi dobbiamo sempre produrre nuove versione (es: clonaendo e contesuatlmente modificando lo stato esistente) e pasarle ai vari setter.
 
 ```tsx
-function MioComponente(){
-  const [persona, setPersona] = React.useState({ nome: "", cognome: "" })
-  return <div>
-    <input
-      value={persona.nome}
-      onChange={event => {
-        // SBAGLIATO! perche react aggiorname il componente in pagina, solo se richiamamiamo un setter di stato
-        persona.nome = event.currentTarget.value;
+function MioComponente() {
+  const [persona, setPersona] = React.useState({ nome: "", cognome: "" });
+  return (
+    <div>
+      <input
+        value={persona.nome}
+        onChange={(event) => {
+          // SBAGLIATO! perche react aggiorname il componente in pagina, solo se richiamamiamo un setter di stato
+          persona.nome = event.currentTarget.value;
 
-        // SBAGLIATO! perche react aggiorname il componente in pagina, solo se richiamamiamo un setter di stato con una nuova istanza
-        persona.nome = event.currentTarget.value;
-        setPersona(persona)
+          // SBAGLIATO! perche react aggiorname il componente in pagina, solo se richiamamiamo un setter di stato con una nuova istanza
+          persona.nome = event.currentTarget.value;
+          setPersona(persona);
 
-        // CORRETTO
-        setPersona({ ...persona, nome: event.currentTarget.value })
+          // CORRETTO
+          setPersona({ ...persona, nome: event.currentTarget.value });
 
-        // CORRETTO MA ANCORA MEGLIO
-        const nome = event.currentTarget.value; // catturo subito il valore, perchè per motivi vari potrebbe cambiare
-        setPersona(persona => ({ ...persona, nome }));
+          // CORRETTO MA ANCORA MEGLIO
+          const nome = event.currentTarget.value; // catturo subito il valore, perchè per motivi vari potrebbe cambiare
+          setPersona((persona) => ({ ...persona, nome }));
 
-        // ALTERNATIVA PIU ESPLICITA
-        const nuovoNome = event.currentTarget.value;
-        const nuovaPersona = { ...persona, nome: nuovoNome };
-        setPersona(nuovaPersona)
-      }}
-    />
-    <input
-      value={persona.cognome}
-      onChange={event => {
-        // FORMA MIGLIORE per compromesso numero di indirezioni ed esplicità
-        const congome = event.currentTarget.value;
-        setPersona({...persona, cognome })
-      }}
-    />
-  </div>
+          // ALTERNATIVA PIU ESPLICITA
+          const nuovoNome = event.currentTarget.value;
+          const nuovaPersona = { ...persona, nome: nuovoNome };
+          setPersona(nuovaPersona);
+        }}
+      />
+      <input
+        value={persona.cognome}
+        onChange={(event) => {
+          // FORMA MIGLIORE per compromesso numero di indirezioni ed esplicità
+          const congome = event.currentTarget.value;
+          setPersona({ ...persona, cognome });
+        }}
+      />
+    </div>
+  );
 }
 ```
 
@@ -1468,41 +1544,56 @@ Ritorna un array di due elementi: il primo è lo stato attuale, il secondo una f
 
 ```tsx
 function MyComponent() {
-  const [count, dispatchCount] = React.useReducer((state, action: {type: "increment"} | {type: "decrement", amount: number }) => {
-    switch (action.type) {
-      case "increment": return state + 1;
-      case "decrement": return state - action.amount;
-      // è buona pratica lanciare un errore su un azione non gestita
-      // (occhio però questo errore è utile in sviluppo
-      // perchè vediamo lo stack trace,
-      // non dovrebbe mai accadere in production)
-      default:
-        throw new Error();
-    } 
-  }, 0);
-  return <button onClick={event => { dispatchCount({ type: "increment" }) }}>{count}</button>
+  const [count, dispatchCount] = React.useReducer(
+    (
+      state,
+      action: { type: "increment" } | { type: "decrement"; amount: number }
+    ) => {
+      switch (action.type) {
+        case "increment":
+          return state + 1;
+        case "decrement":
+          return state - action.amount;
+        // è buona pratica lanciare un errore su un azione non gestita
+        // (occhio però questo errore è utile in sviluppo
+        // perchè vediamo lo stack trace,
+        // non dovrebbe mai accadere in production)
+        default:
+          throw new Error();
+      }
+    },
+    0
+  );
+  return (
+    <button
+      onClick={(event) => {
+        dispatchCount({ type: "increment" });
+      }}
+    >
+      {count}
+    </button>
+  );
 }
 ```
 
 ```tsx
 // solitamente suddividiamo le operazioni in funzioni diverse
 
-function inc(){}
-function dec(){}
-function set(amount: number){}
-
+function inc() {}
+function dec() {}
+function set(amount: number) {}
 
 // per motivi di performance con useReducer dobbiamo accorparle
 // quindi diventa una serializzazione della chiamata a funzione fatta a mano
 
-disptach({type: "inc"}) // invece di inc()
-dispatch({type: "dec"}) // invece di dec()
-dispatch({type: "set", amount: 45}) // invece di set(45)
+disptach({ type: "inc" }); // invece di inc()
+dispatch({ type: "dec" }); // invece di dec()
+dispatch({ type: "set", amount: 45 }); // invece di set(45)
 
-switch(action.type){
-  case "inc": 
-  case "dec": 
-  case "set": 
+switch (action.type) {
+  case "inc":
+  case "dec":
+  case "set":
 }
 ```
 
@@ -1511,8 +1602,11 @@ In realtà React.useState è una hook costruita con React.useReducer
 ```tsx
 // versione esemplificativa
 function useState(initial) {
-  const [state, dispatch] = React.useReducer((state, action) => action, initial)
-  return [state, disptach]
+  const [state, dispatch] = React.useReducer(
+    (state, action) => action,
+    initial
+  );
+  return [state, disptach];
 }
 ```
 
@@ -1527,8 +1621,850 @@ function useState(initial) {
 // segnare come letto un todo
 // modificare il testo di un todo
 // riordinare i todo
+
+// SPOILER soluzione
+
+// ---
+
+(() => {
+  function TodoList() {
+    return null;
+  }
+})();
+
+// quindi aggiungere un todo
+
+// ---
+
+(() => {
+  function TodoList() {
+    return (
+      <div>
+        <input placeholder="scrivi qui" />
+        <button>aggiungi</button>
+        <div>
+          <div>todo 1</div>
+          <div>todo 1</div>
+          <div>todo 1</div>
+        </div>
+      </div>
+    );
+  }
+})();
+
+// ---
+
+(() => {
+  function TodoList() {
+    return (
+      <div>
+        <input
+          placeholder="scrivi qui"
+          onChange={(event) => {
+            alert("modifica testo");
+          }}
+        />
+        <button
+          onClick={(event) => {
+            alert("aggiungi");
+          }}
+        >
+          aggiungi
+        </button>
+        <div>
+          <div>todo 1</div>
+          <div>todo 1</div>
+          <div>todo 1</div>
+        </div>
+      </div>
+    );
+  }
+})();
+
+// ---
+
+(() => {
+  function TodoList() {
+    return (
+      <div>
+        <input
+          placeholder="scrivi qui"
+          onChange={(event) => {
+            alert("modifica testo");
+          }}
+        />
+        <button
+          onClick={(event) => {
+            alert("aggiungi");
+          }}
+        >
+          aggiungi
+        </button>
+        <div>
+          {[].map((item, index) => {
+            return <div key={index}>todo 1</div>;
+          })}
+        </div>
+      </div>
+    );
+  }
+})();
+
+// ---
+
+(() => {
+  function TodoList() {
+    const value = "";
+    const todos = [];
+    return (
+      <div>
+        <input
+          placeholder="scrivi qui"
+          input={value}
+          onChange={(event) => {
+            alert("modifica testo");
+          }}
+        />
+        <button
+          onClick={(event) => {
+            alert("aggiungi");
+          }}
+        >
+          aggiungi
+        </button>
+        <div>
+          {todos.map((todo, index) => {
+            return <div key={index}>{todo}</div>;
+          })}
+        </div>
+      </div>
+    );
+  }
+})();
+
+// ---
+
+(() => {
+  function TodoList() {
+    const [value, setValue] = React.useState("");
+    const [todos, setTodos] = React.useState([]);
+    return (
+      <div>
+        <input
+          placeholder="scrivi qui"
+          value={value}
+          onChange={(event) => {
+            alert("modifica testo");
+          }}
+        />
+        <button
+          onClick={(event) => {
+            alert("aggiungi");
+          }}
+        >
+          aggiungi
+        </button>
+        <div>
+          {todos.map((todo, index) => {
+            return <div key={index}>{todo}</div>;
+          })}
+        </div>
+      </div>
+    );
+  }
+})();
+
+// ---
+
+// [FATTO] quindi aggiungere un todo
+
+(() => {
+  function TodoList() {
+    const [value, setValue] = React.useState("");
+    const [todos, setTodos] = React.useState(["todo di esempio"]);
+    return (
+      <div>
+        <input
+          placeholder="scrivi qui"
+          value={value}
+          onChange={(event) => {
+            setValue(event.currentTarget.value);
+          }}
+        />
+        <button
+          onClick={(event) => {
+            const newTodos = [value, ...todos];
+            setTodos(newTodos);
+            setValue("");
+          }}
+        >
+          aggiungi
+        </button>
+        <div>
+          {todos.map((todo, index) => {
+            return <div key={index}>{todo}</div>;
+          })}
+        </div>
+      </div>
+    );
+  }
+})();
+
+// ---
+
+// rimuovere un todo
+
+(() => {
+  function TodoList() {
+    const [value, setValue] = React.useState("");
+    const [todos, setTodos] = React.useState(["todo di esempio"]);
+    return (
+      <div>
+        <input
+          placeholder="scrivi qui"
+          value={value}
+          onChange={(event) => {
+            setValue(event.currentTarget.value);
+          }}
+        />
+        <button
+          onClick={(event) => {
+            const newTodos = [value, ...todos];
+            setTodos(newTodos);
+            setValue("");
+          }}
+        >
+          aggiungi
+        </button>
+        <div>
+          {todos.map((todo, index) => {
+            return (
+              <div key={index}>
+                {todo}
+                <button
+                  onClick={(event) => {
+                    alert("rimuovi todo");
+                  }}
+                >
+                  delete
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+})();
+
+// ---
+
+(() => {
+  function TodoList() {
+    const [value, setValue] = React.useState("");
+    const [todos, setTodos] = React.useState(["todo di esempio"]);
+    return (
+      <div>
+        <input
+          placeholder="scrivi qui"
+          value={value}
+          onChange={(event) => {
+            setValue(event.currentTarget.value);
+          }}
+        />
+        <button
+          onClick={(event) => {
+            const newTodos = [value, ...todos];
+            setTodos(newTodos);
+            setValue("");
+          }}
+        >
+          aggiungi
+        </button>
+        <div>
+          {todos.map((todo, index) => {
+            return (
+              <div key={index}>
+                {todo}
+                <button
+                  onClick={(event) => {
+                    const newTodos = [...todos];
+                    newTodos.splice(index, 1); // la mutazione è solo locale quindi OK
+                    setTodos(newTodos);
+                  }}
+                >
+                  delete
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+})();
+
+// ---
+
+// [FATTO] rimuovere un todo
+
+(() => {
+  function TodoList() {
+    const [value, setValue] = React.useState("");
+    const [todos, setTodos] = React.useState(["todo di esempio"]);
+    return (
+      <div>
+        <input
+          placeholder="scrivi qui"
+          value={value}
+          onChange={(event) => {
+            setValue(event.currentTarget.value);
+          }}
+        />
+        <button
+          onClick={(event) => {
+            const newTodos = [value, ...todos];
+            setTodos(newTodos);
+            setValue("");
+          }}
+        >
+          aggiungi
+        </button>
+        <div>
+          {todos.map((todo, index) => {
+            return (
+              <div key={index}>
+                {todo}
+                <button
+                  onClick={(event) => {
+                    const newTodos = [...todos];
+                    newTodos.splice(index, 1);
+                    setTodos(newTodos);
+                  }}
+                >
+                  delete
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+})();
+
+// ---
+
+(() => {
+  function TodoList() {
+    const [value, setValue] = React.useState("");
+    const [todos, setTodos] = React.useState([{}]);
+    return (
+      <div>
+        <input
+          placeholder="scrivi qui"
+          value={value}
+          onChange={(event) => {
+            setValue(event.currentTarget.value);
+          }}
+        />
+        <button
+          onClick={(event) => {
+            const newTodos = [value, ...todos];
+            setTodos(newTodos);
+            setValue("");
+          }}
+        >
+          aggiungi
+        </button>
+        <div>
+          {todos.map((todo, index) => {
+            return (
+              <div key={index}>
+                <input
+                  type="checkbox"
+                  ckecked={true}
+                  onChange={(event) => {
+                    alert("cambio checkbox");
+                  }}
+                />
+                {todo}
+                <button
+                  onClick={(event) => {
+                    const newTodos = [...todos];
+                    newTodos.splice(index, 1);
+                    setTodos(newTodos);
+                  }}
+                >
+                  delete
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+})();
+
+// ---
+
+// [FATTO] segnare come letto un todo
+
+(() => {
+  function TodoList() {
+    const [value, setValue] = React.useState("");
+    const [todos, setTodos] = React.useState([
+      {
+        text: "todo di esempio",
+        isDone: false,
+      },
+    ]);
+    return (
+      <div>
+        <input
+          placeholder="scrivi qui"
+          value={value}
+          onChange={(event) => {
+            setValue(event.currentTarget.value);
+          }}
+        />
+        <button
+          onClick={(event) => {
+            const newTodo = { text: value, isDone: false };
+            const newTodos = [newTodo, ...todos];
+            setTodos(newTodos);
+            setValue("");
+          }}
+        >
+          aggiungi
+        </button>
+        <div>
+          {todos.map((todo, index) => {
+            return (
+              <div key={index}>
+                <input
+                  type="checkbox"
+                  checked={todo.isDone}
+                  onChange={(event) => {
+                    const isDone = event.currentTarget.checked;
+                    const newTodos = [...todos];
+                    const newTodo = { ...newTodos[index], isDone };
+                    newTodos[index] = newTodo;
+                    setTodos(newTodos);
+                  }}
+                />
+                {todo.text}
+                <button
+                  onClick={(event) => {
+                    const newTodos = [...todos];
+                    newTodos.splice(index, 1);
+                    setTodos(newTodos);
+                  }}
+                >
+                  delete
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+})();
+
+// ---
+
+// [FATTO] modificare il testo di un todo
+
+(() => {
+  function TodoList() {
+    const [value, setValue] = React.useState("");
+    const [todos, setTodos] = React.useState([
+      {
+        text: "todo di esempio",
+        isDone: false,
+      },
+    ]);
+    return (
+      <div>
+        <input
+          placeholder="scrivi qui"
+          value={value}
+          onChange={(event) => {
+            setValue(event.currentTarget.value);
+          }}
+        />
+        <button
+          onClick={(event) => {
+            const newTodo = { text: value, isDone: false };
+            const newTodos = [newTodo, ...todos];
+            setTodos(newTodos);
+            setValue("");
+          }}
+        >
+          aggiungi
+        </button>
+        <div>
+          {todos.map((todo, index) => {
+            return (
+              <div key={index}>
+                <input
+                  type="checkbox"
+                  checked={todo.isDone}
+                  onChange={(event) => {
+                    const isDone = event.currentTarget.checked;
+                    const newTodos = [...todos];
+                    const newTodo = { ...newTodos[index], isDone };
+                    newTodos[index] = newTodo;
+                    setTodos(newTodos);
+                  }}
+                />
+                <input
+                  value={todo.text}
+                  onChange={(event) => {
+                    // catturo il nuovo valore
+                    const newText = event.currentTarget.value;
+                    // creo una copia dell'array
+                    const newTodos = [...todos];
+                    // creo una copia dell'oggetto
+                    const newTodo = { ...newTodos[index], text: newText };
+                    // aggiorno la copia dell'array
+                    newTodos[index] = newTodo;
+                    // aggiorno lo stato
+                    setTodos(newTodos);
+                  }}
+                />
+                <button
+                  onClick={(event) => {
+                    const newTodos = [...todos];
+                    newTodos.splice(index, 1);
+                    setTodos(newTodos);
+                  }}
+                >
+                  delete
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+})();
+
+// ---
+
+// riordinare i todo
+
+(() => {
+  function TodoList() {
+    const [value, setValue] = React.useState("");
+    const [todos, setTodos] = React.useState([
+      {
+        text: "todo di esempio",
+        isDone: false,
+      },
+    ]);
+    return (
+      <div>
+        <input
+          placeholder="scrivi qui"
+          value={value}
+          onChange={(event) => {
+            setValue(event.currentTarget.value);
+          }}
+        />
+        <button
+          onClick={(event) => {
+            const newTodo = { text: value, isDone: false };
+            const newTodos = [newTodo, ...todos];
+            setTodos(newTodos);
+            setValue("");
+          }}
+        >
+          aggiungi
+        </button>
+        <div>
+          {todos.map((todo, index) => {
+            return (
+              <div key={index}>
+                <button
+                  onClick={(event) => {
+                    alert("sposta su");
+                  }}
+                >
+                  ^
+                </button>
+                <button
+                  onClick={(event) => {
+                    alert("sposta giu");
+                  }}
+                >
+                  v
+                </button>
+                <input
+                  type="checkbox"
+                  checked={todo.isDone}
+                  onChange={(event) => {
+                    const isDone = event.currentTarget.checked;
+                    const newTodos = [...todos];
+                    const newTodo = { ...newTodos[index], isDone };
+                    newTodos[index] = newTodo;
+                    setTodos(newTodos);
+                  }}
+                />
+                <input
+                  value={todo.text}
+                  onChange={(event) => {
+                    // catturo il nuovo valore
+                    const newText = event.currentTarget.value;
+                    // creo una copia dell'array
+                    const newTodos = [...todos];
+                    // creo una copia dell'oggetto
+                    const newTodo = { ...newTodos[index], text: newText };
+                    // aggiorno la copia dell'array
+                    newTodos[index] = newTodo;
+                    // aggiorno lo stato
+                    setTodos(newTodos);
+                  }}
+                />
+                <button
+                  onClick={(event) => {
+                    const newTodos = [...todos];
+                    newTodos.splice(index, 1);
+                    setTodos(newTodos);
+                  }}
+                >
+                  delete
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+})();
+
+// ---
+
+(() => {
+  function TodoList() {
+    const [value, setValue] = React.useState("");
+    const [todos, setTodos] = React.useState([
+      {
+        text: "todo di esempio",
+        isDone: false,
+      },
+    ]);
+    return (
+      <div>
+        <input
+          placeholder="scrivi qui"
+          value={value}
+          onChange={(event) => {
+            setValue(event.currentTarget.value);
+          }}
+        />
+        <button
+          onClick={(event) => {
+            const newTodo = { text: value, isDone: false };
+            const newTodos = [newTodo, ...todos];
+            setTodos(newTodos);
+            setValue("");
+          }}
+        >
+          aggiungi
+        </button>
+        <div>
+          {todos.map((todo, index) => {
+            const isFirst = index === 0;
+            return (
+              <div key={index}>
+                <button
+                  disabled={isFirst}
+                  onClick={(event) => {
+                    if (!isFirst) {
+                      const thisTodo = todos[index];
+                      const upperTodo = todos[index - 1];
+                      const newTodos = [...todos];
+                      newTodos[index - 1] = thisTodo;
+                      newTodos[index] = upperTodo;
+                      setTodos(newTodos);
+                    }
+                  }}
+                >
+                  ^
+                </button>
+                <button
+                  onClick={(event) => {
+                    alert("sposta giu");
+                  }}
+                >
+                  v
+                </button>
+                <input
+                  type="checkbox"
+                  checked={todo.isDone}
+                  onChange={(event) => {
+                    const isDone = event.currentTarget.checked;
+                    const newTodos = [...todos];
+                    const newTodo = { ...newTodos[index], isDone };
+                    newTodos[index] = newTodo;
+                    setTodos(newTodos);
+                  }}
+                />
+                <input
+                  value={todo.text}
+                  onChange={(event) => {
+                    // catturo il nuovo valore
+                    const newText = event.currentTarget.value;
+                    // creo una copia dell'array
+                    const newTodos = [...todos];
+                    // creo una copia dell'oggetto
+                    const newTodo = { ...newTodos[index], text: newText };
+                    // aggiorno la copia dell'array
+                    newTodos[index] = newTodo;
+                    // aggiorno lo stato
+                    setTodos(newTodos);
+                  }}
+                />
+                <button
+                  onClick={(event) => {
+                    const newTodos = [...todos];
+                    newTodos.splice(index, 1);
+                    setTodos(newTodos);
+                  }}
+                >
+                  delete
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+})();
+
+// ---
+
+// [TODO] riordinare i todo
+
+(() => {
+  function TodoList() {
+    const [value, setValue] = React.useState("");
+    const [todos, setTodos] = React.useState([
+      {
+        text: "todo di esempio",
+        isDone: false,
+      },
+    ]);
+    return (
+      <div>
+        <input
+          placeholder="scrivi qui"
+          value={value}
+          onChange={(event) => {
+            setValue(event.currentTarget.value);
+          }}
+        />
+        <button
+          onClick={(event) => {
+            const newTodo = { text: value, isDone: false };
+            const newTodos = [newTodo, ...todos];
+            setTodos(newTodos);
+            setValue("");
+          }}
+        >
+          aggiungi
+        </button>
+        <div>
+          {todos.map((todo, index) => {
+            const isFirst = index === 0;
+            const isLast = index === todos.length - 1;
+            return (
+              <div key={index}>
+                <button
+                  disabled={isFirst}
+                  onClick={(event) => {
+                    if (!isFirst) {
+                      const thisTodo = todos[index];
+                      const upperTodo = todos[index - 1];
+                      const newTodos = [...todos];
+                      newTodos[index - 1] = thisTodo;
+                      newTodos[index] = upperTodo;
+                      setTodos(newTodos);
+                    }
+                  }}
+                >
+                  ^
+                </button>
+                <button
+                  disabled={isLast}
+                  onClick={(event) => {
+                    if (!isLast) {
+                      const thisTodo = todos[index];
+                      const lowerTodo = todos[index + 1];
+                      const newTodos = [...todos];
+                      newTodos[index + 1] = thisTodo;
+                      newTodos[index] = lowerTodo;
+                      setTodos(newTodos);
+                    }
+                  }}
+                >
+                  v
+                </button>
+                <input
+                  type="checkbox"
+                  checked={todo.isDone}
+                  onChange={(event) => {
+                    const isDone = event.currentTarget.checked;
+                    const newTodos = [...todos];
+                    const newTodo = { ...newTodos[index], isDone };
+                    newTodos[index] = newTodo;
+                    setTodos(newTodos);
+                  }}
+                />
+                <input
+                  value={todo.text}
+                  onChange={(event) => {
+                    // catturo il nuovo valore
+                    const newText = event.currentTarget.value;
+                    // creo una copia dell'array
+                    const newTodos = [...todos];
+                    // creo una copia dell'oggetto
+                    const newTodo = { ...newTodos[index], text: newText };
+                    // aggiorno la copia dell'array
+                    newTodos[index] = newTodo;
+                    // aggiorno lo stato
+                    setTodos(newTodos);
+                  }}
+                />
+                <button
+                  onClick={(event) => {
+                    const newTodos = [...todos];
+                    newTodos.splice(index, 1);
+                    setTodos(newTodos);
+                  }}
+                >
+                  delete
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+})();
 ```
 
+## Stato estrinseco e intrinseco
+
+intrinseco: salvare le info nell'oggeto, quinid aggiungere al lui un attributo [usare solitamente questo]
+estrinseco: salvare le info su un oggetto in una collection esterna e ricollegare tramite key o index [usare se non si può modificare la foram dell'oggetto originale]
 
 # React Advanced
 
@@ -1541,9 +2477,6 @@ function useState(initial) {
     - istallare LTS (long term support)
   - [yarn](https://yarnpkg.com/lang/en/)
 - [gitkraken](https://www.gitkraken.com/) A PAGAMENTO
-- react dev tools
-  - [react dev tools - chrome](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi)
-  - [react dev tools - firefox](https://addons.mozilla.org/it/firefox/addon/react-devtools/)
 
 ### [vscode](https://code.visualstudio.com/)
 
@@ -1596,7 +2529,20 @@ https://code.visualstudio.com/docs/getstarted/tips-and-tricks#_keyboard-referenc
 https://code.visualstudio.com/docs/editor/codebasics
 https://code.visualstudio.com/docs/editor/editingevolved
 
+### React dev tools
 
+- [react dev tools - chrome](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi)
+- [react dev tools - firefox](https://addons.mozilla.org/it/firefox/addon/react-devtools/)
+
+## Creating app with create-react-app
+
+```bash
+yarn create react-app --template typescript nome-della-app
+```
+
+Cercare sempre di avere un feedback-loop molto breve (vedo le conseguenze delle mie modifiche in meno di 5 secondi)
+
+Specialemente quando si fa integrazione (es: portali) utilizzare proxy, mock (vedi docs)
 
 ## React code writing workflow
 
@@ -1629,14 +2575,20 @@ When you need to create form components in React, it is recommended to avoid usi
 
 ```jsx
 const [value, setValue] = React.useState("");
-<input value={value} onChange={(event) => setValue(event.currentTarget.value)} />
+<input
+  value={value}
+  onChange={(event) => setValue(event.currentTarget.value)}
+/>;
 ```
 
 2. To create a custom hook that encapsulates the state management for a form field, you can use a thin wrapper approach. Begin by creating a custom hook called `useField` and initially include only the `useState` hook.
 
 ```tsx
 export function useField<Value>({ initialValue }: { initialValue?: Value }) {
-  type State = { value: { type: "set"; value: Value } | { type: "unset" }, hasChanged: boolean };
+  type State = {
+    value: { type: "set"; value: Value } | { type: "unset" };
+    hasChanged: boolean;
+  };
   const [state, setState] = React.useState<State>(() => {
     const value = initialValue
       ? { type: "set" as const, value: initialValue }
@@ -1680,68 +2632,82 @@ Every layer has access only to its children. Dependency inversion applies only f
 - **App Layer**: `component/*.tsx`
   - **Data Layer**: It answers `Get data` and `Modify data`. Implemented as named exports of custom hooks for queries and mutations that takes Domain/DTO objects and return Domain/DTO objects. `component/data.ts`
     - **Rest**: Implements caching and aggregation. Custom hooks that just return `react-query` calls. `component/data.ts`
-      - **Api object**: Implements authentication and data fetching. implemented as instantiable object *(to handle ouatuh schemes) with configuration, exposed ad REact context with custom hook `useApi`. Handles internally authentication, refresh tokens, custom headers, adapts data. Use at least `customFetch` insted of `fetch` to eventually add global features as needed. Use `msw` for mocking. 
+      - **Api object**: Implements authentication and data fetching. implemented as instantiable object \*(to handle ouatuh schemes) with configuration, exposed ad REact context with custom hook `useApi`. Handles internally authentication, refresh tokens, custom headers, adapts data. Use at least `customFetch` insted of `fetch` to eventually add global features as needed. Use `msw` for mocking.
     - **GraphQl**: Implements authentication, caching and aggregation. `ApolloGraphQL` Client `component/data.ts`
-  - **Visual components Layer**: It answers `Show something`. Implement reased visual components to isolate from specific implementation. Implemented as flat directory `components` with named export for react components or custom hooks that are a thin wrapper around ui-kit used (ex: Bootstrap, MaterialUI, ClayUI). If needed custom styling with `styled-components/macro` with *css={`color: red`}* and theme as React context with custom hook `useTheme` or project css global variables.  `component/*data*.tsx`
-  - **Forms**: use thin layer approach  `component/*.tsx`
+  - **Visual components Layer**: It answers `Show something`. Implement reased visual components to isolate from specific implementation. Implemented as flat directory `components` with named export for react components or custom hooks that are a thin wrapper around ui-kit used (ex: Bootstrap, MaterialUI, ClayUI). If needed custom styling with `styled-components/macro` with _css={`color: red`}_ and theme as React context with custom hook `useTheme` or project css global variables. `component/*data*.tsx`
+  - **Forms**: use thin layer approach `component/*.tsx`
   - **i18n**: use `react-i18next` with label extraction, without context key, with `<Trans/>` component.
   - **State managment**: use plain props passing. If needed use renderProps.
 
 ## Library choice
 
 - Styling
+
   - styled-components + vscode extension
   - className + css
 
 - Internationalization (i18n) and localization (l10n)
+
   - react-i18next
 
 - Chart and diagrams:
+
   - visx [scales](https://observablehq.com/@d3/learn-d3-scales)
   - svg tags
   - d3
 
 - UI Kits
+
   - Material UI
   - Bootstrap
   - Bootstrap Italia
   - ClayUI
 
 - Routing
+
   - React Router
 
 - State Management
+
   - DO NOT USE LIBRARIES
   - USE props passing and render props
 
 - Data Loading (REST)
+
   - @tanstack/react-query (più performante e personalizzabile rispetto a react-swr)
 
 - Data Loading (GraphQL)
+
   - Apollo-GraphQL + VSCode extension
 
 - Date Library
+
   - [Luxon.js](https://moment.github.io/luxon) <-- miglior api e performance
   - Day.js molto utilizzato ma api meno chiara
   - date-fns molto utilizzato ma api non tipizzata in typescript
 
 - Array Utilities
+
   - Lodash (più veloce e con piu funzionalita rispetto a underscore)
 
 - Infinite Lists
+
   - react-virtuso (più completo in termini di funzionalità, auto-dimensionamento)
   - react-window (più utilizzato, ma manuale)
   - @tanstack/react-virtual (simile a react-window, ma più recente)
 
 - Animations
+
   - Framer Motion
   - React Spring
 
 - Table
+
   - #tanstack/table [vedi qui per i tipi](https://tanstack.com/table/v8/docs/guide/introduction)
   - ag-Grid (tabella completa e standard, la più utilizzata per amministrazione pubblica)
 
 - Mock:
+
   - [msw](https://mswjs.io/)
 
 - Fonts

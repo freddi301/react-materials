@@ -6,7 +6,6 @@ This repository contains various resources for react courses.
 
 - [jsx translation example](snippets/jsx-translation-example.tsx)
 - [react ref example](snippets/react-ref-example.tsx)
-- [react effect](snippets/react-effect.tsx)
 - [calculator with workaround](snippets/calculator-with-workflow.tsx)
 - [todo list with workflow](snippets/todo-list-with-workflow.tsx)
 - [react context example](snippets/react-context-example.tsx)

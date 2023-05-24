@@ -2485,9 +2485,9 @@ function MyComponent() {
 
 React.useEffect serve per incapsulare operazioni non pure, in gergo "effetti".
 Riceve 2 parametri.
-Il primo è una funzione che incapsule le istruzioni imperative con effetti collaterali. Queste istruzioni trovandosi dentro una funzione vengono eseguite appunto solo se la funzinione viene richiamata. Opzionalmente può ritornare una funzione di cleanup che verrà eseguita prima della successiva chiamata dell’effetto.
-Il secondo parametro è un array, in gergo array delle dipendenze, dentro questo array dobbiamo scrivere tutte le variabili che utiliziamo nelle funzione che incapsula le istruzioni ma che non appertengono al suo scope. Questo array va scritto in modo espicito nella maggiorpate dei casi non può essere computato. Fondamentalmente ci possiamo affidare all'ide per riempire questo array in automatico.
-La funzione che incapsula le istruzioni viene eseguita la prima volta che il componente viene renderizzato e poi ogni volta che una delle variabili dell'array delle dipendenze cambia valore.
+Il primo è una funzione che incapsule le istruzioni imperative con effetti collaterali, chiamiamola effetto. Queste istruzioni trovandosi dentro una funzione vengono eseguite appunto solo se la funzinione viene richiamata. Opzionalmente può ritornare una funzione di cleanup che verrà eseguita prima della successiva chiamata dell’effetto.
+Il secondo parametro è un array, in gergo array delle dipendenze, dentro questo array dobbiamo scrivere tutte le variabili che utiliziamo nelle funzione effetto ma che non appertengono al suo scope. Questo array va scritto in modo espicito nella maggiorpate dei casi non può essere computato. Fondamentalmente ci possiamo affidare all'ide per riempire questo array in automatico.
+La funzione effetto viene eseguita la prima volta che il componente viene renderizzato e poi ogni volta che una delle variabili dell'array delle dipendenze cambia valore e poi quando l'elemtno scompare dalla pgaina.
 
 ### Title changer
 
@@ -2517,6 +2517,9 @@ function TitleChanger() {
 ```
 
 ### With setInterval
+
+setInterval permette di far eseguire una funzione ogni n millisecondi.
+Ritorna un id che permette di fermare l'esecuzione della funzione con clearInterval.
 
 ```tsx
 function MyComponent() {
@@ -2551,6 +2554,121 @@ RECAP: qual'è l'unita di riutilizzo del codice?
 - in javascript : funzione
 - in react per il markup : componente (ovvero una funzione che produce virtual dom)
 - in react per gestione stato e effects : custom hook (ovvero una funzione che a sua volta richiama custom hook)
+
+## React.useEffect examples
+
+### Timer bomb
+
+```tsx
+// il componente deve visualizzare un bottone
+// con il testo "clicccami se no esplodi entro x secondi"
+// la x nel testo deve essere real time
+// se si clicca, la x ridiventa 10
+// se il timer scade, visualizzare al posto del bottone "sei esploso"
+
+// SPOILER soluzione
+
+export function CountDown() {
+  const [secondiRimanenti, setSecondiRimanenti] = React.useState(0);
+  React.useEffect(() => {
+    const intervalId = setInterval(() => {
+      // qui dobbiamo utilizzare la firma del setter che ci permette
+      // di passare una funzione che prende il valore precedente e ritorna il nuovo valore
+      // altrimenti dovremmo inlcudere secondiRimanenti nell'array delle dipendenze
+      // e questo non è possibile perchè cambia ogni volta che la funzione viene eseguita
+      // NOTA: il setter mantiene sempre la stessa istanza tra i render, quinid non va OMESSO dalle dipendenze
+      setSecondiRimanenti((secondiRimanenti) => secondiRimanenti - 1);
+    }, 1000);
+    // prima del return è FARE
+    // dopo il return è DISFARE
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
+  const seEsploso = secondiRimanenti < 0;
+  if (seEsploso) {
+    return <h1>sei esploso</h1>;
+  }
+  return (
+    <button
+      onClick={() => {
+        setSecondiRimanenti(10);
+      }}
+    >
+      clicccami se no esplodi entro {secondiRimanenti} secondi
+    </button>
+  );
+}
+```
+
+### useLocalStorage
+
+```tsx
+// data la seguente applicazione
+// implementare un custom hook useLocalStorage che salva e legge dal local storage
+// di modo che se ricarcio la pagina il valore del campo di input non viene perso
+function App() {
+  const [nota, setNota] = useLocalStorage("nota", "");
+  return (
+    <input
+      value={nota}
+      onChange={(event) => {
+        setNota(event.currentTarget.value);
+      }}
+    />
+  );
+}
+function useLocalStorage<Value>(
+  localStorageKey: string,
+  initialValue: Value
+): [Value, (value: Value) => void] {
+  // TODO
+}
+
+// SPOILER soluzione
+function useLocalStorage<Value>(
+  localStorageKey: string,
+  initialValue: Value
+): [Value, (value: Value) => void] {
+  const [state, setState] = React.useState(initialValue);
+  // effetto da eseguire per leggere il valore iniziale
+  React.useEffect(() => {
+    const deserialize = (jsonString: string): Value => JSON.parse(jsonString);
+    const valueFromLocalStorage = localStorage.getItem(localStorageKey);
+    if (valueFromLocalStorage) {
+      setState(deserialize(valueFromLocalStorage));
+    }
+  }, [localStorageKey]);
+  // effetto da eseguire al cambio valore
+  React.useEffect(() => {
+    const serialize = (value: Value): string => JSON.stringify(value);
+    localStorage.setItem(localStorageKey, serialize(value));
+  }, [localStorageKey, value]);
+  return [state, setState];
+}
+```
+
+## DO derive - DO NOT synchronize
+
+```tsx
+// Assolutamente corretto
+const [a, setA] = React.useState(0);
+const [b, setB] = React.useState(0);
+const c = a + b;
+
+// Assolutamente sbagliato perchè
+// - bisogna sincronizzare lo stato manualmente
+// - è più codice
+// - è meno leggibile ed immediato
+// - produce facilemente anche bug difficili da individuare
+// - va contro la filosofia di react
+const [a, setA] = React.useState(0);
+const [b, setB] = React.useState(0);
+const [c, setC] = React.useState(0);
+React.useEffect(() => {
+  setC(a + b);
+}, [a, b]);
+```
 
 ## Controlled components
 
@@ -2834,19 +2952,20 @@ function TextInput(props: ReturnType<typeof useField<string>>) {
 
 By following these steps, you can create custom form components in React using the thin wrapper approach, allowing for easy extensibility and flexibility throughout your application.
 
-## React apllication layers
+## React application layers
 
 Every layer has access only to its children. Dependency inversion applies only for types.
 
 - **App Layer**: `component/*.tsx`
   - **Data Layer**: It answers `Get data` and `Modify data`. Implemented as named exports of custom hooks for queries and mutations that takes Domain/DTO objects and return Domain/DTO objects. `component/data.ts`
-    - **Rest**: Implements caching and aggregation. Custom hooks that just return `react-query` calls. `component/data.ts`
+    - **Rest**: Implements caching and aggregation. Custom hooks that just return [`react-query` v4](https://tanstack.com/query/latest) calls. `component/data.ts`
       - **Api object**: Implements authentication and data fetching. implemented as instantiable object \*(to handle ouatuh schemes) with configuration, exposed ad REact context with custom hook `useApi`. Handles internally authentication, refresh tokens, custom headers, adapts data. Use at least `customFetch` insted of `fetch` to eventually add global features as needed. Use `msw` for mocking.
     - **GraphQl**: Implements authentication, caching and aggregation. `ApolloGraphQL` Client `component/data.ts`
   - **Visual components Layer**: It answers `Show something`. Implement reased visual components to isolate from specific implementation. Implemented as flat directory `components` with named export for react components or custom hooks that are a thin wrapper around ui-kit used (ex: Bootstrap, MaterialUI, ClayUI). If needed custom styling with `styled-components/macro` with _css={`color: red`}_ and theme as React context with custom hook `useTheme` or project css global variables. `component/*data*.tsx`
   - **Forms**: use thin layer approach `component/*.tsx`
   - **i18n**: use `react-i18next` with label extraction, without context key, with `<Trans/>` component.
   - **State managment**: use plain props passing. If needed use renderProps.
+  - **Routing**: use [`react-router` v6](https://reactrouter.com/en/main/start/overview)
 
 ## Library choice
 

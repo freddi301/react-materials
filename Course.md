@@ -2,6 +2,16 @@
 
 # Js Modern
 
+## Why compile JavaScript?
+
+### Transpiling
+
+Babel
+
+### Bundling
+
+Webpack
+
 ## Suggested Readings
 
 - JavaScript Allongee [libro programmazione funzionale]
@@ -107,6 +117,38 @@ function prova() {
 }
 ```
 
+### Keyword function statement
+
+```javascript
+function Hello() {
+  return "hello";
+}
+// desugars to
+var Hello = function Hello() {
+  return "hello";
+};
+```
+
+### Block scope vs function scope
+
+```javascript
+function hello() {
+  // hoisting
+  // var u;
+  var u = 10; // u = 10
+  const a = 8;
+  consoel.log(u); // 10
+  if (true) {
+    var u = 6; // u = 6
+    console.log(a); // 8
+    const a = 5;
+    console.log(a); // 5
+  }
+  console.log(a); // 8
+  console.log(u); // 6
+}
+```
+
 ## Risoluzione variabili nei scope
 
 ## Values
@@ -181,10 +223,26 @@ f = (x: number, y: number): number => x + y;
 
 ```javascript
 f = (x, y) => x + y;
-f(2, 4); // 6
+douz = f(2, 4); // 6
 ```
 
-// Currying
+#### Associativity
+
+Left associative +
+
+```tsx
+// x = 1 + 2 + 3 + 4;
+// x = (((1 + 2) + 3) + 4);
+```
+
+Right associative =>
+
+```tsx
+// a => b => c => d;
+// a => (b => (c => d)));
+```
+
+#### Currying
 
 ```typescript
 f = (x: number) => (y: number) => x + y; // closure su x
@@ -193,33 +251,16 @@ f = (x: number) => (y: number) => x + y; // closure su x
 ```javascript
 f = (x) => (y) => x + y;
 
-f(3); // per pterlo fare
-(
+// cosa torna?
+const z = f(2);
+const z = (
   (x) => (y) =>
     x + y
-)(3);
-(y) => 3 + y;
-
-// f(2)(4)
-f(2)(4);
-(
-  (x) => (y) =>
-    x + y
-)(2)(4);
-((y) => 4 + y)(2);
-4 + 2;
-6;
+)(2);
+const z = (y) => 2 + y;
 ```
 
-// Left associative +
-
-// 1 + 2 + 3 + 4
-// ((1 + 2) + 3) + 4
-
-// Right assocative =>
-
-// a => b => c => d
-// a => (b => (c => d))
+### Function as parameter (higher order function)
 
 ```typescript
 f =
@@ -227,7 +268,7 @@ f =
   (x: number): number =>
     g(g(x));
 
-function doubleExecution(opreation: (data: number) => number) {
+function doubleExecution(operation: (data: number) => number) {
   return function (data) {
     const middle = operation(data);
     return operation(middle);
@@ -241,10 +282,10 @@ f = (g) => (x) => g(g(x));
 doubleExecution = (operation) => (data) => operation(operation(data));
 ```
 
-// i due estremi
-// pro (nessuna indirezione) contro (nessun nome; non si capisce cosa fa cosa)
-// vs
-// prop (esplicito) contro (troppi nomi; troppa indirezione nella lettura; inventare nome è difficile)
+i due estremi
+pro (nessuna indirezione) contro (nessun nome; non si capisce cosa fa cosa)
+vs
+pro (esplicito) contro (troppi nomi; troppa indirezione nella lettura; inventare nome è difficile)
 
 ```typescript
 f = (g) => (x) => g(g(x));
@@ -326,16 +367,20 @@ const doubleExecution = (operation: Operation) => (data: number) => {
   return operation(operation(data));
 };
 
+// SPOILER soluzione
+
 const multiplicazionePer2 = (qualcosa) => qualcosa * 2;
 const addizioneDi4 = (numero: number) => numero + 4;
 
 const risultato6 = doubleExecution(addizioneDi4)(2);
 
 // usare doubleExecution(???)(3) di modo che ritorni 1, tenersi in una riga
-const risultato3 = doubleExecution((numero) => numero - 1)(3);
+const risultato1_a = doubleExecution(addizioneDi4)(-6);
+const risultato1_b = doubleExecution((n) => n + 1)(-1);
+const risultato1_b = doubleExecution((n) => n - 1)(3);
 
 const addizioneDi = (x) => (y) => x + y; // in java si chiamerebbe Factory di Operation
-const risultato12 = doubleExecution(addizioneDi(10))(2); // 12
+const risultato12 = doubleExecution(addizioneDi(10))(2); // 22
 
 const adddtionOfOperationFactory = (settings: number): Oepration => {
   const additionBy: Operation = (data: number) => {
@@ -350,32 +395,19 @@ f = (g) => (x) => g(g(x));
 f((x) => 2 * x)(4); // 16
 ```
 
-### Block scope vs function scope
-
-```javascript
-function hello() {
-  // hoisting
-  // var u;
-  var u = 10; // u = 10
-  const a = 8;
-  consoel.log(u); // 10
-  if (true) {
-    var u = 6; // u = 6
-    console.log(a); // 8
-    const a = 5;
-    console.log(a); // 5
-  }
-  console.log(a); // 8
-  consoel.log(u); // 6
-}
-```
-
-### IFEE Immediately Invoked Function Expression
+### IIFE Immediately Invoked Function Expression
 
 Serve per trasformare uno statement in un'espression
 
 ```javascript
+const x = (() => {
+  /* qui si possono usare statement */
+})();
+```
+
+```javascript
 // e tutto finto
+// pero librearia.funzionalita vuole una stringa
 libreria.funzionalita((() => {
   const hello = String.random();
   switch (hello) {
@@ -383,52 +415,120 @@ libreria.funzionalita((() => {
     case "c": return "g"
   }
 })())
-
-
-function Hello(){
-  return "hello"
-}
-// desugars to
-var Hello = function Hello(){
-    return "hello"
-}
 ```
 
 ### Code block VS Object literal
 
+Le parentesi graffe in javascript, sono utilizzate sia per blocchi di codice che per object literal.
+Le Graffe nella posizione di expression indicano un object literal,
+mentre le graffe nella posizione di statement indicano un blocco di codice.
+Eccezione parte destra di arrow function.
+
 ```javascript
+// object literal
 const a = {
   x: 1,
   y: 2,
-}; // oggetto
+};
+// statement
 const f = () => {
   console.log(1);
   console.log(1);
-}; // statement
-while (true) console.log();
+};
+
+while (true) console.log(1);
+// statement
 while (true) {
   console.log(1);
   console.log(1);
-} // statement
+}
+
+// invece se vogliamo tornare un oggetto da un arrow function
+const f = () => ({
+  x: 1,
+  y: 2,
+});
+const f = () => {
+  return {
+    x: 1,
+    y: 2,
+  };
+};
 ```
 
-Un oggetto un contenitore, fatto di una lista di chiave valore, con chiavi che sono univoche nell-oggetto
+## Oggetti
+
+In javascript gli oggetti sono dei contenitori di valori, e sono molto flessibili.
+Sono fatti da una lista di chiave valore, dove le chiavi sono univoche nell'oggetto.
+Le chiavi possono essere di tipo stringa o symbol, mentre i valori possono essere di qualsiasi tipo.
+
+### Creazione
+
+Ci sono diversi modi per creare un oggetto.
 
 ```javascript
-{ x: 1, x: 2 }
-(() => {
-    const obj = {}
-    obj.x = 1;
-    obj.x = 2;
-    return obj;
-})
+// object literal
+const o = { x: 1, x: 2 };
+// cosa in realtà accade
+const o = (() => {
+  const obj = new Object();
+  obj.x = 1;
+  obj.x = 2;
+  return obj;
+})();
 ```
+
+### Lettura
+
+```javascript
+const obj = { value: 42 };
+
+console.log(obj["value"]); // 42
+
+// forma breve di quella sopra
+console.log(obj.value); // 42
+```
+
+### Funzioni in oggetti
+
+```javascript
+let obj = {
+  aMethod: function () {},
+  anotherMethod: () => {},
+  otherMethod() {}, // questo viene tradotto in function, quindi ha il this
+};
+obj.yetAnotherMethod = function () {};
+obj.yetAnotherFunction = () => {};
+```
+
+### More syntax sugar
+
+```javascript
+// property shorthand
+getAjax({ payload });
+// ...è uguale a...
+getAjax({ payload: payload });
+
+// computed object key
+const obj = { ["par" + "am"]: 42 };
+console.log(obj); // { param: 42 }
+```
+
+## Mutabality vs Immutability
 
 ```javascript
 const a = 4; // dichiarazione
 let b;
 b = 6; // mutazione
+```
 
+## Object destructuring + rest
+
+## Object spread
+
+```javascript
+// versione syntax sugar che si chiama object spread
+const modified = { ...original, c: 345, d: 78 };
 const original = {
   a: 1,
   b: 2,
@@ -440,11 +540,59 @@ const modified = {
   b: original.b,
   c: 345,
 };
-// versione syntax sugar che si chiama object spread
-const modified = { ...original, c: 345, d: 78 }[
-  // esempio sort
-  (1, 2, 3)
-].sort((a, b) => {
+```
+
+## Array destructuring + rest
+
+```javascript
+function funzinalita(array) {
+  const first = array[0];
+  const second = array[1];
+  const rest = array.slice(2);
+  // c'è la scorciatoia del array destructuring
+  // questo equivale a quello prima
+  const [first, second, ...rest] = array;
+
+  // intuizione
+  // const [a, b, c] =
+  //       [1, 2, 3];
+}
+```
+
+## Array spread
+
+```javascript
+Math.min = (...numbers) => {
+  for (let min = -Infinity, i = 0; i++; i < numbers.length) {
+    if (numbers[i] < min) min = numbers[i];
+  }
+  return min;
+};
+Math.min(1, 2, 3, 4);
+Math.min(...[1, 2, 3]); // si traduce in Math.min(1,2,3)
+
+function prova(a, b, ...resto) {} // a = 1 b = 2 c [3,4]
+prova(1, 2, 3, 4, 5, 6); // a = 1; b = 2; resto = [3,4,5]
+prova(1, ...[2, 3, 4]); // si traduce in Math.min(1,2,3) dentro prova a = 1; b = 2; resto = [3]
+```
+
+## Local mutability is global immutability
+
+spesso vi può capitare che vi serve una funzionalità che ha solo la variante mutabile
+in questo caso usare trucchetto: "mutabilità locale"
+
+```javascript
+function immutableReverse(originalArray)
+  const modifiedArray = [...orignalArray] // clono con array spread
+  modifiedArray.reverse() // modifico il clone
+  return modfiedArray // l'orignale rimane intatto;
+// e all'esterno non si nota nessuna modifica allo stato dle mondo
+```
+
+## Array.sort
+
+```javascript
+[1, 2, 3].sort((a, b) => {
   // deve tornare 0 se sono uguali
   // deve tornare < 0 se a deve stare prima di b
   // deve tornare > 0 se a deve stare prima di b
@@ -462,56 +610,6 @@ const modified = { ...original, c: 345, d: 78 }[
 
   // per oggetti tornate per semplicità 0 -1 o 1
 });
-```
-
-spesso vi può capitare che vi serve una funzionalità che ha solo la variante mutabile
-in questo caso usare trucchetto: "mutabilità locale"
-
-```javascript
-function immutableReverse(originalArray)
-  const modifiedArray = [...orignalArray] // clono con array spread
-  modifiedArray.reverse() // modifico il clone
-  return modfiedArray // l'orignale rimane intatto;
-// e all'esterno non si nota nessuna modifica allo stato dle mondo
-```
-
-// using spread ...
-let p1 = {
-...person
-};
-
-// using Object.assign() method <- quetaè la versione desugared quindi stessa funzionalità del {...x}
-let p2 = Object.assign({}, person);
-
-// using JSON <- ok per prortotipare ma ha delle limitazioni (omette le funzioni)
-let p3 = JSON.parse(JSON.stringify(person));
-
-```javascript
-function funzinalita(array)
-  const first = array[0]
-  const second = array[1]
-  const rest = array.slice(2)
-  // c'è la scorciatoia del array destructuring
-  // questo equivale a quello prima
-  const [first, second, ...rest] = array
-
-  // intuizione
-  const [a, b, c]
-      = [1, 2, 3];
-
-  Math.min = (...numbers) => {
-    for (let min = -Infinity, i = 0; i++; i<numbers.length) {
-      if (numbers[i] < min) min = numbers[i]
-    };
-    return min;
-  }
-  Math.min(1,2,3,4)
-  Math.min(...[1,2,3]) // si traduce in Math.min(1,2,3)
-
-  function prova(a, b, ...resto) {}  // a = 1 b = 2 c [3,4]
-  prova(1,2,3,4,5,6) // a = 1; b = 2; resto = [3,4,5]
-  prova(1,...[2,3,4]) // si traduce in Math.min(1,2,3) dentro prova a = 1; b = 2; resto = [3]
-
 ```
 
 ## Array.map
@@ -836,7 +934,7 @@ console.log(personeConNomeCheIniziaPerA)
 
 /*
 const quelliCheComincianoLeFrasiConAiMieiTempi: Array<Persona> = []
-  // simile a prima 
+  // simile a prima
 */
 
 // TODO: creare un nuovo array, senza modificare l'originale, dove le persone hanno l'altezza aumentata di 12cm
@@ -3195,4 +3293,9 @@ Every layer has access only to its children. Dependency inversion applies only f
 # Notes
 
 - Esercizio calcolatrice dopo il counter
-- Creare progetto di esempio, realizzando un applicazione CRUD come- Trascrivere in questo file gli snippet nella cartella legacy/TODO
+- Creare progetto di esempio, re counter
+- Creare progetto di esempio, realizzando un applicazioneaCRUD lime- Trascrivere in qzesto file gli szippea nnlla cadtella legacy/TODOo un applicazione CRUD come- Trascrivere in questo file gli snippet nella cartella legacy/TODO
+
+```
+
+```

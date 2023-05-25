@@ -4,17 +4,167 @@
 
 ## Suggested Readings
 
-// JavaScript Allongee [libro programmazione funzionale]
-https://react.dev/learn
-https://github.com/getify/You-Dont-Know-JS
+- JavaScript Allongee [libro programmazione funzionale]
+- Documentatzione Ufficiale React https://react.dev/learn
+- You Don't Know JS https://github.com/getify/You-Dont-Know-JS
+
+## Statement vs Expression
+
+Intenzione:
+
+- un EXPRESSION vuole trasmettere il concetto di VALORE
+- uno STATEMENT vuole trasmettere il concetto di ISTRUZIONE
+
+Intuizione:
+
+- un EXPRESSION è qualcosa che si puo mettere tra le tonde
+- uno STATEMENT è quando puo essere separato con il punto e virgola
+
+Un' espressione in javascript, è una porzione di codice, che se sistituita con il poprio risultato, non cambia il significato del programma:
+
+```tsx
+console.log(1 + 2); // stampa 3
+// sostituendo l'espressione 1 + 2 con il suo risultato
+console.log(3); // stampa 3
+```
+
+```tsx
+console.log(1 + 2);
+if (true) {
+  console.log(3);
+}
+```
+
+Expression:
+
+- operazioni aritmetiche + - / \* % ^
+- operazioni logiche && || !
+- operazioni binarie & | ^ >> << >>>
+- chiamate a funzione (con o senza parametri) funzione() funzione(1, 2, 3)
+
+Statement:
+
+- il primo livello di un file javascript è una sequenza di statement
+- struttura di controllo con keyword if, else, switch, for, while, do while, for of, for in, try catch finally
+- blocchi di codice che sono racchiusi tra parentesi graffe {}
+
+## Let Const Var
+
+`const` è una keyoword per scrivere una definizione di una variabile. Es: `const x = 1;`
+Dichiarando una varaibile con const, si crea una varaibile che non può essere riassegnata, pena errore runtime.
+L'inizializzazione è obbligatoria, pena errore runtime.
+E block scoped.
+
+`let` è una keyoword per scrivere una definizione di una variabile. Es: `let x = 1;`
+Dichiarando una varaibile con let, si crea una varaibile che può essere riassegnata.
+L'inizializzazione è opzionale, se no undefined.
+E block scoped.
+
+`var` è una keyoword per scrivere una definizione di una variabile. Es: `var x = 1;`
+Dichiarando una varaibile con var, si crea una varaibile che può essere riassegnata.
+L'inizializzazione è opzionale, se no undefined.
+E function scoped.
+Comporta hoisting.
+
+```tsx
+// Block scoped significa che la variabile è disponibile all'uso
+// solo dopo la sua dichiarazione
+console.log(x); // <-- Errrore, x non è ancora stata dichiarata
+const x = 4;
+
+// Block scoped significa anche che è possibile fare il shadowing del nome in un nuovo blocco innestato
+const x = 4;
+console.log(x); // <-- 4
+{
+  console.log(x); // <-- 4
+  const x = 5;
+  console.log(x); // <-- 5
+}
+console.log(x); // <-- 4
+
+// function scoped vuol dire che la varaibile ignora i blocchi, e considera solo i blocchi di funzione
+function prova() {
+  if (true) {
+    var x = 4;
+  }
+  console.log(x); // <-- 4
+}
+
+// hoisting è il comportamento di spostare la dichiarazione di una variabile all'inizio del blocco di funzione più vicino, ma lasciando l'assegnazione al suo posto
+function prova() {
+  if (true) {
+    var x = 4;
+  }
+  console.log(x); // <-- 4
+}
+// diventa
+function prova() {
+  var x;
+  if (true) {
+    x = 4;
+  }
+  console.log(x); // ecco perchè non da errore
+}
+```
+
+## Risoluzione variabili nei scope
+
+## Values
+
+In javascript abbiamo 2 tipi di valori
+
+Primitivi: boolean, number, bigint, string, null, undefined, symbol
+Oggetti: object
+
+Tutti i valori (al netto di null e undefined) possono essere trattati come oggetti: x.y.
+
+```tsx
+// L'operatore keyword typeof di un valore ci restituisce una stringa che rappresnta il tipo
+
+typeof "test"; // "string"
+typeof true; // "boolean"
+typeof 12; // "number"
+typeof 120n; // "bigint"
+typeof Symbol("hi"); // "symbol"
+typeof undefined; // "undefined"
+typeof iDoNotExist; // "undefined"
+console.log(iDoNotExist); // ReferenceError!
+typeof (() => {}); // "function"
+typeof function () {}; // "function"
+typeof null; // "object" !!!!
+typeof { a: 1, b: 2 }; // "object"
+```
 
 ## Functions
 
-// in matematica
+### keyword function vs arrow function
 
-// f(x) = x \* 2
+```tsx
+// I due tipi di sintassi per definire una funzione in javascript
 
-// y = f x ---- ad esempio per fare un grafico
+// keyword function
+const x = function nomeFunzione(a, b, c) { console.log(a); return b + c; };
+functionNameAsVarName(a, b, c) { }; // keyword function declaration se in posizione di statement; è come se var = function ....
+
+// arrow function
+const x = (a,b,c) => b + c; // corpo expression
+const y = () => { console.log("hello"); return a + b; } // corpo code block
+```
+
+Altre differenze:
+
+- keyword function ha la variabile speciale `this` che dipende dal contesto di invocazione (viene valotizzata al momento della chiamata di funzione, con l-oggetto al quale le funzione appartiene)
+- arrow function non ha la variabile speciale `this`, quindi dipende dal contesto di dichiarazione (banalemente vede il this della keyword function che la contiene)
+- keyword function ha la variabile speciale `arguments` che contiene tutti i parametri passati alla funzione
+- arrow function non ha la variabile speciale `arguments`
+
+### Esempi
+
+in matematica
+
+f(x) = x \* 2
+
+y = f x ---- ad esempio per fare un grafico
 
 ```typescript
 f = (x: number): number => x * 2;
@@ -24,8 +174,6 @@ f = (x: number): number => x * 2;
 f = (x) => x * 2;
 f(8); // 16
 ```
-
-// un a funzione che prende 2 parametri
 
 ```typescript
 f = (x: number, y: number): number => x + y;
@@ -3047,5 +3195,4 @@ Every layer has access only to its children. Dependency inversion applies only f
 # Notes
 
 - Esercizio calcolatrice dopo il counter
-- Creare progetto di esempio, realizzando un applicazione CRUD come descritto nella sezione "React application layers"
-- Trascrivere in questo file gli snippet nella cartella legacy/TODO
+- Creare progetto di esempio, realizzando un applicazione CRUD come- Trascrivere in questo file gli snippet nella cartella legacy/TODO

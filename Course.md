@@ -690,6 +690,10 @@ const modified = {
 
 ## Object destructuring + rest
 
+molto spesso ci capita di dover leggere degli attributi di un oggetto
+esiste un syntax sugar che ci permete di estraare gli attributi di un oggetto
+in variabili
+
 ```javascript
 // destructuring
 const obj = { a: "foo", b: "bar" };
@@ -711,6 +715,24 @@ const a = obj.a; // "foo"
 const b = obj.b; // "bar"
 const c = obj.c; // undefined
 
+// in cosa viene trasformato questo?
+const { a } = p;
+// traduzione
+const a = p.a;
+
+// in cosa viene tradotto?
+const {
+  a: { b },
+} = t;
+// traduzione
+const b = t.a.b;
+
+// in cosa viene tradotto?
+const { a: { b }, c } = t;
+// traduzione
+const b = t.a.b;
+const c = t.c;
+
 // destructuring con rinominazione
 // è utile in queli pochi casi in cui abbiamo delle variabili omonime
 const x = 10;
@@ -719,6 +741,14 @@ const { x: xCoordinate, y: yCoordinate } = coordinates;
 // è equivalente a
 const xCoordinate = coordinates.x; // 1
 const yCoordinate = coordinates.y; // 2
+
+// object rest operator, indicato con 3 punti (...) quando nella parte sinistra di un'assegnazione/inizializzazione
+// raccoglie in un oggetto tutte le rimaneti proprietà (limitazione, uno per destructuring)
+const { a, ...rest } = { a: 1, b: 2, c: 3 };
+// equivale a
+const obj = { a: 1, b: 2, c: 3 };
+const a = obj.a
+const rest = {b: 2, c: 3 };
 ```
 
 ## Object spread
@@ -764,6 +794,12 @@ const [x, y] = [1, 2, 3, 4];
 const arr = [1, 2, 3, 4];
 const x = arr[0];
 const y = arr[1];
+
+// è possibile anche omettere delle variabili
+// in cosa si traduce?
+const [x, , z] = [1, 2, 3];
+// SPOILER soluzione
+
 
 // è possibile assegnare un valore di default alle variabili
 // che viene utilizzato se il valore estratto dall'array è undefined
@@ -814,6 +850,91 @@ prova(1, ...[2, 3, 4]); // si traduce in Math.min(1,2,3) dentro prova a = 1; b =
 ```
 
 ## Destructuring in function parameters + rest
+
+IN javascript è possibile utilizzare il destructruing anche nei parametri di una funzione
+
+```javascript
+// ... sul primo livello dei parametri di una funzione raccoglie in un array eventuali parametri rimanenti
+// limitazione un solo rest sul primo livello e solo alla fine
+const f = (a, ...rest) => {
+  return { a, rest }
+  // return { a: a, rest: rest }
+}
+// cosa torna? 
+f(1,2,3) // {a: 1, rest:[2,3]}
+// cosa torna?
+f() // {a: undefined, rest:[]}
+// cosa torna?
+f(1, 2) // {a: 1, rest:[2]} 
+// cosa torna?
+f(1,[2,3]) //{a: 1, rest:[[2,3]]}
+
+// cosa torna?
+((...args) => args)() // []
+// cosa torna?
+((...args) => args)(1) // [1]
+// cosa torna?
+((...args) => args)(1, 2) // [1,2]
+// cosa torna?
+((...args) => args)(1, 2, 3) // [1,2,3]
+// cosa torna?
+((a, b, ...args) => ({a,b, args}))(1,2,3) // {a:1,b:2, args:[3]}
+
+// in cosa viene tradotto?
+function f({ a, b }) {
+  return a + b;
+}
+// SPOILER soluzione
+function f(arg1) {
+  const a = arg1.a;
+  const b = arg1.b;
+  return a + b;
+}
+
+// in cosa viene tradotto?
+function f({ a, b }, { c, d }) {
+  return a + b + c + d;
+}
+// SPOILER soluzione
+function f(arg1, arg2) {
+  const a = arg1.a;
+  const b = arg1.b;
+  const c = arg2.c;
+  const d = arg2.d;
+  return a + b + c + d;
+}
+
+
+// lo spread operator si indica con i 3 punti (...) in posizione RHS (Right Hand Side)
+// le posizioni RHS sono a destra dell'uguale oppure negli argomenti di una funzione
+// parametri di una funzione sono le variabili nella sua dichiarazione
+// argomenti sono i valori che passiamo ad una funzione quando la richiamiamo
+
+// cosa torna?
+((a,b,c) => ({a,b,c}))(1,2,3) // {a:1,b:2,c:3}
+// cosa torna?
+((a,b,c) => ({a,b,c}))() // {a: undefined, b: undefined, c:undefined}
+// cosa torna?
+((a,b,c) => ({a,b,c}))(1) // {a:1, b:undefined, c:undefined}
+// cosa torna?
+((a,b,c) => ({a,b,c}))(1, 2, 3, 4) // {a:1, b:2, c: 3}
+
+// cosa torna?
+((a,b,c) => ({a,b,c}))(...[1,2,3]) // {a:1, b:2, c:3}
+// cosa torna?
+((a,b,c) => ({a,b,c}))(...[]) // {a: undefined, b:undefined, c:undefined}
+// cosa torna?
+((a,b,c) => ({a,b,c}))(...[1]) // {a:1, b:undefined, c:undefined}
+// cosa torna?
+((a,b,c) => ({a,b,c}))(...[1, 2, 3, 4]) // {a:1, b:2, c:3}
+// cosa torna?
+((a,b,c) => ({a,b,c}))(1, 2, ...[3, 4]) // {a:1, b:2, c:3}
+// cosa torna?
+((a,b,c) => ({a,b,c}))(1, 2, ...[3, 4], 5, 6) // {a:1, b:2, c:3}
+// cosa torna?
+((a,b,c,...r) => ({a,b,c, r}))(1, 2, ...[3, 4], 5, 6) // {a:1, b:2, c: 3, r: [4,5,6]}
+
+```
 
 ## Local mutability is global immutability
 

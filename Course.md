@@ -3473,8 +3473,8 @@ Every layer has access only to its children. Dependency inversion applies only f
 
 - UI Kits
 
-  - Material UI
-  - Bootstrap
+  - Material UI (per ispirazione su come comporre una'applicazione completa https://mui.com/material-ui/getting-started/templates/, https://github.com/mui/material-ui/tree/master/examples)
+  - Bootstrap (per ispirazione su come comporre una'applicazione completa prendere ispirazione ad interfaccie realizzate con bootstrap, poichè ne è una variazione)
   - Bootstrap Italia
   - ClayUI
 

@@ -597,6 +597,17 @@ arr; // [1, 2, 3, 4]
 // fa molte operazioni diverse, ed e di difficile utilizzo, e ancora di piu difficile comprensione, EVITARE
 ```
 
+### MEtodi utili
+
+```javascript
+// .slice() crea un nuovo array a partire da un array esistente, da un indice di inizio e uno di fine (escluso)
+// gli indici di inizio e fine sono opzionali e possono essere negativi
+// indici negativi indicano posizioni a partire dalle fine dell'array
+// indici positivi indicano posizioni a partire dall'inizio dell'array
+const arr = [1, 2, 3, 4];
+arr.slice(1, 3); // [2, 3]
+```
+
 ## Mutabality vs Immutability
 
 Le strutture dati e gli algoritmi possono essere mutabili o immutabili.
@@ -741,9 +752,48 @@ const z = a[2];
 
 // a cosa equivale?
 const [x, y, z] = [1, 2];
+// SPOILER soluzione
+const a = [1, 2];
+const x = a[0]; // 1
+const y = a[1]; // 2
+const z = a[2]; // undefined
 
 // a cosa equivale?
 const [x, y] = [1, 2, 3, 4];
+// SPOILER soluzione
+const arr = [1, 2, 3, 4];
+const x = arr[0];
+const y = arr[1];
+
+// è possibile assegnare un valore di default alle variabili
+// che viene utilizzato se il valore estratto dall'array è undefined
+const [a, b = "pera", c = "banana"] = ["mela", "ananas"];
+// è equivalente a
+const arr = ["mela", "ananas"];
+const a = arr[0]; // "mela"
+const b = arr[1] === undefined ? "pera" : arr[1]; // "ananas"
+const c = arr[2] === undefined ? "banana" : arr[2]; // "banana"
+
+// a cosa equivale?
+const [] = [];
+// SPOILER soluzione
+const arr = [];
+
+// a cosa equivale?
+const [x = "posta", y, z] = [undefined, "messaggio"];
+// SPOILER soluzione
+const arr = [undefined, "messaggio"];
+const x = arr[0] === undefined ? "posta" : arr[0]; //"posta"
+const y = arr[1]; //"messaggio"
+const z = arr[2]; //undefined
+
+// rest operator, raccoglie gli elementi rimaneti in un array (limitazione: può essere solo l'ultimo)
+const [x, y, ...resto] = [1, 2, 3, 4, 5, 6];
+// equivale a
+const arr = [x, y, ...resto];
+const x = arr[0]; //1
+const y = arr[1]; //2
+const resto = arr.slice(2); //[3,4,5,6]
 ```
 
 ## Array spread

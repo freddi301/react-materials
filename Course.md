@@ -557,8 +557,41 @@ Esempi di operazioni mutabili, ovvero che modificano l-array originale
 ```javascript
 const a = ["a", "b", "c"];
 
-a.copyWithin()
-a.fill()
+// .pop()
+const arr = [1, 2, 3, 4];
+arr.pop(); // 4
+arr; // [1, 2, 3]
+
+// .push()
+const arr = [1, 2, 3, 4];
+arr.push(5); // 5
+arr; // [1, 2, 3, 4, 5]
+
+// .shift()
+const arr = [1, 2, 3, 4];
+arr.shift(); // 1;
+arr; // [2, 3, 4]
+
+// .unshift()
+const arr = [1, 2, 3, 4];
+arr.unshift(0); // 5
+arr; // [0, 1, 2, 3, 4]
+
+// .fill()
+new Array(4).fill(9); // [9, 9, 9, 9]
+
+// .reverse()
+const arr = [1, 2, 3, 4];
+arr.reverse(); // [4, 3, 2, 1]
+arr; // [4, 3, 2, 1]
+
+// .sort()
+const arr = [1, 4, 3, 2];
+arr.sort(); // [1, 2, 3, 4]
+arr; // [1, 2, 3, 4]
+
+// .splice()
+// fa molte operazioni diverse, ed e di difficile utilizzo, e ancora di piu difficile comprensione, EVITARE
 ```
 
 ## Mutabality vs Immutability

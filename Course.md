@@ -487,6 +487,9 @@ console.log(obj["value"]); // 42
 
 // forma breve di quella sopra
 console.log(obj.value); // 42
+
+// se leggiamo qualcosa che non esiste otteniammo undefined
+console.log(obj.nonEsiste); // undefined
 ```
 
 ### Funzioni in oggetti
@@ -676,6 +679,37 @@ const modified = {
 
 ## Object destructuring + rest
 
+```javascript
+// destructuring
+const obj = { a: "foo", b: "bar" };
+const { a, b } = obj;
+// è equivalente a
+const obj = new Object();
+obj.a = "foo";
+obj.b = "bar";
+const a = obj.a; // "foo"
+const b = obj.b; // "bar"
+
+// a cosa equivale?
+const { a, b, c } = { a: "foo", b: "bar" };
+// SPOILER SOLUZIONE
+const obj = new Object();
+obj.a = "foo";
+obj.b = "bar";
+const a = obj.a; // "foo"
+const b = obj.b; // "bar"
+const c = obj.c; // undefined
+
+// destructuring con rinominazione
+// è utile in queli pochi casi in cui abbiamo delle variabili omonime
+const x = 10;
+const coordinates = { x: 1, y: 2 };
+const { x: xCoordinate, y: yCoordinate } = coordinates;
+// è equivalente a
+const xCoordinate = coordinates.x; // 1
+const yCoordinate = coordinates.y; // 2
+```
+
 ## Object spread
 
 ```javascript
@@ -697,18 +731,19 @@ const modified = {
 ## Array destructuring + rest
 
 ```javascript
-function funzinalita(array) {
-  const first = array[0];
-  const second = array[1];
-  const rest = array.slice(2);
-  // c'è la scorciatoia del array destructuring
-  // questo equivale a quello prima
-  const [first, second, ...rest] = array;
+// array desctrucuring
+const a = [1, 2, 3];
+const [x, y, z] = a;
+// è equivalente a
+const x = a[0];
+const y = a[1];
+const z = a[2];
 
-  // intuizione
-  // const [a, b, c] =
-  //       [1, 2, 3];
-}
+// a cosa equivale?
+const [x, y, z] = [1, 2];
+
+// a cosa equivale?
+const [x, y] = [1, 2, 3, 4];
 ```
 
 ## Array spread

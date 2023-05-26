@@ -728,7 +728,10 @@ const {
 const b = t.a.b;
 
 // in cosa viene tradotto?
-const { a: { b }, c } = t;
+const {
+  a: { b },
+  c,
+} = t;
 // traduzione
 const b = t.a.b;
 const c = t.c;
@@ -747,8 +750,8 @@ const yCoordinate = coordinates.y; // 2
 const { a, ...rest } = { a: 1, b: 2, c: 3 };
 // equivale a
 const obj = { a: 1, b: 2, c: 3 };
-const a = obj.a
-const rest = {b: 2, c: 3 };
+const a = obj.a;
+const rest = { b: 2, c: 3 };
 ```
 
 ## Object spread
@@ -799,7 +802,6 @@ const y = arr[1];
 // in cosa si traduce?
 const [x, , z] = [1, 2, 3];
 // SPOILER soluzione
-
 
 // è possibile assegnare un valore di default alle variabili
 // che viene utilizzato se il valore estratto dall'array è undefined
@@ -857,28 +859,28 @@ IN javascript è possibile utilizzare il destructruing anche nei parametri di un
 // ... sul primo livello dei parametri di una funzione raccoglie in un array eventuali parametri rimanenti
 // limitazione un solo rest sul primo livello e solo alla fine
 const f = (a, ...rest) => {
-  return { a, rest }
+  return { a, rest };
   // return { a: a, rest: rest }
-}
-// cosa torna? 
-f(1,2,3) // {a: 1, rest:[2,3]}
+};
 // cosa torna?
-f() // {a: undefined, rest:[]}
+f(1, 2, 3); // {a: 1, rest:[2,3]}
 // cosa torna?
-f(1, 2) // {a: 1, rest:[2]} 
+f(); // {a: undefined, rest:[]}
 // cosa torna?
-f(1,[2,3]) //{a: 1, rest:[[2,3]]}
+f(1, 2); // {a: 1, rest:[2]}
+// cosa torna?
+f(1, [2, 3]); //{a: 1, rest:[[2,3]]}
 
 // cosa torna?
-((...args) => args)() // []
+((...args) => args)(); // []
 // cosa torna?
-((...args) => args)(1) // [1]
+((...args) => args)(1); // [1]
 // cosa torna?
-((...args) => args)(1, 2) // [1,2]
+((...args) => args)(1, 2); // [1,2]
 // cosa torna?
-((...args) => args)(1, 2, 3) // [1,2,3]
+((...args) => args)(1, 2, 3); // [1,2,3]
 // cosa torna?
-((a, b, ...args) => ({a,b, args}))(1,2,3) // {a:1,b:2, args:[3]}
+((a, b, ...args) => ({ a, b, args }))(1, 2, 3); // {a:1,b:2, args:[3]}
 
 // in cosa viene tradotto?
 function f({ a, b }) {
@@ -904,36 +906,34 @@ function f(arg1, arg2) {
   return a + b + c + d;
 }
 
-
 // lo spread operator si indica con i 3 punti (...) in posizione RHS (Right Hand Side)
 // le posizioni RHS sono a destra dell'uguale oppure negli argomenti di una funzione
 // parametri di una funzione sono le variabili nella sua dichiarazione
 // argomenti sono i valori che passiamo ad una funzione quando la richiamiamo
 
 // cosa torna?
-((a,b,c) => ({a,b,c}))(1,2,3) // {a:1,b:2,c:3}
+((a, b, c) => ({ a, b, c }))(1, 2, 3); // {a:1,b:2,c:3}
 // cosa torna?
-((a,b,c) => ({a,b,c}))() // {a: undefined, b: undefined, c:undefined}
+((a, b, c) => ({ a, b, c }))(); // {a: undefined, b: undefined, c:undefined}
 // cosa torna?
-((a,b,c) => ({a,b,c}))(1) // {a:1, b:undefined, c:undefined}
+((a, b, c) => ({ a, b, c }))(1); // {a:1, b:undefined, c:undefined}
 // cosa torna?
-((a,b,c) => ({a,b,c}))(1, 2, 3, 4) // {a:1, b:2, c: 3}
+((a, b, c) => ({ a, b, c }))(1, 2, 3, 4); // {a:1, b:2, c: 3}
 
 // cosa torna?
-((a,b,c) => ({a,b,c}))(...[1,2,3]) // {a:1, b:2, c:3}
+((a, b, c) => ({ a, b, c }))(...[1, 2, 3]); // {a:1, b:2, c:3}
 // cosa torna?
-((a,b,c) => ({a,b,c}))(...[]) // {a: undefined, b:undefined, c:undefined}
+((a, b, c) => ({ a, b, c }))(...[]); // {a: undefined, b:undefined, c:undefined}
 // cosa torna?
-((a,b,c) => ({a,b,c}))(...[1]) // {a:1, b:undefined, c:undefined}
+((a, b, c) => ({ a, b, c }))(...[1]); // {a:1, b:undefined, c:undefined}
 // cosa torna?
-((a,b,c) => ({a,b,c}))(...[1, 2, 3, 4]) // {a:1, b:2, c:3}
+((a, b, c) => ({ a, b, c }))(...[1, 2, 3, 4]); // {a:1, b:2, c:3}
 // cosa torna?
-((a,b,c) => ({a,b,c}))(1, 2, ...[3, 4]) // {a:1, b:2, c:3}
+((a, b, c) => ({ a, b, c }))(1, 2, ...[3, 4]); // {a:1, b:2, c:3}
 // cosa torna?
-((a,b,c) => ({a,b,c}))(1, 2, ...[3, 4], 5, 6) // {a:1, b:2, c:3}
+((a, b, c) => ({ a, b, c }))(1, 2, ...[3, 4], 5, 6); // {a:1, b:2, c:3}
 // cosa torna?
-((a,b,c,...r) => ({a,b,c, r}))(1, 2, ...[3, 4], 5, 6) // {a:1, b:2, c: 3, r: [4,5,6]}
-
+((a, b, c, ...r) => ({ a, b, c, r }))(1, 2, ...[3, 4], 5, 6); // {a:1, b:2, c: 3, r: [4,5,6]}
 ```
 
 ## Local mutability is global immutability

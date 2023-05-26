@@ -494,8 +494,8 @@ console.log(obj.value); // 42
 ```javascript
 let obj = {
   aMethod: function () {},
+  otherMethod() {}, // scorciatoia per sopra, questo viene tradotto in function, quindi ha il this
   anotherMethod: () => {},
-  otherMethod() {}, // questo viene tradotto in function, quindi ha il this
 };
 obj.yetAnotherMethod = function () {};
 obj.yetAnotherFunction = () => {};
@@ -504,6 +504,7 @@ obj.yetAnotherFunction = () => {};
 ### More syntax sugar
 
 ```javascript
+// È possibile assegnare ad un oggetto delle proprietà utilizzando lo shorthand quando il nome della proprietà coincide con il nome della variabile da cui avreste estratto il valore
 // property shorthand
 getAjax({ payload });
 // ...è uguale a...
@@ -514,12 +515,130 @@ const obj = { ["par" + "am"]: 42 };
 console.log(obj); // { param: 42 }
 ```
 
-## Mutabality vs Immutability
+## Array
+
+Gli array in javascript sono dei contenitori di una sequenza di valori, e sono molto flessibili.
+Un array in javascript e mutabile, si posssono fare varie operazioni come aggiungere lementi in testa, in coda modificarli, rimuoverli, ecc.
+Per leggere un elemento di un array si usa la notazione con le parentesi quadre indicando l'indice (che parte da 0).
+
+### Creazione
+
+Ci sono varie modalità
 
 ```javascript
-const a = 4; // dichiarazione
+// Array literal
+const a = [1, 2, 3];
+// cosa in realtà accade
+const a = (() => {
+  const arr = new Array();
+  arr[0] = 1;
+  arr[1] = 2;
+  arr[2] = 3;
+  return arr;
+})();
+```
+
+### Lettura
+
+```javascript
+const a = ["a", "b", "c"];
+
+console.log(a[0]); // "a"
+console.log(a[1]); // "b"
+console.log(a[2]); // "c"
+console.log(a[3]); // undefined
+console.log(a[-1]); // undefined
+```
+
+### Modifica
+
+Esempi di operazioni mutabili, ovvero che modificano l-array originale
+
+```javascript
+const a = ["a", "b", "c"];
+
+a.copyWithin()
+a.fill()
+```
+
+## Mutabality vs Immutability
+
+Le strutture dati e gli algoritmi possono essere mutabili o immutabili.
+
+Quando sviluppiamo del software ci troviamo sempre a scegliere tra questi due paradigmi facendo dei compromessi:
+
+Mutabilità PRO:
+
+- con abbastanza effort si può ottimmizzare al massimo l'uso di risorse come tempo cpu e spazio ram
+  - l'ottimizzzazione è un processo manule, e richiede molto efort
+  - da notare che a parità di effert, i porgrammi con paradigma immutabili sono più efficienti in media
+- è che corrisponde in modo diretto alla metafora della modelllazione del mondo reale (che appunto è mutabile)
+
+Mutabilità CONTRO:
+
+- è facile creare bug
+- difficilta di lettura (perchè ogni istruzione potrebbe modificare qualsiasi cosa)
+- non corrisponde alla metafore della modellazione del mondo con modelli matematici (che sono immutabili)
+  - quindi se si opta per questo approccio c'è della fatica in più
+
+Immutabilità PRO:
+
+- è facile creare programmi corretti
+- facilita di lettura del codice (appunto perchè le espressioni non modificano nulla)
+- senza effort aggiuntivo si ottengono performance accettabili
+- corrisponde direttamente alla metafore della modellazione del mondo con modelli matematici (che sono immutabili)
+
+Immubilità CONTRO:
+
+- non corrisponde alla metafora della modelllazione del mondo reale (che è mutabile)
+  - quindi se si opta per questo approccio c'è della fatica in più
+
+```javascript
+// variabili
+
+const a = 4; // immutabile
 let b;
 b = 6; // mutazione
+
+// oggetti
+
+const o = {}; // immutabile (limitazione di javascript, l'iimutabilita in questo caso si ferma al puntatore)
+o.x = 1; // mutazione (aggiunta attributo)
+o.x = 2; // mutazione (modifica attributo)
+delete o.x; // mutazione (rimozione attributo)
+```
+
+Prendiamo il seguente codice:
+
+```javascript
+const obj = { someProperty: 12 };
+someFunction(obj);
+```
+
+Dopo questo codice obj.someProperty varrà ancora 12? L'unica risposta possibile è
+“non lo sappiamo” a meno che di non conoscere il codice di someFunction.
+In poche parole, se un oggetto viene mutato da un’altra porzione di codice, per poter
+fare delle assunzioni corrette su tale oggetto dobbiamo conoscerne il
+comportamento.
+
+Il javascript dovendo rimanere retrocompatibile, non puo permettersi di cambiare comportameni esistenti come ad esempio rendere gli oggetti immutabili.
+Al momento non ci sono nuove specifiche approvate per introdurre immutabilita nel linguaggio.
+
+Come alternativa ci rimane l-autodisciplina nel trattare gli oggetti come immutabili, e un uso sapiente di syntax sugar che il javascript ci mette a disposizione.
+
+Nel paradigma immutabile, per modellare il cambio di stato o la mutabilit' esiste unico approccio che è quello dicreare nuovi a partire da quelli originali, includendo contestualemente le modifiche.
+
+```javascript
+const original = {
+  a: 1,
+  b: 2,
+  c: 3,
+};
+const modified = {
+  a: original.a,
+  b: original.b,
+  c: 345,
+};
 ```
 
 ## Object destructuring + rest
@@ -3295,7 +3414,3 @@ Every layer has access only to its children. Dependency inversion applies only f
 - Esercizio calcolatrice dopo il counter
 - Creare progetto di esempio, re counter
 - Creare progetto di esempio, realizzando un applicazioneaCRUD lime- Trascrivere in qzesto file gli szippea nnlla cadtella legacy/TODOo un applicazione CRUD come- Trascrivere in questo file gli snippet nella cartella legacy/TODO
-
-```
-
-```

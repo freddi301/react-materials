@@ -3280,6 +3280,28 @@ Realizzare in react, pure client side, una app CRUD che permette di gestire una 
 
 # React Advanced
 
+## Memoization workflow
+
+implement meoization on list wiht exclusive selection, use react dev tools profiler
+
+## Mememoization with
+
+### React.memo
+
+### React.useMemo
+
+### React.useCallback
+
+### React.useRef
+
+## React Context
+
+## Error boundaries
+
+## ref imperative dom
+
+## React.useLayoutEffect
+
 # React Best Practices
 
 ## Tools
@@ -3356,6 +3378,12 @@ Cercare sempre di avere un feedback-loop molto breve (vedo le conseguenze delle 
 
 Specialemente quando si fa integrazione (es: portali) utilizzare proxy, mock (vedi docs)
 
+## Useful Typescript Types
+
+- React.ReactNode rappresenta un istanza di un compoennten react, ovvero qualsiasi elemento jsx valido
+- React.CssProperties raprresente l'oggetto che passiamo alla prop style dei componenti nativi di react
+- React.ChangeEvent<HTMLInputElement> React.MouseEvent<HTMLDivElement> sono i tipi degli eventi passati agli event handler, il parametro di tipo indica che tipologia di nodo html e presente dentro evet.currentTarget
+
 ## React code writing workflow
 
 Per gli esempi fare riferimento agli esempi precedenti (ricerca testuale "workflow" in questo file)
@@ -3380,6 +3408,19 @@ Per gli esempi fare riferimento agli esempi precedenti (ricerca testuale "workfl
 - inviduare eventuali effetti collaterali e codificarli con React.useEffect
   - ricordiamoci di inserire nell'array delle dipendenze tutte le variabile usate nell'effetto (possiamo sfruttare l'ide per farlo in automatico)
   - ricordiamoci di scrivere il codice di cleanup se serve
+
+## When subdividie into components, hooks and functions
+
+Di default scriviamo tutta l'apllicazione nel componentente del file principale, con tutto il jsx inline.
+Un asuddivisione intuitiva in componenti in base al layout grafico nelle davole di design in spesso è molto controproducente.
+  - comporta difficolta di lettura perchè aggiunge molti livelli di indirezione, dobbiamo cammbiare riga nel file o addiritttura aprirne un altro
+  - suddividre in molti comporta un grande trischio di lasciare del codice morto
+  - comporta sicuramente una proliferazine di props da passare dal padre ai figli (prop drilling) (in realtà non produce bug, ma comporta grandi quantita di codice ridondante, che quasi sicuramente diventa confusionario (immagina di dover passare 15 props a 3 livelli di profondita))
+
+Quando suddividere?:
+- in componenti, hook, funzioni per riutlizzo di codice (qui applicare prima il principio WET e poi il principio DRY)
+- in componenti per memoizzare elementi di liste
+- oppure vedere pattern menzionati nell [best practices](#react-best-practices)
 
 ## Forms: thin wrapper approach
 

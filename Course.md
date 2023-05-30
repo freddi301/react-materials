@@ -1018,6 +1018,8 @@ function immutableReverse(originalArray)
 
 ## Array.sort
 
+Modifica l'array originale
+
 ```javascript
 [1, 2, 3].sort((a, b) => {
   // deve tornare 0 se sono uguali
@@ -1025,12 +1027,12 @@ function immutableReverse(originalArray)
   // deve tornare > 0 se a deve stare prima di b
 
   // per numeri
-  return a - b; // quindi questo sarebbe l'0ridnamneto asscnedente
-  return b - a; // quindi questo sarebbe l'0ridnamneto dissencdente
+  return a - b; // quindi questo sarebbe l'ordinamento asscendente
+  return b - a; // quindi questo sarebbe l'ordinamento disscendente
 
   // per stringhe .localCompare ordina in base all'allfabeto della lingua dell'utente
-  return a.localCompare(b);
-  return b.localCompare(a);
+  return a.localCompare(b); // ordinamento ascendente
+  return b.localCompare(a); // ordinamento discendente
   // < o > invece confronto come se ofsse ASCII
   // ["a", "b", "à"].sort() // ["a", "b", "à"]
   // ["a", "b", "à"].sort(...localCompare...) // ["a", "à", "b"]
@@ -1042,11 +1044,17 @@ function immutableReverse(originalArray)
 ## Array.filter
 
 ```typescript
-// il .filter è il criterio su un ogetto ma applicato ad un array di oggetti
-
-["apple", "orange", "ananas", "banana"].filter(
-  (fruit) => fruit.charAt(0) === "a"
-) /* => produces => */[("apple", "ananas")];
+// Array.filter codifica qeusta forma di for
+const a = ["apple", "orange", "ananas", "banana"];
+const b = new Array();
+for (let i = 0; i < a.length; i++) {
+  if (a[i].charAt(0) === "a") {
+    b.push(a[i]);
+  }
+}
+// si puo condificare con
+const a = ["apple", "orange", "ananas", "banana"];
+const b = a.filter((fruit) => fruit.charAt(0) === "a"); // [("apple", "ananas")]
 
 type Fruit = string;
 
@@ -1058,27 +1066,49 @@ function startsWihtA(fruit: Fruit): boolean {
 const doesAppleStartsWithA = startsWihtA("appple");
 
 const fruits: Array<Fruit> = ["apple", "orange", "ananas", "banana"];
-const fruitsILike =
-  fruits.filter(startsWihtA) /* => produces => */[("apple", "ananas")];
+const fruitsILike = fruits.filter(startsWihtA); // [("apple", "ananas")];
+
+// ottenere una lista di persone che hanno più di 18 anni, usare il metodo filter
+type Person = { name: string; age: number };
+const people: Array<Person> = [
+  { name: "Mario", age: 17 },
+  { name: "Luigi", age: 18 },
+  { name: "Pippo", age: 19 },
+  { name: "Pluto", age: 20 },
+];
+// const adults =
+// SPOILER soluzione
+const maggiorenni = people.filter((p) => p.age >= 18);
 ```
 
 ## Array.map
 
+Questo metodo codifica il concetto di trasformazione degli elementi di un array
+
 ```typescript
 // Il .map è la trasformazione di un oggetto, ma applicata ad un array di oggetti
+// Array.map codifica qeusta forma di for
+const arrayOriginale = ["a", "b", "c"];
+const suffisso = "--";
+const arrayNuovo = new Array();
+for (let i = 0; i < arrayOriginale.length; i++) {
+  const itemOriginale = arrayOriginale[i];
+  const itemNuovo = itemOriginale.toUppercase() + suffisso;
+  arrayNuovo.push(itemNuovo);
+}
 
 const arrayOriginale = ["a", "b", "c"];
 const suffisso = "--";
-const arrayNuovo = arrayOriginale
-  .map(function newItemProducer(itemOriginale) {
-    const itemNuovo = itemOriginale.toUppercase() + suffisso;
-    return itemNuovo;
-  }) // ["A--", "B--", "C--"]
+const arrayNuovo = arrayOriginale.map(
+  (itemOriginale) => itemOriginale.toUppercase() + suffisso
+); // ["A--", "B--", "C--"]
+// o un po più esplicito
+const arrayNuovo = arrayOriginale.map(function newItemProducer(itemOriginale) {
+  const itemNuovo = itemOriginale.toUppercase() + suffisso;
+  return itemNuovo;
+});
 
-  [(1, 2, 3)].map((x) => x * 2) /* => produce => */
-  [(2, 4, 6)][(1, 2, 3)].map((x) => x * 2) /* => produce => */[(2, 4, 6)];
-
-// VOTI: **
+[1, 2, 3].map((x) => x * 2); // [2, 4, 6]
 
 type Person = { name: string };
 type Worker = { name: string; job: string };
@@ -1092,6 +1122,12 @@ const fredAtSmc: Worker = fromPersonToWorker(fredAtHome);
 const fannulloni: Array<Person> = [];
 const fannulloniConstipendio: Array<Worker> =
   fannulloni.map(fromPersonToWorker);
+
+// trasformare un array di numeri in un array degli stessi numeri ma di segno opposto
+const a = [1, 2, 3, -4, -5, -6];
+// const b =
+// SPOILER soluzione
+a.map((x) => x * -1);
 ```
 
 ## Array.reduce
@@ -1114,6 +1150,108 @@ console.log(
     return accumulatore + item;
   }, 100)
 );
+// più brevemente
+[10, 20, 30].reduce((memo, item) => memo + item, 100);
+
+// fare la media artimetica di un array di numeri utilizzando .reduce
+const a = [1, 2, 3, 4];
+// const somma =
+// const media =
+// SPOILER soluzione
+const somma = a.reduce((elem, item) => elem + item, 0);
+const media = somma / a.length;
+```
+
+## Array.find Array.every Array.some Array.flatten Array.flatMap
+
+```javascript
+// .find, dato un criterio e un array, ritorna il primo oggetto che soddisfa il criterio, altrimenti undefined
+// non modifica l'array orignale
+// il criterio è codificato come una funzione che prendo l'elelnto dell alista e torna true o false
+const aFruitThatStartsWithA = ["apple", "orange", "ananas", "banana"].find(
+  (fruit) => fruit.charAt(0) === "a"
+); // "apple"
+
+// .some risponde alla domanda: c'è almeno un elemento che soddisfa il criterio?
+const isThereAFruitThatStartWithA = [
+  "apple",
+  "orange",
+  "ananas",
+  "banana",
+].some((fruit) => fruit.charAt(0) === "a"); // true
+
+// .every risponde alla domanda: tutti gli elementi soddisfano il criterio?
+const doAllFruitsSTartWithA = ["apple", "orange", "ananas", "banana"].every(
+  (fruit) => fruit.charAt(0) === "a"
+); // false
+
+// il metodo .flatten ci permette di appiattire un array multidimensionale in un array monodimensionale
+const arrayMultidimensionale = [
+  [1, 2],
+  [3, 4],
+  [5, 6],
+];
+const arrayMonodimensionale = arrayMultidimensionale.flatten(); // [1, 2, 3, 4, 5, 6]
+
+// il metodo .flatMap ci permette di applicare una trasformazione ad ogni elemento di un array e poi appiattire il risultato
+const lettereMinuscole = ["a", "b", "c"];
+const lettereMinuscoleSeguiteDallaRelativaMaiuscola = lettereMinuscole.flatMap(
+  (lettera) => [lettera, lettera.toUpperCase()]
+); // ["a", "A", "b", "B", "c", "C"]
+```
+
+## Array methods fluent examples
+
+```typescript
+const numeri = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const numeriPari = numeri.filter((x) => x % 2 === 0);
+const numeriPariMoltiplicatiPerDue = numeriPari.map((x) => x * 2);
+
+/*
+There are only two hard things in Computer Science: cache invalidation and naming things.
+-- Phil Karlton
+*/
+// è possibile evitare di dover inventare nuovi nomi
+// utlizzando una tecnica chiamata fluent interface
+// che consiste nel concatenare più metodi
+const numeri = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const numeriPariMoltiplicatiPerDue = numeri
+  .filter((x) => x % 2 === 0)
+  .map((x) => x * 2);
+
+// requisito
+// dato un array di numeri
+// mantenere solo i numeri pari
+// duplicarli in sequenza es: [1,2] => [1,1,2,2]
+// raddopiare i numeri
+// fare la media aritmetica (considerando che la funzione passata a reduce riceve i parametri accumulatore, elemento, index_element, array_originale)
+function operazioneComplessa(numeri: Array<numeri>) {
+  // usaretecnica fluent interface
+}
+// SPOILER soluzione
+function operazioneComplessa(numeri: Array<numeri>) {
+  const numeriPariRadoppiatiInSequenzaPerDue = numeri
+    .filter((x) => x % 2 === 0)
+    .flatMap((x) => [x, x])
+    .map((x) => x * 2);
+  const somma = numeriPariRadoppiatiInSequenzaPerDue.reduce(
+    (accumulatore, elemento, index_element, array_originale) =>
+      accumulatore + elemento,
+    0
+  );
+  return somma / numeriPariRadoppiatiInSequenzaPerDue.length;
+}
+function operazioneComplessa(numeri: Array<numeri>) {
+  return numeri
+    .filter((x) => x % 2 === 0)
+    .flatMap((x) => [x, x])
+    .map((x) => x * 2)
+    .reduce(
+      (accumulatore, elemento, index_element, array_originale) =>
+        accumulatore + elemento / array_originale.length,
+      0
+    );
+}
 ```
 
 ## Import/Export

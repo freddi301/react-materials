@@ -1294,29 +1294,29 @@ un import è uno statement
 
 e diviso in due parti:
 
-sinistra: cosa imparotre
+sinistra: cosa importare
 
 destra: da quale file
 
 ```typescript
 import <sinistra> from <destra>
 
-import <qualcosa> from "../hello/hello" // percorso relativo del file nei sorgenti
-import <qualcosa> from "/hello/hello" // percorso assuluto del file nei sorgenti (quinid tipicamnete a partire dalla cartella src)
+import <qualcosa> from "../hello/hello" // percorso relativo del file nei sorgenti (inlcudere od ometter l'estensione è specifico per la configurazione del bundler)
+import <qualcosa> from "/hello/hello" // percorso assoluto del file nei sorgenti (quindi tipicamnete a partire dalla cartella src)
 import <qualcosa> from "libreria-esterna" // nome della cartella della libreria all'interno di node_modules
-  // node_modules è la cartella creata da npm (pacjage manager di nodejs) quando si istallano le dipendenze ovvero libreire esterne
+  // node_modules è la cartella creata da npm (package manager di nodejs) quando si istallano le dipendenze ovvero librerie esterne
 import <qualcosa> from "@user/library" // di recente è stato aggiunto anche il prefisso del nome dell'utente che ha creato la libreira
   // di default npm scarica le libreire da npmjs.com
   // esistono anche altri package manager (esempio yarn) e repository pubblici e privati
 
 // named import
 import { hello } from <qualcosa>
-// corrispettiov per il named export
+// corrispettivo per il named export
 export const hello = ""
 
-// deafult import
+// default import
 import NomeDiverso from <qualcosa>
-// corrispettiov per il named export
+// corrispettivo per default export
 export default const NomeOriginale = ""
 
 // combo
@@ -1326,7 +1326,8 @@ import NomeDiverso, { qualcosa } from <qualcosa>
 import * as Raccolta from <qualcosa>
 
 // named import e contesuale rinominzaione
-import { qualcosa as qualcosaDvisero } from <qualcosa>
+// utile per disambiguare nomi identidici exportati da file diversi
+import { qualcosa as qualcosaDiverso } from <qualcosa>
 
 // named export o famo strano
 export const a = 1
@@ -1334,9 +1335,9 @@ export const b = 2
 // si può scrivere anche
 const a = 1
 const b = 2
-export { a, b }
+export { a, b } // ATTENZIONE: non è un vero e proprio object literal
 
-// altra forma ameesasa di export
+// altra forma ammessa di export
 export { a as x };
 ```
 
@@ -1384,7 +1385,7 @@ class outer {
 // preferibilmente in typescript (l'editor vscopde ha il supporto nativo)
 
 // seguono alcuni passaggi propedeutici
-// seguiremo prima un aproccio WET (Write Everything Twice) cosi da capire dove avvengono le ripetizioni
+// seguiremo prima un aproccio WET (Write Everything Thrice) cosi da capire dove avvengono le ripetizioni
 // per poi applicare DRY (Don't Repeat Yourself) e creare una funzione generica che possa essere riutilizzata
 
 // le istruzioni cominciano con "TODO"

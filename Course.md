@@ -597,7 +597,7 @@ arr; // [1, 2, 3, 4]
 // fa molte operazioni diverse, ed e di difficile utilizzo, e ancora di piu difficile comprensione, EVITARE
 ```
 
-### MEtodi utili
+### Metodi utili
 
 ```javascript
 // .slice() crea un nuovo array a partire da un array esistente, da un indice di inizio e uno di fine (escluso)
@@ -754,22 +754,66 @@ const a = obj.a;
 const rest = { b: 2, c: 3 };
 ```
 
+```typescript
+function removeAttribute<
+  Obj extends Record<string, any>,
+  Attr extends keyof Obj
+>(obj: Obj, attr: Attr): Omit<Obj, Attr> {
+  const { [attr]: unused, ...rest } = obj;
+  return rest;
+}
+const o = { x: 1, y: 2, z: 3 }; // tipo in typescript {x: number, y: number, z: number}
+const o1 = removeAttribute(o, "x"); // tipo in typescript {y: number, z: number}
+```
+
 ## Object spread
 
 ```javascript
 // versione syntax sugar che si chiama object spread
-const modified = { ...original, c: 345, d: 78 };
 const original = {
   a: 1,
   b: 2,
   c: 3,
 };
-// verione esetesa
+const modified = { ...original, c: 345, d: 78 };
+// versione senza lo spread operator
 const modified = {
   a: original.a,
   b: original.b,
   c: 345,
+  d: 78,
 };
+const modified = (() => {
+  const obj = new Object();
+  for (const key in original) {
+    obj[key] = original[key];
+  }
+  obj.c = 345;
+  obj.d = 78;
+  return obj;
+})();
+
+// a cosa corrisponde?
+const a = "z";
+const o1 = { x: 42, y: 62 };
+const o2 = { y: 12, z: 22 };
+const o = { [a]: 42, ...o1, x: 62, ...o2 };
+// SPOILER soluzione
+const o = (() => {
+  const obj = new Object();
+  obj[a] = 42;
+  for (const key in o1) obj[key] = o1[key];
+  obj.x = 62;
+  for (const key in o2) obj[key] = o2[key];
+  return obj;
+})();
+/*
+  {
+    z: 22,
+    x: 62,
+    y: 12,
+  }
+*/
 ```
 
 ## Array destructuring + rest
@@ -837,18 +881,28 @@ const resto = arr.slice(2); //[3,4,5,6]
 ## Array spread
 
 ```javascript
-Math.min = (...numbers) => {
-  for (let min = -Infinity, i = 0; i++; i < numbers.length) {
-    if (numbers[i] < min) min = numbers[i];
-  }
-  return min;
-};
-Math.min(1, 2, 3, 4);
-Math.min(...[1, 2, 3]); // si traduce in Math.min(1,2,3)
+const a1 = [1, 2, 3];
+const a2 = [4, 5, 6];
+const a3 = [...a1, 99, ...a2]; // [1,2,3,99,4,5,6]
+// è equivalente a
+const a3 = new Array();
+for (const item of a1) a1.push(item);
+a3.push(99);
+for (const item of a2) a3.push(item);
 
-function prova(a, b, ...resto) {} // a = 1 b = 2 c [3,4]
-prova(1, 2, 3, 4, 5, 6); // a = 1; b = 2; resto = [3,4,5]
-prova(1, ...[2, 3, 4]); // si traduce in Math.min(1,2,3) dentro prova a = 1; b = 2; resto = [3]
+// a cosa equivale?
+const a1 = [1, 2, 3];
+const a2 = [...a1, 4, 5, 6, [a1], ...[a1]];
+// SPOILER soluzione
+const a2 = new Array();
+for (const item of a1) a2.push(item);
+a2.push(4);
+a2.push(5);
+a2.push(6);
+a2.push([a1]);
+for (const item of [a1]) a2.push(item);
+
+// [1,2,3,4,5,6,[a1],a1]
 ```
 
 ## Destructuring in function parameters + rest
@@ -934,6 +988,19 @@ function f(arg1, arg2) {
 ((a, b, c) => ({ a, b, c }))(1, 2, ...[3, 4], 5, 6); // {a:1, b:2, c:3}
 // cosa torna?
 ((a, b, c, ...r) => ({ a, b, c, r }))(1, 2, ...[3, 4], 5, 6); // {a:1, b:2, c: 3, r: [4,5,6]}
+
+Math.min = (...numbers) => {
+  for (let min = -Infinity, i = 0; i++; i < numbers.length) {
+    if (numbers[i] < min) min = numbers[i];
+  }
+  return min;
+};
+Math.min(1, 2, 3, 4);
+Math.min(...[1, 2, 3]); // si traduce in Math.min(1,2,3)
+
+function prova(a, b, ...resto) {} // a = 1 b = 2 c [3,4]
+prova(1, 2, 3, 4, 5, 6); // a = 1; b = 2; resto = [3,4,5]
+prova(1, ...[2, 3, 4]); // si traduce in Math.min(1,2,3) dentro prova a = 1; b = 2; resto = [3]
 ```
 
 ## Local mutability is global immutability
@@ -3413,11 +3480,13 @@ Per gli esempi fare riferimento agli esempi precedenti (ricerca testuale "workfl
 
 Di default scriviamo tutta l'apllicazione nel componentente del file principale, con tutto il jsx inline.
 Un asuddivisione intuitiva in componenti in base al layout grafico nelle davole di design in spesso è molto controproducente.
-  - comporta difficolta di lettura perchè aggiunge molti livelli di indirezione, dobbiamo cammbiare riga nel file o addiritttura aprirne un altro
-  - suddividre in molti comporta un grande trischio di lasciare del codice morto
-  - comporta sicuramente una proliferazine di props da passare dal padre ai figli (prop drilling) (in realtà non produce bug, ma comporta grandi quantita di codice ridondante, che quasi sicuramente diventa confusionario (immagina di dover passare 15 props a 3 livelli di profondita))
+
+- comporta difficolta di lettura perchè aggiunge molti livelli di indirezione, dobbiamo cammbiare riga nel file o addiritttura aprirne un altro
+- suddividre in molti comporta un grande trischio di lasciare del codice morto
+- comporta sicuramente una proliferazine di props da passare dal padre ai figli (prop drilling) (in realtà non produce bug, ma comporta grandi quantita di codice ridondante, che quasi sicuramente diventa confusionario (immagina di dover passare 15 props a 3 livelli di profondita))
 
 Quando suddividere?:
+
 - in componenti, hook, funzioni per riutlizzo di codice (qui applicare prima il principio WET e poi il principio DRY)
 - in componenti per memoizzare elementi di liste
 - oppure vedere pattern menzionati nell [best practices](#react-best-practices)

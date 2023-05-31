@@ -1379,10 +1379,10 @@ class outer {
 ## Replicate Array.filter, Array.map
 
 ```typescript
-// l'obiettivo è implementare per conto nostro le seguenti functioni sugli array di javascript
+// l'obiettivo è implementare per conto nostro le seguenti function sugli array di javascript
 // Array.filter
 // Array.map
-// preferibilmente in typescript (l'editor vscopde ha il supporto nativo)
+// preferibilmente in typescript (l'editor vscode ha il supporto nativo)
 
 // seguono alcuni passaggi propedeutici
 // seguiremo prima un aproccio WET (Write Everything Thrice) cosi da capire dove avvengono le ripetizioni
@@ -1453,12 +1453,12 @@ simile a prima
 */
 
 // Ora notare bene dove che avviene la ripetizione di codice
-// per evitare ripetizione di codice solitamente si porcedere ad "asrarre" il codice ripetuto
+// per evitare ripetizione di codice solitamente si procede ad "astrarre" il codice ripetuto
 // quindi prendo il codice che si ripete
 // lo metto dentro una funzione sensa parametri
 // le parti che variano da un esempio all'altro le trasformo in parametri della funzione
 
-// TODO: scrivere una funzione che datat una condizione e un array di persone, restituisce un array di persone che soddisfano la condizione, senza modificare quello originale
+// TODO: scrivere una funzione che data una condizione e un array di persone, restituisce un array di persone che soddisfano la condizione, senza modificare quello originale
 // la condizione è una funzione che dato una persona restituisce un booleano, true se la persona soddisfa la condizione, false altrimenti
 
 /*
@@ -1472,26 +1472,26 @@ function filtraPersone(persone: Array<Persona>, condizione: (persona: Persona) =
 */
 
 // TODO: [opzionale] crea una funzione che dato un oggetto di qualisasi tipo e una condizione
-// restituisce un nuovo array senza modifica l'originale che contiente solog gli oggetti che soddisfano la condizione
+// restituisce un nuovo array senza modifica l'originale che contiente solo gli oggetti che soddisfano la condizione
 // la condizione è una funzione che dato un oggetto restituisce un booleano, true se l'oggetto soddisfa la condizione, false altrimenti
-// in typescript per indicare un parametro che accetta un valore (numero, stringa, oggetto, array, ecc) si mette nelle tonde
+// in typescript per indicare un parametro che accetta un valore (numero, stringa, oggetto, array, ecc) si mette tra parentesi tonde
 // per indicare un parametro che accetta il TIPO di un valore si usano le parentesi angolari <NomeDelTipo>
 
 /*
-function filtra<Oggetto>(array: Array<Oggetto>, condizione: (elemento: Oggetto) => boolean): Array<T> {
+function filtra<Oggetto>(array: Array<Oggetto>, condizione: (elemento: Oggetto) => boolean): Array<Oggetto> {
 }
 */
 
-// TODO: creare un nuovo array, senza modificare l'originale, dove le persone hanno il nome che finisce per "u" (quinid aggiungi "u" al nome)
+// TODO: creare un nuovo array, senza modificare l'originale, dove le persone hanno il nome che finisce per "u" (quindi aggiungi "u" al nome)
 
 /*
 const personeDiOriginiSarde: Array<Persona> = [];
 for (itero con un indice sull'array delle persone) {
-  const copiaPersona = // copiare la persona però al nome aggiungiamo "u"
+  const copiaPersona = // copiare la persona però al nome aggiungiamo "u", 
   // aggiungere la copia della persona all'array delle persone con nome che finisce per "u"
 }
 console.log(persone)
-console.log(personeConNomeCheIniziaPerA)
+console.log(personeDiOriginiSarde)
 */
 
 // TODO: creare un nuovo array, senza modificare l'originale, dove le persone hanno il doppio dell'età
@@ -1504,7 +1504,7 @@ const quelliCheComincianoLeFrasiConAiMieiTempi: Array<Persona> = []
 // TODO: creare un nuovo array, senza modificare l'originale, dove le persone hanno l'altezza aumentata di 12cm
 
 /*
-const concorrentiContestTAcco12: Array<Persona> = []
+const concorrentiContestTacco12: Array<Persona> = []
 // simile a prima
 */
 
@@ -3775,6 +3775,10 @@ ctrl + , apre la finestra di configurazione, configurare sempre per progetto, qu
   - `:`25 ci fa andare a riga del file corrente
   - `@` ci fa cercare tra le variabii nel file corrente
   - `#` ci fa cercare tra i nomi
+- `alt + freccia giu/su` sposta la linea sopara o sotto
+- `ctrl + l` slelziona tutta la linea
+- `ctrl + k ctrl + c` commenta le righe selezionate
+- `ctrl + k ctrl + u` scommenta le righe selezionate
 - `ctrl + d` seleziona tutta la parole sotto al cursore
 - `ctrl + d` ripetuto più volte seleziona la prossima porzione di testo identica (piccolo modale in alto a destra offre toggle case sensitive)
 - `shift + alt + ->` seleziona il codice dentro le parentesi

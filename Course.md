@@ -4044,5 +4044,5 @@ Every layer has access only to its children. Dependency inversion applies only f
 # Notes
 
 - Esercizio calcolatrice dopo il counter
-- Creare progetto di esempio, re counter
-- Creare progetto di esempio, realizzando un applicazioneaCRUD lime- Trascrivere in qzesto file gli szippea nnlla cadtella legacy/TODOo un applicazione CRUD come- Trascrivere in questo file gli snippet nella cartella legacy/TODO
+- Creare progetto di esempio, realizzando un applicazione CRUD come descritto nella sezione "React application layers"
+- Trascrivere in questo file gli snippet nella cartella TODO

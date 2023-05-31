@@ -1749,6 +1749,48 @@ async function asyncOperation(): Promise<void> {
 }
 ```
 
+#### window.fetch example
+
+```typescript
+async function getJSON(endPoint: string): Promise<any> {
+  const response = await fetch(endPoint, {
+    method: "GET",
+  });
+  if (!response.ok) {
+    throw new Error("Network response was not ok", { cause: response });
+  }
+  const jsonData = await response.json();
+  return jsonData;
+}
+
+async function exampleUsage() {
+  // recuperare un json da "example.com/api/persone" e samparlo in console, utilizzare window.fetch, e sintassi async/await
+  console.log(await getJSON("https://example.com/api/persone"));
+}
+
+async function postJSON(endPoint: string, data: any): Promise<any> {
+  const response = await fetch(endPoint, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    throw new Error("Network response was not ok", { cause: response });
+  }
+  const jsonData = await response.json();
+  return jsonData;
+}
+
+async function exampleUsage() {
+  // recuperare un json da "example.com/api/persone" e samparlo in console, utilizzare window.fetch, e sintassi async/await
+  console.log(await getJSON("https://example.com/api/persone"));
+
+  console.log(await postJSON("https://example.com/api/persone", { nome: "Mario", cognome: "Rossi" })
+}
+```
+
 # React Basics
 
 ## React paradigm (non interactive)

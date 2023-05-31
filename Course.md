@@ -1531,6 +1531,224 @@ function trasformaPersone(persone: Array<Persona>, trasformazione: (persone: Per
 // COMPLIMENTI, hai replicato con successo la funzionalità di filter e map
 ```
 
+## Asynchroneus programming
+
+JavasScript è un linguaggio single thread, ovvero non puo eseguire più istruzione parallelamente, non può avere ne più processi,
+ne più thread contemporaneamente.
+
+Nel browser abbiamo un solo thread che esegue il javascript e disegna anche la pagina web.
+
+(Un processo è un istanza di un software che viene eseguita parallelamente alle altre, ed è anche isolata dalle altre, dolitamente gestita dal sistema operativo)
+
+(Un thread è simile ad un processo, con la diferenza che può condividere la memoria con altri thread dello stesso software, puo essere gestito sia dal s.o. che dal software stesso)
+
+Siccome avere un solo thread nel browser e molto limitante, poichè ad esempio scaricare una risorsa come un'immagine potrebbe bloccare tutto il resto della papgina web, il browser in realtà implementa diversi thread, di cui però non abbiamo il controllo. Per retrocompatibiltà come autori di codice javascript possiamo scrivere codice solo per il thread principale, e il browser si occupa di gestire i thread secondari.
+
+In realtà è possibile integraigre con questi thread secondari, tramite un meccanismo che si chiama programmazione asincrona.
+
+La programmazione asincrona fondamentalmente è un isnimee di api/metodi che se richiamati, non ritornano un valore immediatamente. Per cominucarci l'esito dell'operazione richiesta, bisogna sempre fornire una funzione detta di callback, che verrà eseguita a task completo.
+
+### JavaScript main thread event loop
+
+Il thread principale di javascript, per poter accomodare api asincrone, e timer, è implementato come un event loop (ciclo di eventi).
+
+```typescript
+// Per semplicità possiamo immaginare che esista un array chiamato event queue (coda degli eventi), che contiene delle funzioni che non prendono parametri e non restiscono nulla.
+const eventQueue: Array<() => void> = [
+  () => {
+    console.log("hello");
+  },
+  () => {
+    console.log("world");
+  },
+];
+
+// Dopodiche eseguiamo gli eventi uno alla volta, finche non finisce la coda (in nodejs)
+// nel browser invece va in stato di attesa IDLE
+while (eventQueue.length > 0) {
+  const event = eventQueue.shift()!;
+  event();
+}
+```
+
+Quindi possiamo considerare che mai il codice javascript verrà eseguito contemporaneamente con altro codice, questo semplifica di molto lo sviluppo di sftware non dovendosi precoccupare di gestire race condition.
+
+Esempio di come sono implemtati i timer
+
+```typescript
+const eventQueue: Array<() => void> = [
+  () => {
+    setTimeout(() => {
+      console.log("hello");
+    }, 1000);
+  },
+];
+
+const timers: Array<{ timestamp: number; callback: () => void }> = [];
+
+function setTimeout(callback: () => void, delay: number) {
+  const timestamp = Date.now() + delay;
+  timers.push({ timestamp, callback });
+}
+
+while (true) {
+  if (timers.length > 0) {
+    const now = Date.now();
+    const timerIndex = timers.findIndex(({ timestamp }) => timestamp <= now);
+    if (timer) {
+      timers[timerIndex].callback();
+      timers.splice(timerIndex, 1);
+    }
+  }
+  const event = eventQueue.shift()!;
+  event();
+}
+```
+
+### Node style cps
+
+Storicamente le prime convenzione nell-utilizzo di api asincrone provengono dal contesto di nodejs
+
+```javascript
+// o è valorizzato l'errore oppure il dato
+fs.readFile("./nome-file.txt", (err, data) => {
+  if (err) {
+    console.error(err);
+    return;
+  }
+  console.log(data);
+});
+
+// variante con 2 callback, una per succesos l'altra per errore
+asyncOperation(
+  "parameter",
+  (data) => console.log(data),
+  (err) => console.error(err)
+);
+```
+
+### Promise
+
+Con l'andare del tempo, si è capito che scrivere codice asincrono con la modalità dei callback portava diversi svantaggi.
+
+```javascript
+// esempio callback hell
+fs.readFile("./nome-file.txt", (err, data) => {
+  if (err) {
+    console.error(err);
+    return;
+  }
+  fs.readFile("./nome-file2.txt", (err, data) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    fs.readFile("./nome-file3.txt", (err, data) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      console.log(data);
+    });
+  });
+});
+```
+
+Per questo sono state introdotte le promise. Una promise è un astrazione che rappresenta un valore futuro. In Javascript è codicifacta come un oggetto.
+
+```javascript
+function asyncOperation() {
+  return new Promise((resolve, reject) => {
+    // resolve è una funzione, va chiamata se vogliamo segnalare che la promise è stata risolta con successo
+    // reject è una funzione, va chiamata se vogliamo segnalare che la promise è stata rigettata con errore
+  });
+}
+
+// si potrebbe intender la promise come una variazione sul tema callback
+asyncOperation(
+  "parameter",
+  (data) => console.log(data),
+  (err) => console.error(err)
+);
+asyncOperation("parameter").then(
+  (data) => console.log(data), // questo potrebbe essere la funzione resolve
+  (err) => console.error(err) // e questa la funzione reject
+)
+```
+
+La creazione dell'oggetto promise è da intendersi come aver avviato un task.
+
+Un promise si può trovare in tre stati:
+- pending (in attesa)
+- fulfilled (risolta con successo)
+- rejected (errore)
+
+I passaggi di stato possbili sono
+- pending -> fulfilled (accade quando viene richiamta la funzione resolve)
+- pending -> rejected (accade quando viene richiamata la funzione reject)
+
+Poichè la promise rappresenta un valore futuro e non molteplici valori futuri, chiamare resolve e/o reject più volte è un errore.
+
+```typescript
+// Per leggere il valore contenuto in una promise, è necessario utilizzare il metodo .then()
+let p : Promise<number>
+
+p.then(
+  (data) => console.log(data),
+  (err) => console.error(err)
+)
+
+// .then(onSucces, onError) riceve 2 parametri, entrambi opzionali, che sono dell funzioni callback
+// il primo è in caso di successo
+// secondo in caso di errore 
+```
+
+Le promise con il tempo sono state arrichite da più metodi, tra cui .catch() .finally() Promise.all Promise.resolve
+
+Vediamo come milgiora la sitauzione del callback hell con le promise
+
+```javascript
+// esempio callback hell
+Promise.all(
+  fs.readFile("./nome-file1.txt"),
+  fs.readFile("./nome-file2.txt"),
+  fs.readFile("./nome-file3.txt"),
+).then(([file1, file2, file3]) => {
+  console.log(file1, file2, file3)
+}).catch((err) => {
+  console.error(err)
+})
+```
+
+Da notare, che il metodo .then() corrisponde ad un concetto storicamente chiamato "flatMap" e "monad bind".
+Questo vul dire che il valore ritornato da .then() è una promise il cui valore è quello tornato dai callback forniti.
+Se i callback forniti ritoranno promise queste vengono "schiacciate".
+
+```javascript
+Promise.resolve(4).then(n => Promise.resolve(n * 2)) // Promise(8) non Promise(Promise(8))
+```
+
+### Async/Await
+
+E una sitassi alternativa per lavorare con le promise. E' stata introdotta nella specifica ES2017.
+
+Si puo annotare una keyword function o arrow function con la keyword async. Questo vuol dire che la funzione ritorna una promise, ma sopratutto permette di utilizzare la keyword await per leggere il valore all'interno di altre promise.
+
+Il vantaggio di questa è che ci permete id scrivere codice come se fosse sincrono anche se è asincrono.
+
+Internamente le async function vengonono codificate con tutto una serie di promise/callback.
+
+```typescript
+async function asyncOperation(): Promise<void> {
+  try {
+    const data = await fs.readFile("./nome-file.txt");
+    console.log(data)
+  } catch (error) {
+    console.error(error)
+  }
+}
+```
+
 # React Basics
 
 ## React paradigm (non interactive)

@@ -3748,7 +3748,9 @@ Realizzare in react, pure client side, una app CRUD che permette di gestire una 
 
 ## Memoization workflow
 
-implement meoization on list wiht exclusive selection, use react dev tools profiler
+implement memoization on list wiht exclusive selection, use react dev tools profiler
+
+## React lifecylce
 
 ## Mememoization with
 

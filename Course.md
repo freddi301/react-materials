@@ -1836,6 +1836,33 @@ Tag principali sono:
 - span che puo separe anche singoli caratteri
 - a per codificare i link
 
+### CSS
+
+CSS (Cascading Style Sheet) è un linguaggio di stilizzazione e layout per documenti HTML.
+
+```css
+p {
+  color: red;
+  font-size: 16px;
+}
+
+button.primary {
+  background-color: blue;
+}
+```
+
+La sintassi de CSS consiste in un file di coppie: selettore e attributi.
+Il selettore CSS è un espressione che indica quali elementi HTML devono essere le regole che segono nel blocco tra le paretnesi graffe.
+Gli attributi sono coppie nome valore, separati da due punti, e terminati da un punto e virgola.
+I selettori hanno una sintassi variegata e compinibile, alcuni esempi:
+
+- `p {}` seleziona tutti i tag p
+- `.container {}` seleziona tutti gli elementi con attributo classe specificato `<div class="container">`
+- `#password {}` seleziona tutti gli elementi con attributo id specificato `<input id="password">`
+- `button:hover {}` seleziona tutti i tag button quando il mouse vi è posizionato sopra (i due punti si chiamano pseudo-selettori)
+- `p.note` seleziona tutti i tag specificati che hanno l'attributo classe specificato `<p class="note">`
+- `.container .footer` seelziona tutti gli elementi figli `<div class="container"><div class="footer">...`
+
 ## React paradigm (non interactive)
 
 Punto di partenza react

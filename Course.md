@@ -1879,6 +1879,42 @@ Npm semplicmente andrà a scaricare la lista dei file forniti all'interno della 
 
 Esistono anche altetrnative a npm, quella più utilizzata si chiama yarn (è più veloce e ha features extra).
 
+### Functional programming basics
+
+#### keyword function e arrow function
+
+```js
+function f(a) {
+  return a + 1;
+}
+const g = (b) => a + 2;
+```
+
+#### Pure function
+
+Un a funzione si dice pura se soddifa questi criteri:
+
+- dato uno stesso input, restituisce sempre lo stesso output
+- non ha effetti collaterali ovvero non modifica lo stato del sistema circostante
+
+```js
+// impura
+function example1(arg) {
+  total.amount += 1; // modifica il sistema circostante
+  return arg * total.amount; // resituisce un valore diverso ad ogni chiamata
+}
+
+// pura
+function example2(arg) {
+  return arg * 42; // restituisce sempre lo stesso valore per los tesso imput
+}
+
+// impura
+function example3(arg) {
+  total.amount = arg * 50; // modifica il sistema circostante
+}
+```
+
 ## React paradigm (non interactive)
 
 Punto di partenza react

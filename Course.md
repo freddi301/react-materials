@@ -1863,6 +1863,28 @@ I selettori hanno una sintassi variegata e compinibile, alcuni esempi:
 - `p.note` seleziona tutti i tag specificati che hanno l'attributo classe specificato `<p class="note">`
 - `.container .footer` seelziona tutti gli elementi figli `<div class="container"><div class="footer">...`
 
+### DOM
+
+DOM (Document Object Model) ed è l' API javascript per poter manipolare il documento.
+
+```js
+// ritrovare l'istanza dell'oggetto che rappresenta l'elemto html
+const element = document.getElementById("element-id");
+
+// creare un nuovo elemento html
+const element = document.createElement("div")
+
+// impostare un attributo
+element.setAttribute("class", "container")
+
+// aggiungere un elemento figlio
+const child = document.createElement("div")
+element.appendChild(child)
+
+// rimuovere un elemento figlio
+element.removeChild(child)
+```
+
 ### Nodejs npm
 
 Mentre il browser è lambiente di esecuzione di JavaScript che ha accesso al documento, NodeJS è l'ambiente di esecuzione di JavaScript che ha a dispozione tutte le risorse del sistema operativo.
@@ -1915,6 +1937,68 @@ function example3(arg) {
 }
 ```
 
+#### Higher order function
+
+Una funzione si dice di ordine superiore se soddisfa almeno uno di questi criteri:
+- accetta uno o più funzioni come argomenti
+- ritorna una funzione
+
+```js
+// higher order function perchè restiruisce una funzione
+function f() {
+  return function () {
+    return 42;
+  };
+}
+
+// higher order function perchè accetta una funzione come argomento
+function double(f, x) {
+  return f(f(x))
+}
+```
+
+## What is React
+
+E' una libreria javascript opensource createa nel lontanto 2013.
+Serve per realizzare interfaccie utente interattive (web, mobile, desktop, 3d).
+Si basa su un paradigma di programmazione funzionale, dichiarativo e immutabile.
+- funzionale perchè fa un uso intensivo di funzioni e features collegate (higher order function, closure, array methods ecc...)
+- dichiarativo perchè invece di descrivere come realizzare un'interfaccia utente, il programmatore descrive cosa deve essere visualizzato, è la libreria ad occuparsi di come realizzarlo
+- immutabile perchè come vincolo tecnico non è possibile modificare lo stato dell'interfaccia utente, ma solo sostituirlo con uno nuovo
+
+## React enviroment
+
+Siccome react sfrutta una moltitudine di features moderne di javascript, è necessario un ambiente di sviluppo che le supporti.
+E possibile configurare un tale ambiente completamente da zero, ma è molto più semplice utilizzare un tool che lo faccia per noi.
+
+Le seguenti sono al momento le più affermate:
+- create-react-app è un setup con le best practice per lo sviluppo di applicazioni frontend single page
+- next.js è un setup per lo sviluppo di applicaioni full stack (frontend con react, backend con nodejs)
+- codesandobx.io è un ambiente online per prototipazione veloce e condivisibile
+
+## Virtual DOM
+
+React nasce per indirizzare le seguenti problematiche:
+- facilitare la creazione di interfacce, evitando allo sviluppatore di dover scrivere codice complesso per aggiornare l'interfaccia, allo svilupaptore basta specifica il risultato finale voluto
+- gestire l'interattività
+- migliorare le performance evitando modifiche ridondanti e costose al dom
+
+Il principio originale per il suo sviluppo è: la cosa più costosa alivello di ram e cpu è proprio l'utilizzo del DOM (lettura o scrittura), quindi per evutare il più possibile di interagire con il DOM react rappresenta il documento in memoria, in un oggetto chiamato virtual DOM che ne è una rappresentazione semplificata.
+
+Quindi il virtual dom non è altro che una struttura gerarchica di oggetti javascript che rappresenta il documento html.
+
+Il funzionamento base di react è il seguente:
+- in memoria abbiamo il virtual dom che rappresnta lo stato attuale del dom reale
+- notifichiamo a react che vogliamo aggiornare il documento passandogli la nuova rappresentazione del documento in virtual dom
+- react confronta il virtual dom attuale con quello nuovo e determina quali sono le modifiche da apportare al dom reale
+
+React è suddiviso in due parti:
+- "react" (package javascript per lavorare con il dom virtuale), di suo non è legato ad una piattaforma o a una qualche visualizzione
+- renderer è un componente software che si occupa di visualizzare il dom virtuale su una piattaforma specifica
+  - web: packege "react-dom" 
+  - mobile: package "react-native"
+  - 3d: "react-three-fiber"
+
 ## React paradigm (non interactive)
 
 Punto di partenza react
@@ -1923,8 +2007,6 @@ Punto di partenza react
 const rootElement = document.getElementById("root")!;
 const root = ReactDOM.createRoot(rootElement);
 // const root = { currentRealDom: rootElement, currentVirtualDom: null }
-
-// root.render(<App />);
 
 const pagina1 = <h1>Fred</h1>;
 // const pagina = React.createElement("h1", {}, ["Fred"])
@@ -4167,6 +4249,8 @@ Every layer has access only to its children. Dependency inversion applies only f
 
 # Notes
 
+- Aggiungere concruunte mopde con suspanse e transition
+- Aggiungere sezione react hooks al completo
 - Esercizio calcolatrice dopo il counter
 - Creare progetto di esempio, realizzando un applicazione CRUD come descritto nella sezione "React application layers"
 - Trascrivere in questo file gli snippet nella cartella TODO

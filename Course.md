@@ -2221,15 +2221,15 @@ ricorda: react è in grado di renderizzare solo alcuni tipi di dato
 null, undefined, true, false vengono interpretati come spazio vuoto
 string e number invece come testo puro
 
-<div/> che è il jsx per istanziare componenti nativi
-<MyComponent/> che è il jsx per istanziare componenti creati da noi
-[null, undefined, true, false, "", 0, <div>, <MyComponent/>] una array che contiene qualsiasi cosa di cui sopra
+`<div/>` che è il jsx per istanziare componenti nativi
+`<MyComponent/>` che è il jsx per istanziare componenti creati da noi
+`[null, undefined, true, false, "", 0, <div>, <MyComponent/>]` una array che contiene qualsiasi cosa di cui sopra
 
 ```tsx
-// creare un compoentente react che visualizza il seguente dato
-// e che va utilizzato cosi
+// creare un compontente react che visualizza il seguente dato
 // usare typescript, Array.map e le props
 // per il momento ignoriamo i warning sulle "key"
+// di seguito la specifica di come lo sivuole istanziare
 
 const app = (
   <PersonList
@@ -4068,7 +4068,8 @@ Specialemente quando si fa integrazione (es: portali) utilizzare proxy, mock (ve
 
 ## Useful Typescript Types
 
-- React.ReactNode rappresenta un istanza di un compoennten react, ovvero qualsiasi elemento jsx valido
+- JSX.Element rappresenta un istanza di un compoennten react, ovvero qualsiasi elemento jsx valido
+- React.ReactNode è come JSX.Element ma include anche i tipi primitivi come null undefined number string true false
 - React.CssProperties raprresente l'oggetto che passiamo alla prop style dei componenti nativi di react
 - React.ChangeEvent<HTMLInputElement> React.MouseEvent<HTMLDivElement> sono i tipi degli eventi passati agli event handler, il parametro di tipo indica che tipologia di nodo html e presente dentro evet.currentTarget
 

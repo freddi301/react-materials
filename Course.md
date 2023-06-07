@@ -1889,7 +1889,19 @@ const text = document.createTextNode("testo");
 
 // cambia testo nodo testuale
 text.nodeValue = "nuovo testo";
+
+// aggiungere un event listener
+
+const onClikc = (event) => {
+  console.log("click");
+};
+element.addEventListener("click", onClick);
+
+// rimuovere un event listener
+element.removeEventListener("click", onClick);
 ```
+
+````
 
 ### Nodejs npm
 
@@ -1916,7 +1928,7 @@ function f(a) {
   return a + 1;
 }
 const g = (b) => a + 2;
-```
+````
 
 #### Pure function
 
@@ -2267,8 +2279,9 @@ function PersonList({ persons }: { persons: Array<Person> }) {
 // è vitale per 2 motivi
 // performance: affinchè react possa riordinare in modo efficiente gli elementi in pagina
 // significato: più avanti quando utilizzzeremo lo stato, noteremo che lo stato di un componente
-//   è legato alla sua posizione nell'albero, e alla key se si trova in un array
-//   quindi è fondamentale, che le key siano univoche e non ripetute per tutti gli elementi nell array (non serve che siano univoche globalmente)
+//   è legato alla sua posizione nell'albero del dom virtuale, e alla key se si trova in un array
+//   quindi è fondamentale, che le key siano univoche e non ripetute per tutti gli elementi nell' array (non serve che siano univoche globalmente)
+// solitamente usare l'id dell'entita che viene tornata dal backend
 ```
 
 ## Event handlers
@@ -2287,12 +2300,12 @@ const app = (
 
 Gli event handlers in react, sono gli stessi del DOM, con alcune piccole differenze:
 
-- Il nome dell'evento è in CamelCase
-- E una prop degli elementi nativi es `div`
+- Il nome dell'evento è in CamelCase prefissato con "on"
+- E una prop degli elementi nativi es: `div`
 - Gli va passato una callback (callback indica una funzione che verrà chiamata in un secondo momento)
-- La cllback riceve un parametro, che per convenzione chiamaiamo event, che corrisponde all'evento.
-  - questo evento non è l'evento nativo del dom, bensi una versione "virtuale" (perchè react per perfromanze riutilizza gli oggetti degli eventi)
-  - pertanto, l'oggetto dopo che la funzione callback finisce, verà riutillazto, quinid per salvarlo, o utilizzarlo in un secondo momento
+- La callback riceve un parametro, che per convenzione chiamiamo event, che corrisponde all'evento con relativi dettagli.
+  - questo evento non è l'evento nativo del dom, bensi una versione "virtuale" (perchè react per motivi di performance riutilizza gli oggetti degli eventi, in più appara differenze tra vari browser)
+  - pertanto, l'oggetto dopo che la funzione callback finisce, verà riutillizzato, quindi per salvarlo, o utilizzarlo in un secondo momento
   - bisogno chiamare il metodo event.persist()
 
 Come prassi, scrivere gli event handler inline, eventualmente per portarli fuori, selezionare codice in vscode usare click destro -> refactor -> extract con const in enclosing scope:
@@ -2302,7 +2315,7 @@ Scrive le callback come arrow function con graffe inline e nome dell'evento `eve
 - più breve
 - inferisce tipo evento in typescript
 - leggibilità (un livello di indirezione in meno)
-- condizionalità (se fosse fuori, dobbiamo verificarlo due volte ed e facile dimentarselo)
+- condizionalità (se fosse fuori, dobbiamo verificare la codnizione due volte ed e facile dimentarselo)
 
 Quando la si mette fuori, attenzione a non richiamare la funzione erroneamente:
 

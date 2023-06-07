@@ -1863,6 +1863,22 @@ I selettori hanno una sintassi variegata e compinibile, alcuni esempi:
 - `p.note` seleziona tutti i tag specificati che hanno l'attributo classe specificato `<p class="note">`
 - `.container .footer` seelziona tutti gli elementi figli `<div class="container"><div class="footer">...`
 
+### Nodejs npm
+
+Mentre il browser è lambiente di esecuzione di JavaScript che ha accesso al documento, NodeJS è l'ambiente di esecuzione di JavaScript che ha a dispozione tutte le risorse del sistema operativo.
+
+Npm è il package manager di NodeJS, che permette di installare librerie JavaScript e di gestire le loro dipendenze.
+
+Ad oggi, le applicazioni JavaScript sono abbastanza complesse da richiedere l'uso di librerie esterne.
+
+Quando una volta si includevano i file delle librerie esterne manualmente all'interno del progetto, ad oggi questo precesso è automatizzato.
+
+Basta fornire un file di nome `package.json` che contiente una lista di librerire esterne da utilizzare nel progetto e lanciare il comando `npm install`.
+
+Npm semplicmente andrà a scaricare la lista dei file forniti all'interno della cartella `node_modules`. (package.json da includere, node_modules da escludere dal sistema di versionning).
+
+Esistono anche altetrnative a npm, quella più utilizzata si chiama yarn (è più veloce e ha features extra).
+
 ## React paradigm (non interactive)
 
 Punto di partenza react

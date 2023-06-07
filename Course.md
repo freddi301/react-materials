@@ -1673,17 +1673,19 @@ asyncOperation(
 asyncOperation("parameter").then(
   (data) => console.log(data), // questo potrebbe essere la funzione resolve
   (err) => console.error(err) // e questa la funzione reject
-)
+);
 ```
 
 La creazione dell'oggetto promise è da intendersi come aver avviato un task.
 
 Un promise si può trovare in tre stati:
+
 - pending (in attesa)
 - fulfilled (risolta con successo)
 - rejected (errore)
 
 I passaggi di stato possbili sono
+
 - pending -> fulfilled (accade quando viene richiamta la funzione resolve)
 - pending -> rejected (accade quando viene richiamata la funzione reject)
 
@@ -1691,16 +1693,16 @@ Poichè la promise rappresenta un valore futuro e non molteplici valori futuri, 
 
 ```typescript
 // Per leggere il valore contenuto in una promise, è necessario utilizzare il metodo .then()
-let p : Promise<number>
+let p: Promise<number>;
 
 p.then(
   (data) => console.log(data),
   (err) => console.error(err)
-)
+);
 
 // .then(onSucces, onError) riceve 2 parametri, entrambi opzionali, che sono dell funzioni callback
 // il primo è in caso di successo
-// secondo in caso di errore 
+// secondo in caso di errore
 ```
 
 Le promise con il tempo sono state arrichite da più metodi, tra cui .catch() .finally() Promise.all Promise.resolve
@@ -1712,12 +1714,14 @@ Vediamo come milgiora la sitauzione del callback hell con le promise
 Promise.all(
   fs.readFile("./nome-file1.txt"),
   fs.readFile("./nome-file2.txt"),
-  fs.readFile("./nome-file3.txt"),
-).then(([file1, file2, file3]) => {
-  console.log(file1, file2, file3)
-}).catch((err) => {
-  console.error(err)
-})
+  fs.readFile("./nome-file3.txt")
+)
+  .then(([file1, file2, file3]) => {
+    console.log(file1, file2, file3);
+  })
+  .catch((err) => {
+    console.error(err);
+  });
 ```
 
 Da notare, che il metodo .then() corrisponde ad un concetto storicamente chiamato "flatMap" e "monad bind".
@@ -1725,7 +1729,7 @@ Questo vul dire che il valore ritornato da .then() è una promise il cui valore 
 Se i callback forniti ritoranno promise queste vengono "schiacciate".
 
 ```javascript
-Promise.resolve(4).then(n => Promise.resolve(n * 2)) // Promise(8) non Promise(Promise(8))
+Promise.resolve(4).then((n) => Promise.resolve(n * 2)); // Promise(8) non Promise(Promise(8))
 ```
 
 ### Async/Await
@@ -1742,9 +1746,9 @@ Internamente le async function vengonono codificate con tutto una serie di promi
 async function asyncOperation(): Promise<void> {
   try {
     const data = await fs.readFile("./nome-file.txt");
-    console.log(data)
+    console.log(data);
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
 }
 ```
@@ -1792,6 +1796,45 @@ async function exampleUsage() {
 ```
 
 # React Basics
+
+## Prerequisites
+
+### HTML
+
+HTML (Hyper Text Markup Language) è il linguaggio di markup (quindi progettato per authoring di documenti stampati o digitali), del web.
+
+Il codice sorgente è testo, che viene visualizzato come un documento digitale solitamente da un browser.
+
+```html
+<html>
+  <head>
+    <title>Titolo della pagina</title>
+  </head>
+  <body>
+    <section>
+      <h1>Titolo<h1>
+      <p>
+        Un paragrafo di <br/>
+        testo con <a href="http://altra.pagina.com">link</a>
+      </p>
+    </section>
+  </body>
+</html>
+```
+
+Un documento è strutturato come un albero gerarichico di elementi chiamati tag. La sintassi prevede l'apertura e la chiusura di un tag, che può contenere altri tag o testo.
+L'apertura è il nome del tag circondato da parentesi angolari `<div>` la chiusira vuole uno slash `</div>`.
+Alcuni tag non hanno contenuto, e si possono scrivere in un modo più compatto `<br />`.
+Ogni tag può avere degli attributi, che sono coppie nome valore, e sono scritti all'interno del tag di apertura `<a href="http://altra.pagina.com">` nome segno uguale e contuneto tra doppi apici.
+Esistono diversi tag che hanno attributi e comportamenti specifici.
+Tag principali sono:
+
+- html che contiene tutto il documento
+- head che contiene informazioni sul documento che non verranno visualizzate
+- body che contiene il contenuto del documento
+- div che serve per separare il contenuto in blocchi
+- span che puo separe anche singoli caratteri
+- a per codificare i link
 
 ## React paradigm (non interactive)
 

@@ -1872,17 +1872,23 @@ DOM (Document Object Model) ed è l' API javascript per poter manipolare il docu
 const element = document.getElementById("element-id");
 
 // creare un nuovo elemento html
-const element = document.createElement("div")
+const element = document.createElement("div");
 
 // impostare un attributo
-element.setAttribute("class", "container")
+element.setAttribute("class", "container");
 
 // aggiungere un elemento figlio
-const child = document.createElement("div")
-element.appendChild(child)
+const child = document.createElement("div");
+element.appendChild(child);
 
 // rimuovere un elemento figlio
-element.removeChild(child)
+element.removeChild(child);
+
+// crea nodo tesutale
+const text = document.createTextNode("testo");
+
+// cambia testo nodo testuale
+text.nodeValue = "nuovo testo";
 ```
 
 ### Nodejs npm
@@ -1940,6 +1946,7 @@ function example3(arg) {
 #### Higher order function
 
 Una funzione si dice di ordine superiore se soddisfa almeno uno di questi criteri:
+
 - accetta uno o più funzioni come argomenti
 - ritorna una funzione
 
@@ -1953,7 +1960,7 @@ function f() {
 
 // higher order function perchè accetta una funzione come argomento
 function double(f, x) {
-  return f(f(x))
+  return f(f(x));
 }
 ```
 
@@ -1962,6 +1969,7 @@ function double(f, x) {
 E' una libreria javascript opensource createa nel lontanto 2013.
 Serve per realizzare interfaccie utente interattive (web, mobile, desktop, 3d).
 Si basa su un paradigma di programmazione funzionale, dichiarativo e immutabile.
+
 - funzionale perchè fa un uso intensivo di funzioni e features collegate (higher order function, closure, array methods ecc...)
 - dichiarativo perchè invece di descrivere come realizzare un'interfaccia utente, il programmatore descrive cosa deve essere visualizzato, è la libreria ad occuparsi di come realizzarlo
 - immutabile perchè come vincolo tecnico non è possibile modificare lo stato dell'interfaccia utente, ma solo sostituirlo con uno nuovo
@@ -1972,6 +1980,7 @@ Siccome react sfrutta una moltitudine di features moderne di javascript, è nece
 E possibile configurare un tale ambiente completamente da zero, ma è molto più semplice utilizzare un tool che lo faccia per noi.
 
 Le seguenti sono al momento le più affermate:
+
 - create-react-app è un setup con le best practice per lo sviluppo di applicazioni frontend single page
 - next.js è un setup per lo sviluppo di applicaioni full stack (frontend con react, backend con nodejs)
 - codesandobx.io è un ambiente online per prototipazione veloce e condivisibile
@@ -1979,6 +1988,7 @@ Le seguenti sono al momento le più affermate:
 ## Virtual DOM
 
 React nasce per indirizzare le seguenti problematiche:
+
 - facilitare la creazione di interfacce, evitando allo sviluppatore di dover scrivere codice complesso per aggiornare l'interfaccia, allo svilupaptore basta specifica il risultato finale voluto
 - gestire l'interattività
 - migliorare le performance evitando modifiche ridondanti e costose al dom
@@ -1988,14 +1998,16 @@ Il principio originale per il suo sviluppo è: la cosa più costosa alivello di 
 Quindi il virtual dom non è altro che una struttura gerarchica di oggetti javascript che rappresenta il documento html.
 
 Il funzionamento base di react è il seguente:
+
 - in memoria abbiamo il virtual dom che rappresnta lo stato attuale del dom reale
 - notifichiamo a react che vogliamo aggiornare il documento passandogli la nuova rappresentazione del documento in virtual dom
 - react confronta il virtual dom attuale con quello nuovo e determina quali sono le modifiche da apportare al dom reale
 
 React è suddiviso in due parti:
+
 - "react" (package javascript per lavorare con il dom virtuale), di suo non è legato ad una piattaforma o a una qualche visualizzione
 - renderer è un componente software che si occupa di visualizzare il dom virtuale su una piattaforma specifica
-  - web: packege "react-dom" 
+  - web: packege "react-dom"
   - mobile: package "react-native"
   - 3d: "react-three-fiber"
 
@@ -2009,8 +2021,8 @@ const root = ReactDOM.createRoot(rootElement);
 // const root = { currentRealDom: rootElement, currentVirtualDom: null }
 
 const pagina1 = <h1>Fred</h1>;
-// const pagina = React.createElement("h1", {}, ["Fred"])
-// const pagina = {component: "h1", children: ["Fred"]}
+// const pagina1 = React.createElement("h1", {}, ["Fred"])
+// const pagina1 = {component: "h1", children: ["Fred"]}
 
 // root = { currentRealDom: rootElement, currentVirtualDom: null }
 root.render(<h1>Fred</h1>);
@@ -2020,11 +2032,11 @@ root.render(<h1>Luca</h1>);
 root.render(<h1>Mario</h1>);
 ```
 
-Unita di uddivisione e riutilizzo del codice
+## Unita di suddivisione e riutilizzo del codice
 
 ```tsx
 // in un software generico
-// abbiamo i dati e le sitruzioni
+// abbiamo i dati e le istruzioni
 // e utilizziamo le funzioni
 // per suddividere il codice, e poterlo eventualmente riutilizzare
 // noi componiamo software tramite il richiamo di funzione
@@ -2034,10 +2046,10 @@ function coppiaDiNumeri(numero) {
 }
 const esempio = coppiaDiNumero(4);
 
-// in react invece i nostri dati sono virtual dom
+// in react invece i nostri dati sono il virtual dom
 // e le nostre funzioni si chiamano componenti
-// in react l'unita di suddivisione e riutilizzo del codice sono appuntoo i compoenti
-// ma siccome il virtual dom non èatro che un albero di ogggetti
+// in react l'unita di suddivisione e riutilizzo del codice sono appunto i componenti
+// ma siccome il virtual dom non è altro che un albero di oggetti
 // un componento è una funzione che li produce
 
 // function MioComponente(props) {
@@ -2054,39 +2066,38 @@ function MioComponente({ nome, cognome }: { nome: string; cognome: string }) {
 }
 const esempio = <MioComponente nome={"Fred"} cognome={"Bat"} />;
 // const esempio = React.createElement(MioComponente, { nome: "Fred", cognome: "Bat" })
-// const esempio = MioComponente({ nome: "Fred", cognome: "Bat" }) // come se voelssi fare cosi
+// const esempio = MioComponente({ nome: "Fred", cognome: "Bat" }) // come se volessi fare cosi
 // const esempio = { component: MioComponente, props: { nome: "Fred", cognome: "Bat" } } // ma in realtà è cosi !!!
 ```
 
 ## React naive DIY
 
 ```typescript
-
 type VirtualDom =
-  { component: "p", props: { children: string } } |
-  { component: "div", props: { children: Array<VirtualDom> } } |
-  { component: (props: any) => VirtualDom, props: any } |
-  null
+  | { component: "p"; props: { children: string } }
+  | { component: "div"; props: { children: Array<VirtualDom> } }
+  | { component: (props: any) => VirtualDom; props: any }
+  | null;
 
 function render(current: VirtualDom, next: VirtualDom, realDom: HtmlElement) {
   if (current === null && next !== null) {
-    realDom.appendChild(create(next))
+    realDom.appendChild(create(next));
   }
-  if (current !== && next === null) {
-    realDom.removeChild(realDom.child)
+  if (current !== null && next === null) {
+    realDom.removeChild(realDom.child);
   }
-  update(current, next, realDom)
+  update(current, next, realDom);
 }
 
 function create(virtualNode: VirtualDom): HtmlElement | null {
-  if (virtualNode === null) return null
+  if (virtualNode === null) return null;
   if (typeof virtualNode.component === "Function") {
-    return create(virtualNode.component(virtualNode.props))
+    return create(virtualNode.component(virtualNode.props));
   }
   if (typeof virtualNode.component === "string") {
-    const element = document.createElement(virtualNode.component)
+    const element = document.createElement(virtualNode.component);
     for (const [attribute, value] of virtualNode.props) {
-      element.setAttribute(attribute, value)
+      element.setAttribute(attribute, value);
     }
     return element;
   }
@@ -2099,15 +2110,14 @@ function update(current: VirtualDom, next: VirtualDom, realDom: HtmlElement) {
       for (const attribute of Object.keys(current).concat(Object.keys(next))) {
         // aggiorno solo gli attributi che differiscono
         if (curent[attribute] !== next[attribute]) {
-          element.setAttribute(attribute, next[attribute])
+          element.setAttribute(attribute, next[attribute]);
         }
       }
     } else {
-      realDom.replaceChild(create(next), realDom.child)
+      realDom.replaceChild(create(next), realDom.child);
     }
   }
 }
-
 ```
 
 ## React props passing example
@@ -2115,19 +2125,19 @@ function update(current: VirtualDom, next: VirtualDom, realDom: HtmlElement) {
 ```tsx
 
 React.createElement(component, props) // è una funzione
-// che come primo parametro, accettaa la funzione che rappresenta il componente react
-// oppure una string (es: "div") per indicare un elemento nativo html
-// come seocndo parametro accetta i parametri per il componente
-// nel caso di un componenten nativo tipo "div" soono proprio gli attributi html
-// nel caso di un componentne a forma di funzione, i parametri da passargli
+// che come primo parametro, accetta la funzione che rappresenta il componente react
+// oppure una stringa (es: "div") per indicare un elemento nativo html
+// come secondo parametro accetta i parametri per il componente
+// nel caso di un componente nativo tipo "div" sono proprio gli attributi html
+// nel caso di un componente a forma di funzione, i parametri da passargli
 // es: <div id="container" aria-label="contenitore">
 // è: React.createElement("div", { id: "container", "aria-label": "contenitore" })
 // es: <div/>
 // è: React.createElement("div", {})
 
 
-// I have a react component in typescript
-function Person({ name, age }: { name: String; age: number }) {
+// React component in typescript
+function Person({ name, age }: { name: string; age: number }) {
   return (
     <div>
       <div>name: {name}</div>
@@ -2149,12 +2159,13 @@ function Person(props) {
   );
 }
 
-const personElement = React.createElement(Person, { name: "John", age: 30 }); // è solo un modo per indicare a react che in realtà
-// qui voglio eseguire la chiamata di functione
+const personElement = React.createElement(Person, { name: "John", age: 30 });
+// è solo un modo per indicare a react che in realtà
+// qui voglio eseguire la chiamata di funzione
 // const personElement = Person({ name: "John", age: 30 })
-// E qui qui che avviene il passgio di paraemtri, in react noti come props
+// E qui qui che avviene il passgio di parametri, in react noti come props
 
-// In definitiva il JSX è solo un modo per codificare le chiamate a funzione.
+// In definitiva il JSX è solo un modo per codificare le chiamate a funzione ritardate.
 // quindi volendo semplificare
 
 function Person(props) {
@@ -2166,9 +2177,8 @@ function Person(props) {
 const personElement = Person({ name: "John", age: 30 });
 
 // l'unica grande differenza è che in questa versione semplificate le funzioni vengono eseguite subito
-// mentre nella versione jsx le funzioni non vengono eseguite subito, bensi codificate come istruzioni per eseguirle
-// cosi react puo decidere quando aggiornare quale parte della pagina, senza rieseguire il codice
-// di tutto l'albero dell'applicazione
+// mentre nella versione jsx le funzioni NON vengono eseguite subito, bensì codificate come istruzioni per eseguirle in un secodno momento
+// cosi react puo decidere quando aggiornare quale parte della pagina, senza rieseguire il codice di tutto l'albero dell'applicazione
 ```
 
 ## children prop
@@ -2200,6 +2210,8 @@ const app = (
   </div>
 );
 ```
+
+`Consegna: creare un componente che utilizzando la prop children, vializzzi i propri figli in un div, due volte, richiamrlo e testare visualmente il risultato`
 
 Ci sono due prop speciali e riservate in react: "children" e "key" che quindi non possono essere utilizzate come paramteri arbitrari per i nostri componenti
 

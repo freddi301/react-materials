@@ -2363,10 +2363,10 @@ l'if else sul primo livello del componente
 function MioComponente({ name }) {
   // se is visible e true visualizzare "Hello world"
   // altrimenti non visualizzare nulla
-  if (name) {
-    return <div>hello {name}</div>;
+  if (!name) {
+    return null;
   }
-  return null;
+  return <div>hello {name}</div>;
 }
 ```
 
@@ -2383,8 +2383,8 @@ function MioComponente({ isVisible }) {
 
 ### Logic operators
 
-Serve per visualizzare qualcosa se c'è. (Sfrutta la proprietà short-circuit degli operatori booleani di javascript)
-gli operatori logici (di solito &&)
+Serve per visualizzare qualcosa se presente. (Sfrutta la proprietà short-circuit degli operatori booleani di javascript)
+gli operatori logici (di solito && e ||)
 sono utili per visualizzare i campi opzionali
 
 ```tsx
@@ -2400,7 +2400,7 @@ function MioComponente({ nome, cognome }: { nome?: string; congome: string }) {
 
 ### IIFE
 
-Serve nel caso in cui necessetiamo di uno statement nella posizione di expression
+Serve nel caso in cui necessetiamo di uno statement nella posizione di un expression
 IFEE (immediately invoked function expression)
 ci permette di sfruttare gli statement nel jsx
 utile sopratutto per rendering condizionale di piu di due alternative
@@ -2426,23 +2426,23 @@ function MioComponente({ status }: { status: "acceso" | "spento" | "rotto" }) {
 
 ## React component state
 
-Mentre le props, sono delle infuromazioni che arrivano al compoennte dal chi lo richiama.
+Mentre le props, sono delle informazioni che arrivano al componente dal chi lo richiama.
 
-Lo stato di un compoennte è privato al componente (non è accessibile dal chiamante o dai figli, a meno chè non viene passato esplicitamente)
+Lo stato di un componente è privato al componente (non è accessibile dal chiamante o dai figli, a meno chè non viene passato esplicitamente)
 
-Come al cambio delle props di un componente, il compoenten viene rirendirizzato e aggiornato in pagina, cosi al cambiare dello stato interno avviene la medesima cosa.
+Come al cambio delle props di un componente, il componente viene rirendirizzato e aggiornato in pagina, cosi al cambiare dello stato interno avviene la medesima cosa.
 
 ## React hooks
 
-React hooks, sono delle funzioni speciali, che troviamo nel package "react" nell'oggetto React, che cominciano con il suffisso use (es: useSTate, useEffect).
+React hooks, sono delle funzioni speciali, che troviamo nel package "react" nell'oggetto React, che cominciano con il suffisso use (es: useState, useEffect).
 
-Ci permettono di agganciarci al lifecycle dei componenti, hanno funzioni diverse.
+Ci permettono di agganciarci al lifecycle dei componenti, hanno funzionalità diverse.
 
 E hanno delle regole da rispettare. (piu avanti)
 
 ## React.useState
 
-React.useState è una react hook, che serve per creare uno slot di stato interno privato al componente. Se questo slot di memoria viene aggiornato, il componete viene rirenderizzato.
+React.useState è una react hook, che serve per creare uno slot di stato interno privato al componente. Se questo slot di memoria viene aggiornato, il componente viene rirenderizzato.
 
 ```tsx
 function MyComponent() {
@@ -2493,7 +2493,7 @@ Il setter, invece del valore da settare, accetta una funzione che dato il valore
 // che dato un numero massimo di persone
 // visualizza un bottone con il numero di persone attuali
 // cliccando sul buttone il numero di persone attuali aumenta di 1
-// se il numero di persone è magioreuguale all' 80% del massimo visualizzare anche scritta "capienza quasi raggiunta"
+// se il numero di persone è magioreuguale all' 80% del massimo, visualizzare anche scritta "capienza quasi raggiunta"
 // se raggiunge la capienza, nascondere il bottone, e visualizzare messaggio "capienza raggiunta"
 // cosa utilizzeremo?: component definition, props, useState, event handlers, conditional rendering
 
@@ -2513,7 +2513,7 @@ function Counter() {
   );
 }
 
-// aggiungere gli event handler che fanno il alert() della descrizione di quello che dovrebbe accadere, oppure annotare con // TODO
+// aggiungere gli event handler che fanno alert() della descrizione di quello che dovrebbe accadere, oppure annotare con // TODO
 
 function Counter() {
   return (
@@ -2535,6 +2535,7 @@ function Counter() {
 }
 
 // sostituire tutti i valori hard coded con delle variabili const nello scope del componente
+// aggiungere il rendering condizionale
 
 function Counter() {
   const numeroDiPersone = 0;
@@ -4094,10 +4095,11 @@ Per gli esempi fare riferimento agli esempi precedenti (ricerca testuale "workfl
   - se ci sono liste o tabelle scrivere il jsx statico in modo da mostrare 3 elementi (così e piu facile identificare dove avviene la ripetizione)
 - aggiungere gli event handler che fanno il alert() della descrizione di quello che dovrebbe accadere, oppure annotare con // TODO
 - sostituire tutti i valori hard coded con delle variabili const nello scope del componente
+- aggiungere rendering condizionale
 - individuare quali const devono diventare props, ovvero parametri del componente, e trascrivere
+- individuare le const ed implementare eventuali valori derivati
 - individuare quali const dovrebbero cambiare nel tempo ma sono privati al componente, e quindi trasformarle in React.useState
   - selezionare il valore, click destro, refactor, extract const module scope
-- individuare le const ed implementare eventuali valori derivati
 - se ci sono campi imput, fare il binding `<input value={value} onChange={event => {}}/>`
 - se ci sono liste o tabelle, implementarle
   - scrivere `{[].map(item => { return null })}`

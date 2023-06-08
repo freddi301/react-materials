@@ -14,9 +14,10 @@ Webpack
 
 ## Suggested Readings
 
-- JavaScript Allongee [libro programmazione funzionale]
+- JavaScript the good parts (libro snello sulle features più utili, circa 100pag)
+- JavaScript Allongee (libro programmazione funzionale, circa 250pag)
+- You Don't Know JS https://github.com/getify/You-Dont-Know-JS (documentazione completa di ogni dettaglio del linguaggio, 7 libri da 400pag)
 - Documentatzione Ufficiale React https://react.dev/learn
-- You Don't Know JS https://github.com/getify/You-Dont-Know-JS
 
 ## Statement vs Expression
 
@@ -2668,9 +2669,9 @@ function Counter({ capienzaMassima }: { capienzaMassima: number }) {
 
 ### React state immutability
 
-Lo stato (props, stato interno, context) in react fanno parte della parte immutabile e dichiarativa. (ad esempio reactRoot.render, Rract.useEffect e event handlers della parte imperativa)
+Lo stato (props, stato interno, context) in react fanno parte della parte immutabile e dichiarativa. (ad esempio reactRoot.render, React.useEffect e event handlers della parte imperativa)
 
-Quindi! NON POSSIAMO MUTARE in alcun modo lo stato, bensi dobbiamo sempre produrre nuove versione (es: clonaendo e contesuatlmente modificando lo stato esistente) e pasarle ai vari setter.
+Quindi! NON POSSIAMO MUTARE in alcun modo lo stato, bensi dobbiamo sempre produrre nuove versione (es: clonando e contestualmente modificando lo stato esistente) e passarlo ai vari setter.
 
 ```tsx
 function MioComponente() {
@@ -2713,12 +2714,14 @@ function MioComponente() {
 }
 ```
 
+`Consegna: reallizare un componente che permette di editare un oggetto persona con campi: nome, età e verificare con react dev tools`
+
 ## React.useReducer
 
 E la react hook fondamentale per lo stato interno.
 E talmente fondamentale che React.useState è implementata attraverso React.useReducer.
 React.useReducer ci permette di incapsulare la logica di modifica dello stato.
-Primo parametero è una funzione che dato lo stato attuale ed un azione, produce nuovo stato.
+Primo parametero è una funzione che dato lo stato attuale ed un azione, produce il nuovo stato.
 Secondo parametro è lo stato iniziale, oppure una funzione che produce lo stato iniziale.
 Ritorna un array di due elementi: il primo è lo stato attuale, il secondo una funzione per notificare un'azione da svolgere sullo stato.
 
@@ -2735,9 +2738,7 @@ function MyComponent() {
         case "decrement":
           return state - action.amount;
         // è buona pratica lanciare un errore su un azione non gestita
-        // (occhio però questo errore è utile in sviluppo
-        // perchè vediamo lo stack trace,
-        // non dovrebbe mai accadere in production)
+        // (attenzione perchè questo errore è utile in sviluppo perchè vediamo lo stack trace,non dovrebbe mai accadere in production)
         default:
           throw new Error();
       }
@@ -2764,7 +2765,7 @@ function dec() {}
 function set(amount: number) {}
 
 // per motivi di performance con useReducer dobbiamo accorparle
-// quindi diventa una serializzazione della chiamata a funzione fatta a mano
+// quindi diventa una serializzazione della chiamata a funzione fatta manualmente
 
 disptach({ type: "inc" }); // invece di inc()
 dispatch({ type: "dec" }); // invece di dec()
@@ -2787,6 +2788,74 @@ function useState(initial) {
     initial
   );
   return [state, disptach];
+}
+```
+
+```tsx
+// Consegna: realizzare un componente che ha uno stato che è un numero. E possibile fare le segeutni operazioni sul numero
+// - raddopiarlo
+// - dimezzarlo
+// - incrementarlo di 1
+// - decrementarlo di 1
+// - azzerarlo
+// realizzare prima con useReducer e poi con useState e confrontare le due soluzioni
+
+// SPOILER soluzione
+
+function NumberOperationsReducer() {
+  const [number, dispatch] = React.useReducer(
+    (
+      state: number,
+      action:
+        | { type: "double" }
+        | { type: "half" }
+        | { type: "increment" }
+        | { type: "decrement" }
+        | { type: "reset" }
+    ) => {
+      switch (action.type) {
+        case "double":
+          return state * 2;
+        case "half":
+          return state / 2;
+        case "increment":
+          return state + 1;
+        case "decrement":
+          return state - 1;
+        case "reset":
+          return 0;
+        default:
+          throw new Error();
+      }
+    },
+    0
+  );
+  return (
+    <div>
+      <button onClick={() => dispatch({ type: "double" })}>raddoppia</button>
+      <button onClick={() => dispatch({ type: "half" })}>dimezza</button>
+      <button onClick={() => dispatch({ type: "increment" })}>
+        incrementa
+      </button>
+      <button onClick={() => dispatch({ type: "decrement" })}>
+        decrementa
+      </button>
+      <button onClick={() => dispatch({ type: "reset" })}>azzera</button>
+    </div>
+  );
+}
+
+function NumberOperationsState() {
+  const [number, setNumber] = React.useState(0);
+  return (
+    <div>
+      <button onClick={() => setNumber(number * 2)}>raddoppia</button>
+      <button onClick={() => setNumber(number / 2)}>dimezza</button>
+      <button onClick={() => setNumber(number + 1)}>incrementa</button>
+      <button onClick={() => setNumber(number - 1)}>decrementa</button>
+      <button onClick={() => setNumber(0)}>azzera</button>
+    </div>
+  );
 }
 ```
 

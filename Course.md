@@ -2832,6 +2832,7 @@ function NumberOperationsReducer() {
   );
   return (
     <div>
+      <div>{number}</div>
       <button onClick={() => dispatch({ type: "double" })}>raddoppia</button>
       <button onClick={() => dispatch({ type: "half" })}>dimezza</button>
       <button onClick={() => dispatch({ type: "increment" })}>
@@ -2849,6 +2850,7 @@ function NumberOperationsState() {
   const [number, setNumber] = React.useState(0);
   return (
     <div>
+      <div>{number}</div>
       <button onClick={() => setNumber(number * 2)}>raddoppia</button>
       <button onClick={() => setNumber(number / 2)}>dimezza</button>
       <button onClick={() => setNumber(number + 1)}>incrementa</button>
@@ -2864,7 +2866,7 @@ function NumberOperationsState() {
 ```tsx
 // realizzare un componente TodoList
 // mi deve permettere di gestire una lista di todo
-// implementare le seguenti features in ordine perhcè sono in ordine crescente di complessità
+// implementare le seguenti features in ordine perchè sono in ordine crescente di complessità
 // quindi aggiungere un todo
 // rimuovere un todo
 // segnare come letto un todo
@@ -2874,7 +2876,7 @@ function NumberOperationsState() {
 // SPOILER soluzione
 
 // da consultare i vscode -> ctrl + shift + p -> File: compare new untitled text files
-// incollando il passggio precedente a sinistra, e quello successivo a destra per vedere le differenze
+// incollando il passaggio precedente a sinistra, e quello successivo a destra per vedere le differenze
 
 // ---
 
@@ -3853,6 +3855,11 @@ export function CountDown() {
 }
 ```
 
+## Custom hooks
+
+Una custom hook è una funzione che utilizza almeno una react hook.
+Per convenzione il nome comincia con use.
+
 ### useLocalStorage
 
 ```tsx
@@ -3899,6 +3906,12 @@ function useLocalStorage<Value>(
   return [state, setState];
 }
 ```
+
+## React hook rules
+
+- possono essere utilizzate solo all'interno di componenti funzionali o altre custom hook
+- non possono essere utilizzate all'interno di cicli o condizioni
+- le react hook in un componente devono essere sempre chiamate nello stesos numero, tipologia e ordine in ogni render
 
 ## DO derive - DO NOT synchronize
 
@@ -4162,12 +4175,12 @@ Per gli esempi fare riferimento agli esempi precedenti (ricerca testuale "workfl
 
 - scrivere il jsx statico con valori hard coded
   - se ci sono liste o tabelle scrivere il jsx statico in modo da mostrare 3 elementi (così e piu facile identificare dove avviene la ripetizione)
-- aggiungere gli event handler che fanno il alert() della descrizione di quello che dovrebbe accadere, oppure annotare con // TODO
+- aggiungere gli event handler che fanno alert() della descrizione di quello che dovrebbe accadere, oppure annotare con // TODO
 - sostituire tutti i valori hard coded con delle variabili const nello scope del componente
 - aggiungere rendering condizionale
 - individuare quali const devono diventare props, ovvero parametri del componente, e trascrivere
 - individuare le const ed implementare eventuali valori derivati
-- individuare quali const dovrebbero cambiare nel tempo ma sono privati al componente, e quindi trasformarle in React.useState
+- individuare quali const che dovrebbero cambiare nel tempo ma sono privati al componente, e quindi trasformarle in React.useState
   - selezionare il valore, click destro, refactor, extract const module scope
 - se ci sono campi imput, fare il binding `<input value={value} onChange={event => {}}/>`
 - se ci sono liste o tabelle, implementarle

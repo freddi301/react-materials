@@ -2865,9 +2865,9 @@ function NumberOperationsState() {
 
 ```tsx
 // realizzare un componente TodoList
-// mi deve permettere di gestire una lista di todo
+// deve permettere di gestire una lista di todo
 // implementare le seguenti features in ordine perchè sono in ordine crescente di complessità
-// quindi aggiungere un todo
+// aggiungere un todo
 // rimuovere un todo
 // segnare come letto un todo
 // modificare il testo di un todo
@@ -2889,6 +2889,7 @@ function NumberOperationsState() {
 // quindi aggiungere un todo
 
 // ---
+// aggiungo jsx statico per aggiunta e visualizzazione dei todo
 
 (() => {
   function TodoList() {
@@ -2907,6 +2908,7 @@ function NumberOperationsState() {
 })();
 
 // ---
+// aggiungere gli event handler con annotazione da completare
 
 (() => {
   function TodoList() {
@@ -2936,6 +2938,7 @@ function NumberOperationsState() {
 })();
 
 // ---
+// sostituire jsx statico lista con lista dinamica
 
 (() => {
   function TodoList() {
@@ -2965,6 +2968,7 @@ function NumberOperationsState() {
 })();
 
 // ---
+// sostituire valori hardcoced con const
 
 (() => {
   function TodoList() {
@@ -2974,7 +2978,7 @@ function NumberOperationsState() {
       <div>
         <input
           placeholder="scrivi qui"
-          input={value}
+          value={value}
           onChange={(event) => {
             alert("modifica testo");
           }}
@@ -2997,6 +3001,7 @@ function NumberOperationsState() {
 })();
 
 // ---
+// codificare lo stato interno
 
 (() => {
   function TodoList() {
@@ -3030,7 +3035,8 @@ function NumberOperationsState() {
 
 // ---
 
-// [FATTO] quindi aggiungere un todo
+// implemtare gli event handler
+// [FATTO] aggiungere un todo
 
 (() => {
   function TodoList() {
@@ -3067,6 +3073,7 @@ function NumberOperationsState() {
 // ---
 
 // rimuovere un todo
+// aggiungi elementi grafici e event handler per rimouvere un todo
 
 (() => {
   function TodoList() {
@@ -3112,6 +3119,7 @@ function NumberOperationsState() {
 })();
 
 // ---
+// implementare event handler
 
 (() => {
   function TodoList() {
@@ -3207,7 +3215,10 @@ function NumberOperationsState() {
   }
 })();
 
+// segnare todo come letto
+
 // ---
+// aggiungere jsx statico ed eventhandler vuoti per segnare todo come letto
 
 (() => {
   function TodoList() {
@@ -3262,7 +3273,7 @@ function NumberOperationsState() {
 })();
 
 // ---
-
+// implentare gli event handler
 // [FATTO] segnare come letto un todo
 
 (() => {
@@ -3410,6 +3421,7 @@ function NumberOperationsState() {
 // ---
 
 // riordinare i todo
+// aggiere jsx e event handler
 
 (() => {
   function TodoList() {
@@ -3502,6 +3514,7 @@ function NumberOperationsState() {
 })();
 
 // ---
+// implementa event handler sposta su
 
 (() => {
   function TodoList() {
@@ -3604,7 +3617,8 @@ function NumberOperationsState() {
 
 // ---
 
-// [TODO] riordinare i todo
+// implementa event handler sposta giu
+// [DONE] riordinare i todo
 
 (() => {
   function TodoList() {
@@ -3717,8 +3731,8 @@ function NumberOperationsState() {
 
 ## Stato estrinseco e intrinseco
 
-intrinseco: salvare le info nell'oggeto, quinid aggiungere al lui un attributo [usare solitamente questo]
-estrinseco: salvare le info su un oggetto in una collection esterna e ricollegare tramite key o index [usare se non si può modificare la foram dell'oggetto originale]
+intrinseco: salvare le info nell'oggeto, quindi aggiungere ad esso un attributo [usare solitamente questo]
+estrinseco: salvare le info su un oggetto in una collection esterna e ricollegare tramite key o index [usare se non si può modificare la forma dell'oggetto originale]
 
 ## React.useEffect
 

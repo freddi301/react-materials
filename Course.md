@@ -3930,14 +3930,9 @@ function useLocalStorage<Value>(
   //   quando? al mount del componente
   // salvare nel local storage
   //   quando? quando viene richiamata la funzione che è il secondo elemento dell'array tornato da useLocalStorage
-  const value = initialValue
-  const setValue = (value: Value) => {
-
-  }
-  return [
-    value,
-    setValue
-  ]
+  const value = initialValue;
+  const setValue = (value: Value) => {};
+  return [value, setValue];
 }
 
 // individuo gli stati
@@ -3949,11 +3944,8 @@ function useLocalStorage<Value>(
   //   quando? al mount del componente
   // salvare nel local storage
   //   quando? quando viene richiamata la funzione che è il secondo elemento dell'array tornato da useLocalStorage
-  const [value, setValue] = React.useState(initialValue)
-  return [
-    value,
-    setValue
-  ]
+  const [value, setValue] = React.useState(initialValue);
+  return [value, setValue];
 }
 
 // individuo gli effetti
@@ -3965,15 +3957,12 @@ function useLocalStorage<Value>(
   React.useEffect(() => {
     // leggere dal local storage
     //   quando? al mount del componente
-  } ,[])
+  }, []);
   React.useEffect(() => {
     // salvare nel local storage
     //   quando? quando viene richiamata la funzione che è il secondo elemento dell'array tornato da useLocalStorage
-  }, [value])
-  return [
-    value,
-    setValue
-  ]
+  }, [value]);
+  return [value, setValue];
 }
 
 // implemetare lettura e scrittura
@@ -3985,15 +3974,12 @@ function useLocalStorage<Value>(
   React.useEffect(() => {
     // leggere dal local storage
     const localStorageValue = localStorage.getItem(localStorageKey);
-  } ,[localStorageKey])
+  }, [localStorageKey]);
   React.useEffect(() => {
     // salvare nel local storage
-    localStorage.setItem(localStorageKey, valueAsString)
-  }, [value])
-  return [
-    value,
-    setValue
-  ]
+    localStorage.setItem(localStorageKey, valueAsString);
+  }, [value]);
+  return [value, setValue];
 }
 
 // implementare serializzazione e deserializzazione
@@ -4011,17 +3997,14 @@ function useLocalStorage<Value>(
       // aggiorno lo stato
       setValue(localStorageValueDeserialized);
     }
-  } ,[localStorageKey])
+  }, [localStorageKey]);
   React.useEffect(() => {
     // serializzazione
-    const valueAsString = JSON.stringify(value)
+    const valueAsString = JSON.stringify(value);
     // salvare nel local storage
-    localStorage.setItem(localStorageKey, valueAsString)
-  }, [value])
-  return [
-    value,
-    setValue
-  ]
+    localStorage.setItem(localStorageKey, valueAsString);
+  }, [value]);
+  return [value, setValue];
 }
 
 // soluzione finale con possibilità di personalizzare la serializzazione/deserializzazione
@@ -4029,8 +4012,8 @@ function useLocalStorage<Value>(
 function useLocalStorage<Value>(
   localStorageKey: string,
   initialValue: Value,
-  serialize?: (value: Value) => string = value => JSON.stringify(value),
-  deserialize?: (value: string) => Value = value => JSON.parse(value)
+  serialize?: (value: Value) => string = (value) => JSON.stringify(value),
+  deserialize?: (value: string) => Value = (value) => JSON.parse(value)
 ): [Value, (value: Value) => void] {
   const [state, setState] = React.useState(initialValue);
   // effetto da eseguire per leggere il valore iniziale
@@ -4048,14 +4031,272 @@ function useLocalStorage<Value>(
 }
 ```
 
-### Extract logic to custom hook
+## Extract logic to custom hook
 
 ```tsx
-// realizzare un componente calcolatirce
+// realizzare un componente calcolatrice
 // con due input numerici
-// una select per le operazioni di addiione, sottrazione, moltiplicazione e divisione
-// e il rislutato che si aggiorna automaticamente
+// una select per le operazioni di addizione, sottrazione, moltiplicazione e divisione
+// e il risultato che si aggiorna automaticamente
 // estrarre succesivamente la logica di calcolo in un custom hook
+
+// SPOILER soluzione con workflow
+
+function Calcolatrice() {
+  return null;
+}
+
+function Calcolatrice() {
+  return (
+    <div>
+      <input type="number" />
+      <select>
+        <option>+</option>
+        <option>-</option>
+        <option>*</option>
+        <option>/</option>
+      </select>
+      <input type="number" />
+      {" = "}
+      {risultato}
+    </div>
+  );
+}
+
+function Calcolatrice() {
+  const operandoSinistro = 0;
+  const operandoDestro = 0;
+  const operatore = "addizione";
+  const risultato = (() => {
+    switch (operatore) {
+      case "addizione":
+        return operandoSinistro + operandoDestro;
+      case "sottrazione":
+        return operandoSinistro - operandoDestro;
+      case "moltiplicazione":
+        return operandoSinistro * operandoDestro;
+      case "divisione":
+        return operandoSinistro / operandoDestro;
+    }
+  })();
+  return (
+    <div>
+      <input type="number" />
+      <select>
+        <option>+</option>
+        <option>-</option>
+        <option>*</option>
+        <option>/</option>
+      </select>
+      <input type="number" />
+      {" = "}
+      {risultato}
+    </div>
+  );
+}
+
+function Calcolatrice() {
+  const operandoSinistro = 0;
+  const operandoDestro = 0;
+  const operatore = "addizione";
+  const risultato = (() => {
+    switch (operatore) {
+      case "addizione":
+        return operandoSinistro + operandoDestro;
+      case "sottrazione":
+        return operandoSinistro - operandoDestro;
+      case "moltiplicazione":
+        return operandoSinistro * operandoDestro;
+      case "divisione":
+        return operandoSinistro / operandoDestro;
+    }
+  })();
+  return (
+    <div>
+      <input type="number" value={operandoSinistro} onChange={(event) => {}} />
+      <select value={operatore} onChange={(event) => {}}>
+        <option>+</option>
+        <option>-</option>
+        <option>*</option>
+        <option>/</option>
+      </select>
+      <input type="number" value={operandoDestro} onChange={(event) => {}} />
+      {" = "}
+      {risultato}
+    </div>
+  );
+}
+
+function Calcolatrice() {
+  const [operandoSinistro, setOperandoSinistro] = React.useState(0);
+  const [operandoDestro, setOperandoDestro] = React.useState(0);
+  const [operatore, setOperatore] = React.useState("addizione");
+  const risultato = (() => {
+    switch (operatore) {
+      case "addizione":
+        return operandoSinistro + operandoDestro;
+      case "sottrazione":
+        return operandoSinistro - operandoDestro;
+      case "moltiplicazione":
+        return operandoSinistro * operandoDestro;
+      case "divisione":
+        return operandoSinistro / operandoDestro;
+    }
+  })();
+  return (
+    <div>
+      <input
+        type="number"
+        value={operandoSinistro}
+        onChange={(event) => {
+          setOperandoSinistro(event.currentTarget.valueAsNumber);
+        }}
+      />
+      <select
+        value={operatore}
+        onChange={(event) => {
+          setOperatore(event.currentTarget.value);
+        }}
+      >
+        <option value="addizione">+</option>
+        <option value="sottrazione">-</option>
+        <option value="moltiplicazione">*</option>
+        <option value="divisione">/</option>
+      </select>
+      <input
+        type="number"
+        value={operandoDestro}
+        onChange={(event) => {
+          setOperandoDestro(event.currentTarget.valueAsNumber);
+        }}
+      />
+      {" = "}
+      {risultato}
+    </div>
+  );
+}
+
+function Calcolatrice() {
+  useCalcolatrice();
+  return (
+    <div>
+      <input
+        type="number"
+        value={operandoSinistro}
+        onChange={(event) => {
+          setOperandoSinistro(event.currentTarget.valueAsNumber);
+        }}
+      />
+      <select
+        value={operatore}
+        onChange={(event) => {
+          setOperatore(event.currentTarget.value);
+        }}
+      >
+        <option value="addizione">+</option>
+        <option value="sottrazione">-</option>
+        <option value="moltiplicazione">*</option>
+        <option value="divisione">/</option>
+      </select>
+      <input
+        type="number"
+        value={operandoDestro}
+        onChange={(event) => {
+          setOperandoDestro(event.currentTarget.valueAsNumber);
+        }}
+      />
+      {" = "}
+      {risultato}
+    </div>
+  );
+}
+function useCalcolatrice() {
+  const [operandoSinistro, setOperandoSinistro] = React.useState(0);
+  const [operandoDestro, setOperandoDestro] = React.useState(0);
+  const [operatore, setOperatore] = React.useState("addizione");
+  const risultato = (() => {
+    switch (operatore) {
+      case "addizione":
+        return operandoSinistro + operandoDestro;
+      case "sottrazione":
+        return operandoSinistro - operandoDestro;
+      case "moltiplicazione":
+        return operandoSinistro * operandoDestro;
+      case "divisione":
+        return operandoSinistro / operandoDestro;
+    }
+  })();
+}
+
+function Calcolatrice() {
+  const {
+    operandoSinistro,
+    operandoDestro,
+    operatore,
+    setOperandoSinistro,
+    setOperatore,
+    setOperandoDestro,
+    risultato,
+  } = useCalcolatrice();
+  return (
+    <div>
+      <input
+        type="number"
+        value={operandoSinistro}
+        onChange={(event) => {
+          setOperandoSinistro(event.currentTarget.valueAsNumber);
+        }}
+      />
+      <select
+        value={operatore}
+        onChange={(event) => {
+          setOperatore(event.currentTarget.value);
+        }}
+      >
+        <option value="addizione">+</option>
+        <option value="sottrazione">-</option>
+        <option value="moltiplicazione">*</option>
+        <option value="divisione">/</option>
+      </select>
+      <input
+        type="number"
+        value={operandoDestro}
+        onChange={(event) => {
+          setOperandoDestro(event.currentTarget.valueAsNumber);
+        }}
+      />
+      {" = "}
+      {risultato}
+    </div>
+  );
+}
+
+function useCalcolatrice() {
+  const [operandoSinistro, setOperandoSinistro] = React.useState(0);
+  const [operandoDestro, setOperandoDestro] = React.useState(0);
+  const [operatore, setOperatore] = React.useState("addizione");
+  const risultato = (() => {
+    switch (operatore) {
+      case "addizione":
+        return operandoSinistro + operandoDestro;
+      case "sottrazione":
+        return operandoSinistro - operandoDestro;
+      case "moltiplicazione":
+        return operandoSinistro * operandoDestro;
+      case "divisione":
+        return operandoSinistro / operandoDestro;
+    }
+  })();
+  return {
+    operandoSinistro,
+    operandoDestro,
+    operatore,
+    setOperandoSinistro,
+    setOperatore,
+    setOperandoDestro,
+    risultato,
+  };
+}
 ```
 
 ## React hook rules

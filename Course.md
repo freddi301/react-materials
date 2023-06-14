@@ -4335,6 +4335,8 @@ Un componente si dice controllato quando il suo stato è interamente controllato
 
 ### Props passing
 
+Serve per far fluire le informazioni dal compopente chiamante all'istanza del componente figlio
+
 ```tsx
 function Twice({ n }: { n: number }) {
   return <div>{n * 2}</div>;
@@ -4350,6 +4352,10 @@ function App() {
 ```
 
 ### Event propagation
+
+Server per far fluire le informazioni dal componente figlio al componente chiamante.
+
+Si codifica come funzioni callbakc passate dal chiamante al figlio.
 
 Per convenzione prefisso "on"
 
@@ -4383,9 +4389,22 @@ function App() {
 
 ### Render props
 
-Veder in codesandbox
+E quando passiamo come parametri di un componente il JSX.
+
+E utile per evitare il problema del prop-drilling (passare props attravesro diversi livelli di componenti).
+
+E utile per realizzare componenti generici e riusabili.
+
+E utile per realizzare componenti che si occupano layout e appearance, ovvero un libreria grafica/linguaggio integrato all'interno del progetto.
+
+Vedere in codesandbox
 
 ```tsx
+// esempio componentni grafici
+// solitamente in un progetto sli decide di utilizzare un linguaggio grafico specifico (esistente oppure creato apositmente dal desginer)
+// seprare la parte grafica da quella funzionale ci è utile per migliorare la lettura del codice
+// e ci facilita cambiamenti globali futuri alla grafica
+
 function Twice({ children }: { children: React.ReactNode }) {
   return (
     <div>
@@ -4408,29 +4427,75 @@ function Chapter({
     </div>
   );
 }
+function Titolo({ children }: { children: React.ReactNode }) {
+  return <h1>{children}</h1>;
+}
+
+// in questo compnete si puo apprezzare il fatto che sono presenti solo componenti grafici che abbiamo definito ed utilizzato in tutto il progetto
+// in realtà qui e da immaginarsi anche altro codice come hooks e logica, che cosi viene separato dalla parte puramente grafica
 function App() {
   return (
-    <div>
+    <React.Fragment>
       <Chapter
-        heading={<h1>Say hello twice</h1>}
+        heading={<Titolo>Say hello twice</Titolo>}
         content={<Twice>Hello</Twice>}
       />
-      <Chapter heading={<h1>Say bye twice</h1>} content={<Twice>bye</Twice>} />
-    </div>
+      <Chapter
+        heading={<Titolo>Say bye twice</Titolo>}
+        content={<Twice>bye</Twice>}
+      />
+    </React.Fragment>
   );
 }
 ```
 
-### HOC - Higher Order Componente
+```tsx
+// esempio prop drilling
 
-Come una uunzione si dice di ordine superiore se riceve e/o ritorna una funzione a sua volta,
+function ComponenteA({ x }) {
+  return <div>{x}</div>
+}
+
+// il componente b non ha bisogno della prop x, ma la deve passare al componente A
+function ComponenteB({ x }) {
+  return <div><ComponenteA x={x} /></div>
+}
+
+function ComponenteC() {
+  return <ComponenteB x={4} />
+}
+
+// risolto con render prop
+
+function ComponenteC() {
+  return <ComponenteB>
+    <ComponenteA x={4}/>
+  </ComponenteB>
+}
+
+function ComponenteA({ x }) {
+  return <div>{x}</div>
+}
+
+// in questo scenario il componente B non ha bisogno di nessuna prop necessara per il componente A
+function ComponenteB({ children }) {
+  return <div>{children}</div>
+}
+
+```
+
+### HOC - Higher Order Component
+
+Come una funzione si dice di ordine superiore se riceve e/o ritorna una funzione a sua volta,
 cosi HOC è una funzione che riceve un componente e ritorna un componente.
 
-E una tecnica desueta. Ne possiamo però trovare l'unico esempio utile sopravvissuto in React.memo.
+E una tecnica desueta. Ne possiamo però trovare l'unico esempio utile sopravvissuto in `React.memo`
+
+Effettivamente è un function decorator che si limita ai componenti react.
 
 ```tsx
 function WithPropLog<Props>(
-  component: React.FunctionComponent<Props>
+  Component: React.FunctionComponent<Props>
 ): React.FunctionComponent<Props> {
   return function WithPropLog(props: Props) {
     console.log(props);

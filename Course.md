@@ -3736,6 +3736,8 @@ estrinseco: salvare le info su un oggetto in una collection esterna e ricollegar
 
 ## React.useEffect
 
+E una react hook che ci permette di incapsulare operazioni non pure, in gergo "effetti".
+
 ```tsx
 function MyComponent() {
   const [count, setCount] = React.useState(0);
@@ -3755,7 +3757,7 @@ React.useEffect serve per incapsulare operazioni non pure, in gergo "effetti".
 Riceve 2 parametri.
 Il primo è una funzione che incapsule le istruzioni imperative con effetti collaterali, chiamiamola effetto. Queste istruzioni trovandosi dentro una funzione vengono eseguite appunto solo se la funzinione viene richiamata. Opzionalmente può ritornare una funzione di cleanup che verrà eseguita prima della successiva chiamata dell’effetto.
 Il secondo parametro è un array, in gergo array delle dipendenze, dentro questo array dobbiamo scrivere tutte le variabili che utiliziamo nelle funzione effetto ma che non appertengono al suo scope. Questo array va scritto in modo espicito nella maggiorpate dei casi non può essere computato. Fondamentalmente ci possiamo affidare all'ide per riempire questo array in automatico.
-La funzione effetto viene eseguita la prima volta che il componente viene renderizzato e poi ogni volta che una delle variabili dell'array delle dipendenze cambia valore e poi quando l'elemtno scompare dalla pgaina.
+La funzione effetto viene eseguita la prima volta che il componente viene renderizzato e poi ogni volta che una delle variabili dell'array delle dipendenze cambia valore e poi quando l'elemento scompare dalla pgaina.
 
 ### Title changer
 
@@ -3821,9 +3823,11 @@ RECAP: qual'è l'unita di riutilizzo del codice?
 
 - in javascript : funzione
 - in react per il markup : componente (ovvero una funzione che produce virtual dom)
-- in react per gestione stato e effects : custom hook (ovvero una funzione che a sua volta richiama custom hook)
+- in react per gestione stato e effects : custom hook (ovvero una funzione che a sua volta richiama customo react hook)
 
 ## React.useEffect examples
+
+`Consegna, realizzare un componente, c'è un onput testuale, dopo mezzo secondo senza avvenute modifiche, stampa in console il contenuto del campo testaule. Usare React.useEffect, setTimeout`
 
 ### Timer bomb
 
@@ -3921,11 +3925,24 @@ function useLocalStorage<Value>(
 }
 ```
 
+### Extract logic to custom hook
+
+```tsx
+// realizzare un componente calcolatirce
+// con due input numerici
+// una select per le operazioni di addiione, sottrazione, moltiplicazione e divisione
+// e il rislutato che si aggiorna automaticamente
+// estrarre succesivamente la logica di calcolo in un custom hook
+
+
+```
+
 ## React hook rules
 
 - possono essere utilizzate solo all'interno di componenti funzionali o altre custom hook
 - non possono essere utilizzate all'interno di cicli o condizioni
 - le react hook in un componente devono essere sempre chiamate nello stesos numero, tipologia e ordine in ogni render
+
 
 ## DO derive - DO NOT synchronize
 
@@ -4095,6 +4112,22 @@ implement memoization on list wiht exclusive selection, use react dev tools prof
 ## ref imperative dom
 
 ## React.useLayoutEffect
+
+## React.useId
+
+## React.useDeferredValue
+
+## React.useTransition
+
+## React.useImperativeHandle
+
+## Error boundary
+
+## React portal
+
+## React lazy
+
+## React suspense
 
 # React Best Practices
 
@@ -4299,6 +4332,10 @@ Every layer has access only to its children. Dependency inversion applies only f
 
 ## Library choice
 
+Lo studio delle librerie da adottare è una parte importante del lavoro dello sviluppatore front-end.
+Bisogna trovare equilibrio tra innovazione, affidabilità e supporto community.
+Un punto di partenza potrebbe essere questo report annuale https://stateofjs.com/en-us/2020/ per avere un'idea di quali librerie sono più utilizzate e quali sono le tendenze.
+
 - Styling
 
   - styled-components + vscode extension
@@ -4324,11 +4361,13 @@ Every layer has access only to its children. Dependency inversion applies only f
 - Routing
 
   - React Router
+  - @tanstack/router (routing con typescript, ancora sperimentale)
 
 - State Management
 
   - DO NOT USE LIBRARIES
   - USE props passing and render props
+  - react recoil (da utilizzare in casi particolari, comunque non su tutta l'applicazione, per risolvere problemi di performance e prop-passing eccessivo, usare con parsimonia) 
 
 - Data Loading (REST)
 

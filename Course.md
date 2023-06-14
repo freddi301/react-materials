@@ -3806,6 +3806,9 @@ function MyComponent() {
 
 ## Custom hook
 
+Una custom hook è una funzione che utilizza almeno una react hook.
+Per convenzione il nome comincia con use.
+
 ```tsx
 function useLogChanges<Value>(value: Value) {
   React.useEffect(() => {
@@ -3873,11 +3876,6 @@ export function CountDown() {
 }
 ```
 
-## Custom hooks
-
-Una custom hook è una funzione che utilizza almeno una react hook.
-Per convenzione il nome comincia con use.
-
 ### useLocalStorage
 
 ```tsx
@@ -3903,14 +3901,140 @@ function useLocalStorage<Value>(
 }
 
 // SPOILER soluzione
+
+// scrivere il psudocodice
 function useLocalStorage<Value>(
   localStorageKey: string,
   initialValue: Value
 ): [Value, (value: Value) => void] {
+  // leggere dal local storage
+  // salvare nel local storage
+}
+
+function useLocalStorage<Value>(
+  localStorageKey: string,
+  initialValue: Value
+): [Value, (value: Value) => void] {
+  // leggere dal local storage
+  //   quando? al mount del componente
+  // salvare nel local storage
+  //   quando? quando viene richiamata la funzione che è il secondo elemento dell'array tornato da useLocalStorage
+}
+
+// implementare i valori di ritorno
+function useLocalStorage<Value>(
+  localStorageKey: string,
+  initialValue: Value
+): [Value, (value: Value) => void] {
+  // leggere dal local storage
+  //   quando? al mount del componente
+  // salvare nel local storage
+  //   quando? quando viene richiamata la funzione che è il secondo elemento dell'array tornato da useLocalStorage
+  const value = initialValue
+  const setValue = (value: Value) => {
+
+  }
+  return [
+    value,
+    setValue
+  ]
+}
+
+// individuo gli stati
+function useLocalStorage<Value>(
+  localStorageKey: string,
+  initialValue: Value
+): [Value, (value: Value) => void] {
+  // leggere dal local storage
+  //   quando? al mount del componente
+  // salvare nel local storage
+  //   quando? quando viene richiamata la funzione che è il secondo elemento dell'array tornato da useLocalStorage
+  const [value, setValue] = React.useState(initialValue)
+  return [
+    value,
+    setValue
+  ]
+}
+
+// individuo gli effetti
+function useLocalStorage<Value>(
+  localStorageKey: string,
+  initialValue: Value
+): [Value, (value: Value) => void] {
+  const [value, setValue] = React.useState(initialValue);
+  React.useEffect(() => {
+    // leggere dal local storage
+    //   quando? al mount del componente
+  } ,[])
+  React.useEffect(() => {
+    // salvare nel local storage
+    //   quando? quando viene richiamata la funzione che è il secondo elemento dell'array tornato da useLocalStorage
+  }, [value])
+  return [
+    value,
+    setValue
+  ]
+}
+
+// implemetare lettura e scrittura
+function useLocalStorage<Value>(
+  localStorageKey: string,
+  initialValue: Value
+): [Value, (value: Value) => void] {
+  const [value, setValue] = React.useState(initialValue);
+  React.useEffect(() => {
+    // leggere dal local storage
+    const localStorageValue = localStorage.getItem(localStorageKey);
+  } ,[localStorageKey])
+  React.useEffect(() => {
+    // salvare nel local storage
+    localStorage.setItem(localStorageKey, valueAsString)
+  }, [value])
+  return [
+    value,
+    setValue
+  ]
+}
+
+// implementare serializzazione e deserializzazione
+function useLocalStorage<Value>(
+  localStorageKey: string,
+  initialValue: Value
+): [Value, (value: Value) => void] {
+  const [value, setValue] = React.useState(initialValue);
+  React.useEffect(() => {
+    // leggere dal local storage
+    const localStorageValue = localStorage.getItem(localStorageKey);
+    if (localStorageValue) {
+      // deserializzazione
+      const localStorageValueDeserialized = JSON.parse(localStorageValue);
+      // aggiorno lo stato
+      setValue(localStorageValueDeserialized);
+    }
+  } ,[localStorageKey])
+  React.useEffect(() => {
+    // serializzazione
+    const valueAsString = JSON.stringify(value)
+    // salvare nel local storage
+    localStorage.setItem(localStorageKey, valueAsString)
+  }, [value])
+  return [
+    value,
+    setValue
+  ]
+}
+
+// soluzione finale con possibilità di personalizzare la serializzazione/deserializzazione
+
+function useLocalStorage<Value>(
+  localStorageKey: string,
+  initialValue: Value,
+  serialize?: (value: Value) => string = value => JSON.stringify(value),
+  deserialize?: (value: string) => Value = value => JSON.parse(value)
+): [Value, (value: Value) => void] {
   const [state, setState] = React.useState(initialValue);
   // effetto da eseguire per leggere il valore iniziale
   React.useEffect(() => {
-    const deserialize = (jsonString: string): Value => JSON.parse(jsonString);
     const valueFromLocalStorage = localStorage.getItem(localStorageKey);
     if (valueFromLocalStorage) {
       setState(deserialize(valueFromLocalStorage));
@@ -3918,7 +4042,6 @@ function useLocalStorage<Value>(
   }, [localStorageKey]);
   // effetto da eseguire al cambio valore
   React.useEffect(() => {
-    const serialize = (value: Value): string => JSON.stringify(value);
     localStorage.setItem(localStorageKey, serialize(value));
   }, [localStorageKey, value]);
   return [state, setState];
@@ -3933,8 +4056,6 @@ function useLocalStorage<Value>(
 // una select per le operazioni di addiione, sottrazione, moltiplicazione e divisione
 // e il rislutato che si aggiorna automaticamente
 // estrarre succesivamente la logica di calcolo in un custom hook
-
-
 ```
 
 ## React hook rules
@@ -3942,7 +4063,6 @@ function useLocalStorage<Value>(
 - possono essere utilizzate solo all'interno di componenti funzionali o altre custom hook
 - non possono essere utilizzate all'interno di cicli o condizioni
 - le react hook in un componente devono essere sempre chiamate nello stesos numero, tipologia e ordine in ogni render
-
 
 ## DO derive - DO NOT synchronize
 
@@ -4367,7 +4487,7 @@ Un punto di partenza potrebbe essere questo report annuale https://stateofjs.com
 
   - DO NOT USE LIBRARIES
   - USE props passing and render props
-  - react recoil (da utilizzare in casi particolari, comunque non su tutta l'applicazione, per risolvere problemi di performance e prop-passing eccessivo, usare con parsimonia) 
+  - react recoil (da utilizzare in casi particolari, comunque non su tutta l'applicazione, per risolvere problemi di performance e prop-passing eccessivo, usare con parsimonia)
 
 - Data Loading (REST)
 
@@ -4412,8 +4532,6 @@ Un punto di partenza potrebbe essere questo report annuale https://stateofjs.com
 
 # Notes
 
-- Aggiungere concruunte mopde con suspanse e transition
-- Aggiungere sezione react hooks al completo
-- Esercizio calcolatrice dopo il counter
+- Aggiungere concurrent mode con suspanse e transition nella parte avanzata
 - Creare progetto di esempio, realizzando un applicazione CRUD come descritto nella sezione "React application layers"
 - Trascrivere in questo file gli snippet nella cartella TODO

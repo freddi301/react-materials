@@ -4609,6 +4609,97 @@ const ref = React.useRef(null);
 const jsx = <div ref={ref} />;
 ```
 
+## React.useLayoutEffect
+
+E una react hook simile a React.useEffect ma viene eseguita in un momento diverso e ha uno scopo diverso. (La differenza sarà spiegata più avanti)
+
+React.useLayoutEffect come dice il nome va utilizzato esclusivamente per effetti collaterali relativi al layout, come ad esempio misurare un componente, oppure cambiarne le dimensioni.
+
+```tsx
+function BlinkyRender() {
+  const [value, setValue] = React.useState(0);
+  React.useEffect(() => {
+    if (value === 0) {
+      setValue(10 + Math.random() * 200);
+    }
+  }, [value]);
+  console.log("render", value);
+  return (
+    <div>
+      <button onClick={() => setValue(0)}>value</button>: {value}
+    </div>
+  );
+}
+
+function GoodRender() {
+  const [value, setValue] = React.useState(0);
+
+  React.useLayoutEffect(() => {
+    if (value === 0) {
+      setValue(10 + Math.random() * 200);
+    }
+  }, [value]);
+  console.log("render", value);
+  return (
+    <div>
+      <button onClick={() => setValue(0)}>value</button>: {value}
+    </div>
+  );
+}
+
+function FlickerFibonacci() {
+  const [targetIndex, setTargetIndex] = React.useState(0);
+  const [[currentIndex, prev, current], setStep] = React.useState([0, 1, 1]);
+  React.useEffect(() => {
+    if (currentIndex < targetIndex) {
+      setStep([currentIndex + 1, current, prev + current]);
+    }
+  }, [currentIndex, targetIndex, prev, current]);
+  React.useEffect(() => {
+    if (targetIndex < currentIndex) {
+      setStep([0, 1, 1]);
+    }
+  }, [targetIndex, currentIndex]);
+  return (
+    <div>
+      <input
+        type="number"
+        value={targetIndex}
+        onChange={(event) => setTargetIndex(Number(event.target.value))}
+      />
+      {current}
+    </div>
+  );
+}
+
+function GoodFibonacci() {
+  const [targetIndex, setTargetIndex] = React.useState(0);
+  const [[currentIndex, prev, current], setStep] = React.useState([0, 1, 1]);
+  React.useLayoutEffect(() => {
+    if (currentIndex < targetIndex) {
+      setStep([currentIndex + 1, current, prev + current]);
+    }
+  }, [currentIndex, targetIndex, prev, current]);
+  React.useLayoutEffect(() => {
+    if (targetIndex < currentIndex) {
+      setStep([0, 1, 1]);
+    }
+  }, [targetIndex, currentIndex]);
+  return (
+    <div>
+      <input
+        type="number"
+        value={targetIndex}
+        onChange={(event) => setTargetIndex(Number(event.target.value))}
+      />
+      {current}
+    </div>
+  );
+}
+```
+
+TODO fare esempio con misurazione e cambio dimensione di un div
+
 # React Advanced
 
 ## Memoization workflow
@@ -4630,8 +4721,6 @@ implement memoization on list wiht exclusive selection, use react dev tools prof
 ## Error boundaries
 
 ## ref imperative dom
-
-## React.useLayoutEffect
 
 ## React.useId
 

@@ -1,6 +1,0 @@
-- [react ref example](snippets/react-ref-example.tsx)
-- [react context example](snippets/react-context-example.tsx)
-- [react context i18n exercise](snippets/react-context-i18-exercise.tsx)
-- [useLayoutEffect flicker](snippets/use-layout-effect-flicker.tsx)
-- [react portal](snippets/react-portal.tsx)
-- [error boundary](snippets/erroy-boundary.tsx)

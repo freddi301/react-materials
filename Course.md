@@ -4303,7 +4303,9 @@ function useCalcolatrice() {
 
 - possono essere utilizzate solo all'interno di componenti funzionali o altre custom hook
 - non possono essere utilizzate all'interno di cicli o condizioni
-- le react hook in un componente devono essere sempre chiamate nello stesos numero, tipologia e ordine in ogni render
+- le react hook in un componente devono essere sempre chiamate nello stesso numero, tipologia e ordine in ogni render del componenten in questione
+
+Internamente react identifica le varie chiamate alle hook tramite un indice numerico.
 
 ## DO derive - DO NOT synchronize
 
@@ -4453,35 +4455,40 @@ function App() {
 // esempio prop drilling
 
 function ComponenteA({ x }) {
-  return <div>{x}</div>
+  return <div>{x}</div>;
 }
 
 // il componente b non ha bisogno della prop x, ma la deve passare al componente A
 function ComponenteB({ x }) {
-  return <div><ComponenteA x={x} /></div>
+  return (
+    <div>
+      <ComponenteA x={x} />
+    </div>
+  );
 }
 
 function ComponenteC() {
-  return <ComponenteB x={4} />
+  return <ComponenteB x={4} />;
 }
 
 // risolto con render prop
 
 function ComponenteC() {
-  return <ComponenteB>
-    <ComponenteA x={4}/>
-  </ComponenteB>
+  return (
+    <ComponenteB>
+      <ComponenteA x={4} />
+    </ComponenteB>
+  );
 }
 
 function ComponenteA({ x }) {
-  return <div>{x}</div>
+  return <div>{x}</div>;
 }
 
 // in questo scenario il componente B non ha bisogno di nessuna prop necessara per il componente A
 function ComponenteB({ children }) {
-  return <div>{children}</div>
+  return <div>{children}</div>;
 }
-
 ```
 
 ### HOC - Higher Order Component
@@ -4513,6 +4520,95 @@ Realizzare in react, pure client side, una app CRUD che permette di gestire una 
 - bottone elimina persona (DELETE singola entita)
 - form di creazione e modifica persona (READ singola entita, CREATE singola entita, UPDATE singola entita)
 
+## React.useRef
+
+E una react hook per uno slot di memoria. A differenza di React.useState, la sua modifica non comporta l'aggiornamento del componente.
+
+Questa hook si usa perlopiù quando abbiamo necessita di accedere au un elemento del dom reale (ad esmepio per gestire il focus programmaticamente), oppure memorizzare un valore che non deve fa raggiornare il componente (caso molto raro, solitamente è legato all'integrazione di librerie non react).
+
+React.useRef torna un oggetto. Questo oggetto è sempre della stessa istanza. L'oggetto tornato contiene una sola properties chiamata current.
+
+L'utilizzo si riduce alla lettura con la formula `ref.current` e alla scrittura con la formula `ref.current = value`.
+
+```tsx
+function RefExample() {
+  const divRef = React.useRef<HTMLDivElement | null>(null);
+  return (
+    <div
+      ref={divRef}
+      onClick={() => {
+        console.log(divRef.current);
+      }}
+    >
+      Ref example
+    </div>
+  );
+}
+
+function RefFunctionExample() {
+  const divRef = React.useRef<HTMLDivElement | null>(null);
+  return (
+    <div
+      ref={(element) => {
+        if (element) {
+          divRef.current = element;
+          // e in questo momento che il div del dom reale corrispondente
+          // a questo di viene aggiunto al dom reale
+        } else {
+          divRef.current = null;
+        }
+      }}
+      onClick={() => {
+        console.log(divRef.current);
+      }}
+    >
+      Ref function example
+    </div>
+  );
+}
+
+function RefVariableExample() {
+  const simpleRef = React.useRef(0); // non fa partire rerender
+  const [simpleState, setSimpleState] = React.useState(0); // fa partire rerender
+  return (
+    <div>
+      <button
+        onClick={() => {
+          simpleRef.current = simpleRef.current + 1;
+        }}
+      >
+        ref {simpleRef.current}
+      </button>
+      <button
+        onClick={() => {
+          setSimpleState(simpleState + 1);
+        }}
+      >
+        state {simpleState}
+      </button>
+    </div>
+  );
+}
+
+// NOTA
+const jsx = <div ref={qualcosa} />;
+// alla prop ref degli elementi nativi possiamo passare due tipologie di valori
+
+// una funzione che verrà richiamata quando lelemnto del dom reale corrispondente viene creato o distrutto o cambiato
+const jsx = (
+  <div
+    ref={(elemento) => {
+      // pertanto elemento è null se l'elemento del dom reale è stato distrutto
+      // elemento è un oggetto del dom reale se l'elemento del dom reale è stato creato
+    }}
+  />
+);
+
+// un oggetto di tipo React.RefObject creato con React.useRef
+const ref = React.useRef(null);
+const jsx = <div ref={ref} />;
+```
+
 # React Advanced
 
 ## Memoization workflow
@@ -4528,8 +4624,6 @@ implement memoization on list wiht exclusive selection, use react dev tools prof
 ### React.useMemo
 
 ### React.useCallback
-
-### React.useRef
 
 ## React Context
 
@@ -4689,6 +4783,7 @@ Quando suddividere?:
 La best practice di React è orientata alla colocalità del codice (ovvero definizione vicino l'utilizzo).
 
 Quindi scrivere tutto inline, nello stesso file a meno chè:
+
 - creare funzioni/componenti/type solo in caso di riutilizzo del codice
 - suddividere in file quando si superano le 2000 righe
 - suddividere in file se si ha una suddivisione netta di tematiche (es: utente/amminstratore, utenti/prodotti, ecc)
@@ -4697,6 +4792,7 @@ Quindi scrivere tutto inline, nello stesso file a meno chè:
 ## File strucutre
 
 Preambolo: queste raccomandazioni sono tarate in base q auesti criteri:
+
 - indicazioni del team che ha sviluppato react
 - single page pallication (quindi solitamente create-react-app, ad esempio per next.js alcune cose sono diverse)
 - struttura progetti opensource in vita da almeno 2 anni e con almeno 2000 stelle su github
@@ -4705,12 +4801,12 @@ Preambolo: queste raccomandazioni sono tarate in base q auesti criteri:
 - suddividere in cartelle tematiche (es: utenti, prodotti), non in base al ruolo implementativo (non ha nessun valore organizativo avere cartelle separate per jsx, stile, logica)
 
 Un esempio di suddivisione in cartelle
+
 - src
   - components (cartella per componenti/hook riutilizzabili)
   - pages (cartella per componenti che rappresentano pagine)
     - suddivisione in cartelle tematiche (es: utente/prodotto/reposrtisica ecc)
     - componntes [sottolivello opzionale se necessario]
-
 
 ## Forms: thin wrapper approach
 

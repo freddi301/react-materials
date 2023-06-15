@@ -4507,7 +4507,7 @@ const TwiceWithLog = WithPropLog(Twice);
 
 ## Client only CRUD app exercise
 
-Realizzare in react, pure client side, una app CRUD che permette di gestire una lista di persone.
+Realizzare in react, pure client side, una app CRUD che permette di gestire una lista di persone (nome, cognome, eta).
 
 - lista delle persone (READ tutte le entita)
 - bottone elimina persona (DELETE singola entita)
@@ -4671,7 +4671,7 @@ Per gli esempi fare riferimento agli esempi precedenti (ricerca testuale "workfl
 ## When subdividie into components, hooks and functions
 
 Di default scriviamo tutta l'apllicazione nel componentente del file principale, con tutto il jsx inline.
-Un asuddivisione intuitiva in componenti in base al layout grafico nelle davole di design in spesso è molto controproducente.
+Una suddivisione intuitiva in componenti in base al layout grafico nelle davole di design in spesso è molto controproducente.
 
 - comporta difficolta di lettura perchè aggiunge molti livelli di indirezione, dobbiamo cammbiare riga nel file o addiritttura aprirne un altro
 - suddividre in molti comporta un grande trischio di lasciare del codice morto
@@ -4682,6 +4682,35 @@ Quando suddividere?:
 - in componenti, hook, funzioni per riutlizzo di codice (qui applicare prima il principio WET e poi il principio DRY)
 - in componenti per memoizzare elementi di liste
 - oppure vedere pattern menzionati nell [best practices](#react-best-practices)
+- per rappresentare pagine
+
+## Code colocality
+
+La best practice di React è orientata alla colocalità del codice (ovvero definizione vicino l'utilizzo).
+
+Quindi scrivere tutto inline, nello stesso file a meno chè:
+- creare funzioni/componenti/type solo in caso di riutilizzo del codice
+- suddividere in file quando si superano le 2000 righe
+- suddividere in file se si ha una suddivisione netta di tematiche (es: utente/amminstratore, utenti/prodotti, ecc)
+- suddividere in file in base al layering dell'app (vedi sezione react app layers)
+
+## File strucutre
+
+Preambolo: queste raccomandazioni sono tarate in base q auesti criteri:
+- indicazioni del team che ha sviluppato react
+- single page pallication (quindi solitamente create-react-app, ad esempio per next.js alcune cose sono diverse)
+- struttura progetti opensource in vita da almeno 2 anni e con almeno 2000 stelle su github
+- Tenere il numero dei file basso (avere tanti file rende molto difficile la navigazione del codice, e quasi impossibile la sua eliminazione)
+- Tenere una struttura più piatta possibile, tenere i livelli di profondita delle cartelle basso (per evitare di spendere tempo nel design di alberatura filesystem che tanto nel cosrso dello sviluppo dovra essere modificato continuamente, in più rende difficile consultare la struttura del progetto (assolutamente evitare cartelle con un solo file o cartella))
+- suddividere in cartelle tematiche (es: utenti, prodotti), non in base al ruolo implementativo (non ha nessun valore organizativo avere cartelle separate per jsx, stile, logica)
+
+Un esempio di suddivisione in cartelle
+- src
+  - components (cartella per componenti/hook riutilizzabili)
+  - pages (cartella per componenti che rappresentano pagine)
+    - suddivisione in cartelle tematiche (es: utente/prodotto/reposrtisica ecc)
+    - componntes [sottolivello opzionale se necessario]
+
 
 ## Forms: thin wrapper approach
 

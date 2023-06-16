@@ -4700,6 +4700,147 @@ function GoodFibonacci() {
 
 TODO fare esempio con misurazione e cambio dimensione di un div
 
+## React Context
+
+Recap: in react lo stato viene sotto forma di
+
+- props : parametri di un componenete, che gli vengono passati dal chiamante chaiamante
+- state : stato interno privato al componente (creato con React.useState, React.useRef, this.state sui componenti classe)
+- context : è una specie di variabile globale, ma che viene valorizzato a partire dal da un certo punto per una parte di sottoalbero
+
+```tsx
+// una variabile di contesto viene creata con React.createContext
+// gli va passato un valore di default
+const MyContext = React.createContext(0);
+
+function MyComponent() {
+  // per leggere il valore di una variabile di contesto si usa React.useContext
+  const value = React.useContext(MyContext);
+  return <div>{value}</div>;
+}
+
+function App(){
+  return <React.Fragment>
+    <MyComponent/> {/* valore di contesto = 0 */}
+    <MyContext.Provider value={42}>
+      <MyComponent/> {/* valore di contesto = 42 */}
+      <MyContext.Provider value={300}>
+        <MyComponent/> {/* valore di contesto = 300 */}
+      </MyContext.Provider>
+    </MyContext.Provider>
+    <MyContext.Provider value={100}>
+      <MyComponent/> {/* valore di contesto = 100 */}
+    </MyContext.Provider>
+  <React.Fragment>
+}
+
+```
+
+Si puo usare qualsiasi valore javascript come valore di contesto (numeri, oggetti, funzioni).
+Attenzione in caso di valori dinamici evitare di creare nuove istanze quando non necessario, perchè tutti i componenti che usano il valore di contesto si aggiornano se l'istanza del valore fornita al provider cambia.
+Per convenzione si metter il suffisso Context.
+
+Quando utilizzare context?
+Il context è un livello di indirezione, il su effetto è quello di far fluire l'informazione giu nell albero in maniera implicita.
+Conviene tenere il numero di context basso, altrimenti si rischia di compromettere la leggibilità del codice.
+E consigliabile usare il context per codificare concetti globali es: tema, lingua, autorizzazione (cosa puo fare l'utente), ecc. quindi più o meno un solo provider sulla root del componente
+E consigliabile usare context per variabili globali, che però cambiano raramente e devono far rirendirizzare l'interfaccia.
+Si puo usare anche per implemetare dei meccanimi particolari (es: molte librerie usano context per implementare il loro funzionamento).
+A volte è consigliabile usare il context anche per creare dei contesti più piccoli, relativi a una parte dell'applicazione (casi particolari).
+E sconsigliato usare context per ovviare al problema del prop drilling, usare invece render prop e/o children.
+Va bene se il context è un dettaglio implementativo nascosto all'interno di componente.
+In generale se l'utilizzo del context non compromette la leggibilità può essere utilizzato anche non rispettando le raccomandazioni sopra.
+
+```tsx
+// esempio di utilizzo di context per concetti globali
+// creare context per il tema grafico (chiaro e scuro, solo colore del background e del testo per semplicita)
+// creare un context per le label (solo due lingue it e en, solo due label per semplicita)
+// creare una piccola applicazione che permette di impostare il tema e la lingua
+// NOTA, questo è solo un esempio didattico, per lingua e tema utilizzare librerie apposite
+
+type Theme = {
+  backgroundColor: string;
+  textColor: string;
+};
+
+const lightTheme: Theme = {
+  backgroundColor: "white",
+  textColor: "black",
+};
+
+const darkTheme: Theme = {
+  backgroundColor: "black",
+  textColor: "white",
+};
+
+const ThemeContext = React.createContext(lightTheme);
+// ThemeContext = React.createContext<Theme>(null as any); è una tecnica per far andare in errore l'applicazione nel caso in cui non è possibile specificare un valore di default
+// quindi l'applicazione andra in errore se ci dimentichiamo di specificare il <Contex.Provider value={}>
+
+type Labels = {
+  title: string;
+  subtitle: string;
+};
+
+const italianLabels: Labels = {
+  title: "Titolo",
+  subtitle: "Sottotitolo",
+};
+
+const englishLabels: Labels = {
+  title: "Title",
+  subtitle: "Subtitle",
+};
+
+const LabelContext = React.createContext(englishLabels);
+
+function App() {
+  const [theme, setTheme] = React.useState(lightTheme);
+  const [labels, setLabels] = React.useState(englishLabels);
+  return (
+    <ThemeContext.Provider value={theme}>
+      <LabelContext.Provider value={labels}>
+        <div>
+          <div>
+            Theme
+            <button onClick={() => setTheme(lightTheme)}>Light</button>
+            <button onClick={() => setTheme(darkTheme)}>Dark</button>
+          </div>
+          <div>
+            Labels
+            <button onClick={() => setLabels(italianLabels)}>Italiano</button>
+            <button onClick={() => setLabels(englishLabels)}>English</button>
+          </div>
+        </div>
+        <MainPage />
+      </LabelContext.Provider>
+    </ThemeContext.Provider>
+  );
+}
+
+function MainPage() {
+  const theme = React.useContext(ThemeContext);
+  const labels = React.useContext(LabelContext);
+  return (
+    <div
+      style={{
+        backgroundColor: theme.backgroundColor,
+        color: theme.textColor,
+      }}
+    >
+      <h1>{labels.title}</h1>
+      <h2>{labels.subtitle}</h2>
+    </div>
+  );
+}
+```
+
+## Error boundary
+
+## React portal
+
+## React.useId
+
 # React Advanced
 
 ## Memoization workflow
@@ -4716,23 +4857,13 @@ implement memoization on list wiht exclusive selection, use react dev tools prof
 
 ### React.useCallback
 
-## React Context
-
-## Error boundaries
-
 ## ref imperative dom
-
-## React.useId
 
 ## React.useDeferredValue
 
 ## React.useTransition
 
 ## React.useImperativeHandle
-
-## Error boundary
-
-## React portal
 
 ## React lazy
 

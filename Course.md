@@ -4984,8 +4984,8 @@ export function PortalExample() {
   );
 }
 
-// Exercise
-// create a modal using react portal
+// creare una modale con react portal
+// SPOILER soluzione
 
 type ModalProps = {
   isOpen: boolean;
@@ -5046,6 +5046,28 @@ export function Solution() {
 ```
 
 ## React.useId
+
+E una react hook che torna molto utile per creare id univoci per gli elementi del dom, sopratutto in relazione all'implemtazione dell'accesibilità.
+React.useId ritorna una stringa stabile atravrso i vari rerender.
+Se in pagina sappiamo che ci sarà solo un'instanza del form, solo una field con quel determinato ruolo e nome, possiamo anche non utilizzare React.useId.
+React.useId è utile soprattutto quando abbiamo più istanze del form in pagina, oppure ci stiamo integrando in un frontend esistente e ci vogliamo assicurare che non ci siano id duplicati di cui non siamo a conoscenza.
+
+```tsx
+function App(){
+  const nameFieldId = "name" + React.useId();
+  const ageFieldId = "age" + React.useId();
+  return <form>
+    <div>
+      <label htmlFor={nameFieldId}>name</label>
+      <input id={nameFieldId}>
+    </div>
+    <div>
+      <label htmlFor={ageFieldId}>age</label>
+      <input id={ageFieldId}>
+    </div>
+  </form>
+}
+```
 
 # React Advanced
 

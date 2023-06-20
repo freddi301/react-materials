@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@tanstack/react-query": "^4.29.14",
     "@types/react": "^18.2.12",
     "bootstrap-italia": "^2.5.1",
     "react": "^18.2.0",

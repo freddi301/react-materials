@@ -1,0 +1,8 @@
+version: "3.9"
+services:
+  liferay:
+    image: liferay/portal:7.4.3.62-ga62
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./build.liferay:/mnt/liferay/deploy

@@ -3,13 +3,26 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const apolloClient = new ApolloClient({
+  uri: "/o/graphql",
+  cache: new InMemoryCache(),
+});
+
+const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <QueryClientProvider client={queryClient}>
+      <ApolloProvider client={apolloClient}>
+        <App />
+      </ApolloProvider>
+    </QueryClientProvider>
   </React.StrictMode>
 );
 

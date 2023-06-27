@@ -1,7 +1,6 @@
 import React from "react";
 import "./App.css";
 import { LIFERAY_PARAMS } from "./configuration";
-import { Liferay, themeDisplay } from "./liferay";
 import { useQuery as useApolloQuery, gql } from "@apollo/client";
 import { useQuery as useReactQuery } from "@tanstack/react-query";
 

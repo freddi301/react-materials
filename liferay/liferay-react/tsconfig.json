@@ -2,12 +2,17 @@
   "compilerOptions": {
     "strict": true,
     "outDir": "./dist/",
-    "module": "commonjs",
+    "module": "ESNext",
+    "lib": ["DOM", "ESNext"],
+    "noEmit": true,
+    "declaration": true,
     "target": "es5",
     "jsx": "react",
     "allowJs": true,
     "moduleResolution": "node",
     "skipLibCheck": true,
     "esModuleInterop": true
-  }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }

@@ -7,8 +7,8 @@
 ## More integrations
 
 - typescript
-  - see .babel.rc (we added "@babel/preset-typescript")
-  - fixed ts errors see `index.tsx` `App.tsx` `Liferay.tsx`
+  - see .babelrc (we added "@babel/preset-typescript")
+  - fixed ts errors see `main.tsx` `App.tsx` `Liferay.tsx`
 - add `yarn start command` width webpack
   - see `package.json` start script
   - see `package.json` dependencies

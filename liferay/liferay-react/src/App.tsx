@@ -1,5 +1,4 @@
 import React from "react";
-import { Liferay } from "./Liferay";
 
 type AppComponentProps = {
   portletNamespace: string;
@@ -42,7 +41,7 @@ export function App(props: AppComponentProps) {
 // example fetch for proxy configuration
 async function proxyTest() {
   const response = await fetch(
-    `/o/headless-delivery/v1.0/sites/${Liferay.getSiteGroupId()}/site-pages?p_auth=${
+    `/o/headless-delivery/v1.0/sites/${themeDisplay.getSiteGroupId()}/site-pages?p_auth=${
       Liferay.authToken
     }`
   );

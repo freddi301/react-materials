@@ -1,24 +1,34 @@
+export type Liferay = {
+  authToken: string;
+};
+
+export type ThemeDisplay = {
+  getUserId(): string;
+  getSiteGroupId(): string;
+};
+
 declare global {
+  var Liferay: Liferay;
+  var themeDisplay: ThemeDisplay;
   interface Window {
-    Liferay: {
-      authToken: string;
-    };
-    themeDisplay: {
-      getUserId(): string;
-      getSiteGroupId(): string;
-    };
+    Liferay: Liferay;
+    themeDisplay: ThemeDisplay;
   }
 }
 
-export const Liferay: typeof window.Liferay = window.Liferay ?? {
-  authToken: "0fsHed5t",
-};
+if (typeof Liferay === "undefined") {
+  window.Liferay = {
+    authToken: "0fsHed5t",
+  };
+}
 
-export const themeDisplay: typeof window.themeDisplay = window.themeDisplay ?? {
-  getUserId() {
-    return "20125";
-  },
-  getSiteGroupId() {
-    return "20121";
-  },
-};
+if (typeof themeDisplay === "undefined") {
+  window.themeDisplay = {
+    getUserId() {
+      return "20125";
+    },
+    getSiteGroupId() {
+      return "20121";
+    },
+  };
+}

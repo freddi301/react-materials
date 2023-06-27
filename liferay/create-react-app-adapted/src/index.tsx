@@ -5,6 +5,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import "./liferay";
 
 const apolloClient = new ApolloClient({
   uri: "/o/graphql",

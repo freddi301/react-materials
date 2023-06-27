@@ -12,7 +12,7 @@ import AppComponent from "./AppComponent";
  * @param  {Object} params a hash with values of interest to the portlet
  * @return {void}
  */
-export default function main(params) {
+export default function main(params: Params) {
   ReactDOM.render(
     <AppComponent
       portletNamespace={params.portletNamespace}
@@ -22,4 +22,15 @@ export default function main(params) {
     />,
     document.getElementById(params.portletElementId)
   );
+}
+
+
+type Params = {
+  portletNamespace: string;
+  contextPath: string;
+  portletElementId: string;
+  configuration: {
+    system: Record<string, string>;
+    portletInstance: Record<string, string>;
+  }
 }

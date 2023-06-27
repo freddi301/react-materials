@@ -4,7 +4,11 @@
   "description": "Liferay React",
   "dependencies": {
     "@babel/preset-typescript": "^7.22.5",
-    "@liferay/dxp-7.4": "*"
+    "@liferay/dxp-7.4": "*",
+    "html-webpack-plugin": "^5.5.3",
+    "style-loader": "^3.3.3",
+    "ts-loader": "^9.4.3",
+    "typescript": "^5.1.3"
   },
   "portlet": {
     "com.liferay.portlet.display-category": "category.sample",
@@ -15,6 +19,7 @@
     "javax.portlet.resource-bundle": "content.Language"
   },
   "scripts": {
+    "start": "webpack serve --mode development",
     "build": "liferay build",
     "clean": "liferay clean",
     "deploy": "liferay deploy"

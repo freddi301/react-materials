@@ -10,7 +10,7 @@ type AppComponentProps = {
     portletInstance: Record<string, string>;
   };
 };
-export default function AppComponent(props: AppComponentProps) {
+export function App(props: AppComponentProps) {
   return (
     <div>
       <div>
@@ -38,3 +38,15 @@ export default function AppComponent(props: AppComponentProps) {
     </div>
   );
 }
+
+// example fetch for proxy configuration
+async function proxyTest() {
+  const response = await fetch(
+    `/o/headless-delivery/v1.0/sites/${Liferay.getSiteGroupId()}/site-pages?p_auth=${
+      Liferay.authToken
+    }`
+  );
+  const data = await response.json();
+  console.log(data);
+}
+proxyTest();

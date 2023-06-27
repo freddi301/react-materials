@@ -1,7 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import AppComponent from "./AppComponent";
+import { App } from "./App";
+
+type Params = {
+  portletNamespace: string;
+  contextPath: string;
+  portletElementId: string;
+  configuration: {
+    system: Record<string, string>;
+    portletInstance: Record<string, string>;
+  };
+};
 
 /**
  * This is the main entry point of the portlet.
@@ -14,7 +24,7 @@ import AppComponent from "./AppComponent";
  */
 export default function main(params: Params) {
   ReactDOM.render(
-    <AppComponent
+    <App
       portletNamespace={params.portletNamespace}
       contextPath={params.contextPath}
       portletElementId={params.portletElementId}
@@ -24,13 +34,15 @@ export default function main(params: Params) {
   );
 }
 
-
-type Params = {
-  portletNamespace: string;
-  contextPath: string;
-  portletElementId: string;
-  configuration: {
-    system: Record<string, string>;
-    portletInstance: Record<string, string>;
-  }
+if (process.env.NODE_ENV === "development") {
+  require("./css/styles.scss");
+  ReactDOM.render(
+    <App
+      portletNamespace={"my-portlet-namespace"}
+      contextPath={"my-portletcontext-path"}
+      portletElementId={"my-portlet-element-id"}
+      configuration={{ system: {}, portletInstance: {} }}
+    />,
+    document.getElementById("root")
+  );
 }

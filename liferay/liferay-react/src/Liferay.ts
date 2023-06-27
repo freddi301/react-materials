@@ -1,19 +1,19 @@
 type Liferay = {
-    Language: {
-        get(key: string): string
-    }
-}
+  Language: {
+    get(key: string): string;
+  };
+  getSiteGroupId(): string;
+  authToken: string;
+};
 
-declare global {
-    interface Window {
-        Liferay?: Liferay
-    }
-}
-
-export const Liferay : Liferay = window.Liferay ?? {
-    Language: {
-        get(key) {
-            return key
-        },
-    }
-}
+export const Liferay: Liferay = (window as any).Liferay ?? {
+  Language: {
+    get(key) {
+      return key;
+    },
+  },
+  getSiteGroupId() {
+    return "20121";
+  },
+  authToken: "SMbzHdiW",
+};

@@ -5473,6 +5473,11 @@ Un punto di partenza potrebbe essere questo report annuale https://stateofjs.com
 - Fonts
   - https://github.com/fontsource/fontsource
 
+## Useful tools
+
+- babel macros preval (for reading files at build time)
+- paste json as code (create typescript types out of json data)
+
 ## Securiy and injection
 
 ```tsx

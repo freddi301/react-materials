@@ -5327,6 +5327,7 @@ When you need to create form components in React, it is recommended to avoid usi
 1. Start with the basic approach of using the `useState` hook and `input` elements with `value` and `onChange` props.
 
 ```jsx
+// see https://gist.github.com/freddi301/80b9ac7f1e1e9085b26155d3c571f1c7
 const [value, setValue] = React.useState("");
 <input
   value={value}

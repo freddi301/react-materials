@@ -10,3 +10,5 @@
   - `features/configuration.json`
     - https://github.com/liferay/liferay-frontend-projects/blob/master/projects/js-toolkit/docs/reference/configuration-json.md
     - https://raw.githubusercontent.com/liferay/liferay-js-toolkit/master/resources/schemas/configuration.schema.json
+
+[example typescript integration](https://gist.github.com/freddi301/6b5261771eedfd53f1f9127aba082862)

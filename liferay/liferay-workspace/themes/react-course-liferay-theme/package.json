@@ -1,0 +1,31 @@
+{
+	"name": "react-course-liferay-theme",
+	"version": "1.0.0",
+	"main": "package.json",
+	"keywords": ["liferay-theme"],
+	"liferayTheme": {
+		"baseTheme": "styled",
+		"fontAwesome": true,
+		"templateLanguage": "ftl",
+		"version": "7.4"
+	},
+	"devDependencies": {
+		"compass-mixins": "0.12.10",
+		"gulp": "4.0.2",
+		"liferay-frontend-css-common": "6.0.8",
+		"liferay-frontend-theme-styled": "6.0.54",
+		"liferay-frontend-theme-unstyled": "6.0.45",
+		"liferay-theme-tasks": "^11.5.0",
+		"liferay-font-awesome": "3.5.2"
+	},
+	"scripts": {
+		"init": "gulp init",
+		"build": "gulp build",
+		"deploy": "gulp deploy",
+		"extend": "gulp extend",
+		"kickstart": "gulp kickstart",
+		"status": "gulp status",
+		"upgrade": "gulp upgrade",
+		"watch": "gulp watch"
+	}
+}

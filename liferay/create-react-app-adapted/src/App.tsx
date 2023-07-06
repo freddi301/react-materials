@@ -42,6 +42,9 @@ function App() {
       </pre>
       <pre>{JSON.stringify(sitePagesQuery.data, null, 2)}</pre>
       <pre>{JSON.stringify(sitesQuery.data, null, 2)}</pre>
+      <button className="btn btn-primary" type="button">
+        Example Primary Button
+      </button>
     </div>
   );
 }

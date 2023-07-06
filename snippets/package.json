@@ -2,6 +2,8 @@
   "dependencies": {
     "@tanstack/react-query": "^4.29.14",
     "@types/react": "^18.2.12",
+    "@visx/axis": "^3.2.0",
+    "@visx/scale": "^3.2.0",
     "bootstrap-italia": "^2.5.1",
     "react": "^18.2.0",
     "react-router-dom": "^6.13.0",

@@ -1,0 +1,5 @@
+Bundle-Name: npm-react-portlet
+Bundle-SymbolicName: npm.react.portlet
+Bundle-Version: 1.0.0
+Export-Package: npm.react.portlet.constants
+Web-ContextPath: /npm-react-portlet

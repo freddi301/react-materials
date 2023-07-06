@@ -3,6 +3,7 @@ import "./App.css";
 import { LIFERAY_PARAMS } from "./configuration";
 import { useQuery as useApolloQuery, gql } from "@apollo/client";
 import { useQuery as useReactQuery } from "@tanstack/react-query";
+import ClayButton from "@clayui/button";
 
 export const customFetch: typeof fetch = (input, init) => {
   return fetch(input, {
@@ -43,8 +44,11 @@ function App() {
       <pre>{JSON.stringify(sitePagesQuery.data, null, 2)}</pre>
       <pre>{JSON.stringify(sitesQuery.data, null, 2)}</pre>
       <button className="btn btn-primary" type="button">
-        Example Primary Button
+        Example Primary Button (html + css)
       </button>
+      <ClayButton displayType="primary">
+        Example Button Primary (clatui react component)
+      </ClayButton>
     </div>
   );
 }

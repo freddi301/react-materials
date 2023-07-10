@@ -5377,6 +5377,21 @@ function TextInput(props: ReturnType<typeof useField<string>>) {
 }
 ```
 
+1. Utilizing a simple React.memo to compose the form data allows us for easy extensibility and flexibility throughout our application.
+
+```tsx
+function MyForm() {
+  const nameField = useField<string>({});
+  const surnameField = useField<string>({});
+  const formData = React.useMemo(() => {
+    return {
+      name: nameField.value,
+      surname: surnameField.value,
+    };
+  }, [surnameField.value, nameField.value]);
+}
+```
+
 By following these steps, you can create custom form components in React using the thin wrapper approach, allowing for easy extensibility and flexibility throughout your application.
 
 ## React application layers
@@ -5453,7 +5468,7 @@ Un punto di partenza potrebbe essere questo report annuale https://stateofjs.com
 
 - Infinite Lists
 
-  - react-virtuso (più completo in termini di funzionalità, auto-dimensionamento)
+  - react-virtuoso (più completo in termini di funzionalità, auto-dimensionamento)
   - react-window (più utilizzato, ma manuale)
   - @tanstack/react-virtual (simile a react-window, ma più recente)
 

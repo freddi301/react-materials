@@ -4504,10 +4504,15 @@ Effettivamente è un function decorator che si limita ai componenti react.
 function WithPropLog<Props>(
   Component: React.FunctionComponent<Props>
 ): React.FunctionComponent<Props> {
-  return function WithPropLog(props: Props) {
+  function WithPropLog(props: Props) {
     console.log(props);
     return <Component {...props} />;
-  };
+  }
+  // Serve per ReactDevTools e stack trace
+  WithPropLog.displayName = WithPropLog.name = `WithPropLog(${
+    Component.name || Component.displayName
+  })`;
+  return WithPropLog;
 }
 const TwiceWithLog = WithPropLog(Twice);
 ```
@@ -5487,7 +5492,14 @@ Un punto di partenza potrebbe essere questo report annuale https://stateofjs.com
   - [msw](https://mswjs.io/)
 
 - Fonts
+
   - https://github.com/fontsource/fontsource
+
+- Testing
+  - Jest
+    - https://kentcdodds.com/blog/common-mistakes-with-react-testing-library#not-using-testing-libraryuser-event
+    - https://jestjs.io/docs/snapshot-testing
+    - jest-preview
 
 ## Useful tools
 

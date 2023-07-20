@@ -5437,6 +5437,7 @@ Un punto di partenza potrebbe essere questo report annuale https://stateofjs.com
 
 - UI Kits
 
+  - Tailwind (tailwindss.com) utile sopratutto per creare grafiche quando non abbiamo il designer
   - Material UI (per ispirazione su come comporre una'applicazione completa https://mui.com/material-ui/getting-started/templates/, https://github.com/mui/material-ui/tree/master/examples)
   - Bootstrap (per ispirazione su come comporre una'applicazione completa prendere ispirazione ad interfaccie realizzate con bootstrap, poichè ne è una variazione)
   - Bootstrap Italia
@@ -5539,6 +5540,7 @@ let stringaPericolosa;
 
 # Notes
 
+- Mini corso di grafici a partire calcolo manuale poi scale visx poi helper;
 - Aggiungere concurrent mode con suspanse e transition nella parte avanzata
 - Creare progetto di esempio, realizzando un applicazione CRUD come descritto nella sezione "React application layers"
 - Trascrivere in questo file gli snippet nella cartella TODO

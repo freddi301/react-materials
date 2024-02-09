@@ -5403,16 +5403,47 @@ By following these steps, you can create custom form components in React using t
 
 Every layer has access only to its children. Dependency inversion applies only for types.
 
-- **App Layer**: `component/*.tsx`
-  - **Data Layer**: It answers `Get data` and `Modify data`. Implemented as named exports of custom hooks for queries and mutations that takes Domain/DTO objects and return Domain/DTO objects. `component/data.ts`
-    - **Rest**: Implements caching and aggregation. Custom hooks that just return [`react-query` v4](https://tanstack.com/query/latest) calls. `component/data.ts`
-      - **Api object**: Implements authentication and data fetching. implemented as instantiable object \*(to handle ouatuh schemes) with configuration, exposed ad REact context with custom hook `useApi`. Handles internally authentication, refresh tokens, custom headers, adapts data. Use at least `customFetch` insted of `fetch` to eventually add global features as needed. Use `msw` for mocking.
-    - **GraphQl**: Implements authentication, caching and aggregation. `ApolloGraphQL` Client `component/data.ts`
-  - **Visual components Layer**: It answers `Show something`. Implement reased visual components to isolate from specific implementation. Implemented as flat directory `components` with named export for react components or custom hooks that are a thin wrapper around ui-kit used (ex: Bootstrap, MaterialUI, ClayUI). If needed custom styling with `styled-components/macro` with _css={`color: red`}_ and theme as React context with custom hook `useTheme` or project css global variables. `component/*data*.tsx`
-  - **Forms**: use thin layer approach `component/*.tsx`
-  - **i18n**: use `react-i18next` with label extraction, without context key, with `<Trans/>` component.
-  - **State managment**: use plain props passing. If needed use renderProps.
-  - **Routing**: use [`react-router` v6](https://reactrouter.com/en/main/start/overview)
+- **State managment**: use plain props passing. If needed use renderProps.
+- **Configuration**: `src/components/configuration.ts` encapsue and export any external configuration (ex: environment variables)
+- **Routing**: use `@tanstack/router`
+  - in a single file `src/components/routing.tsx`
+  - write pages in `src/pages/myPage.tsx` (use `Page` suffix)
+- **Rest API**: use `@tanstack/react-query`
+  - `src/components/dto.ts` all the DTO type definitions with suffix `DTO` ex: `PersonDTO` [only if reast client is not generated from openapi]
+  - `src/components/api.ts` in this file a class that encodes all endpoints [only if reast client is not generated from openapi]
+    - Implements authentication and data fetching. Handles internally authentication, refresh tokens, custom headers, adapts data.
+    ```typescript
+      class Api {
+        constructor (private baseUrl: string) {}
+        fetch: typeof fetch = fetch; // here we can intercept call and authentication headers
+        getSometing({}: { filters: { textSearch: string }, pagination: { page: number, pageSize: number } }): Promise<MyDTO> {
+          const response = await this.fetch(`${this.baseUrl}/something?`);
+          if (!response.ok) throw new Error("error"); // optional if needed
+          const data = await response.json();
+          return data;
+        }
+      }
+    ```
+    - `src/components/data.ts` (this handles caching and getting data into react) all the query options and mutations that will be used as `const usersQuery = useQuery(usersQueryOptions({ filter: { department: "IT" } }))`
+      ```typescript
+      export function usersQueryOptions({ filters: { department } }: { filters: { department: string; } }) {
+        return queryOptions({
+          queryKey: ["users", { department }],
+          async queryFn() {
+            return await api.getProntoSoccorso({ department });
+          },
+        });
+      }
+      ```
+- **GraphQL API**: Implements authentication, caching and aggregation. `ApolloGraphQL` Client `src/components/data.ts`
+- **Api Mock**: use `msw` for mocking. `src/components/mock.ts` (https://mswjs.io/docs/best-practices/typescript)
+- **Visual components Layer**: `src/components/MyComponent.tsx` It answers `Show something`. Implement reased visual components to isolate from specific implementation. thin wrapper around ui-kit used (ex: Bootstrap, MaterialUI, ClayUI). If needed custom styling with `styled-components/macro` with ``css={`color: red`}`` and theme as React context with custom hook `useTheme` or project css global variables.
+- **Custom hooks**: `src/hooks/useMyHook.ts` one hook per file (always try to use existing libraries, otherwise use or copy/adjust `usehooks-ts.com` or similar)
+- **i18n**: use `react-i18next` with label extraction, without context key, with ``t(`my label`)`` component.
+- **Forms**: use `@tanstack/react-form`
+- **Notes**
+  - always use named exports ex: `export function MyComponent() {}` or `export const myHook = () => {}`
+
 
 ## Library choice
 
@@ -5437,6 +5468,8 @@ Un punto di partenza potrebbe essere questo report annuale https://stateofjs.com
 
 - UI Kits
 
+  - mui JOY for apps when there is no designer
+  - mui Base for apps when there is a designer but the site has to be still accessbile
   - Tailwind (tailwindss.com) utile sopratutto per creare grafiche quando non abbiamo il designer
   - Material UI (per ispirazione su come comporre una'applicazione completa https://mui.com/material-ui/getting-started/templates/, https://github.com/mui/material-ui/tree/master/examples)
   - Bootstrap (per ispirazione su come comporre una'applicazione completa prendere ispirazione ad interfaccie realizzate con bootstrap, poichè ne è una variazione)
@@ -5445,8 +5478,8 @@ Un punto di partenza potrebbe essere questo report annuale https://stateofjs.com
 
 - Routing
 
-  - React Router
-  - @tanstack/router (routing con typescript, ancora sperimentale)
+  - @tanstack/router (routing con typescript)
+  - react-router-dom
 
 - State Management
 
@@ -5501,6 +5534,9 @@ Un punto di partenza potrebbe essere questo report annuale https://stateofjs.com
     - https://kentcdodds.com/blog/common-mistakes-with-react-testing-library#not-using-testing-libraryuser-event
     - https://jestjs.io/docs/snapshot-testing
     - jest-preview
+
+- Forms
+  - @tanstack/react-form
 
 ## Useful tools
 

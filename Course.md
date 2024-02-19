@@ -5409,6 +5409,7 @@ Every layer has access only to its children. Dependency inversion applies only f
   - in a single file `src/components/routing.tsx`
   - write pages in `src/pages/myPage.tsx` (use `Page` suffix)
 - **Rest API**: use `@tanstack/react-query`
+  - if openapi specification yaml generate with https://orval.dev or  https://github.com/ferdikoomen/openapi-typescript-codegen
   - `src/components/dto.ts` all the DTO type definitions with suffix `DTO` ex: `PersonDTO` [only if reast client is not generated from openapi]
   - `src/components/api.ts` in this file a class that encodes all endpoints [only if reast client is not generated from openapi]
     - Implements authentication and data fetching. Handles internally authentication, refresh tokens, custom headers, adapts data.
@@ -5459,6 +5460,7 @@ Un punto di partenza potrebbe essere questo report annuale https://stateofjs.com
 - Internationalization (i18n) and localization (l10n)
 
   - react-i18next
+  - react-intl
 
 - Chart and diagrams:
 

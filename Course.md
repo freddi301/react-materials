@@ -5405,9 +5405,7 @@ Every layer has access only to its children. Dependency inversion applies only f
 
 - **State managment**: use plain props passing. If needed use renderProps.
 - **Configuration**: `src/components/configuration.ts` encapsue and export any external configuration (ex: environment variables)
-- **Routing**: use `@tanstack/router`
-  - in a single file `src/components/routing.tsx`
-  - write pages in `src/pages/myPage.tsx` (use `Page` suffix)
+- **Routing**: use `@tanstack/router` file system router
 - **Rest API**: use `@tanstack/react-query`
   - if openapi specification yaml generate with https://orval.dev or  https://github.com/ferdikoomen/openapi-typescript-codegen
   - `src/components/dto.ts` all the DTO type definitions with suffix `DTO` ex: `PersonDTO` [only if reast client is not generated from openapi]
